@@ -26,4 +26,3 @@ with open(os.path.join(__DIR__, 'script.py')) as fd:
     source.Script = process(fd.read())
 with open(os.path.join(__DIR__, 'reqscript.py')) as fd:
     source.ScriptRequestInformation = process(fd.read())
-source.PythonPath = "'/home/gpotter/.python/lib/python3.6/site-packages'"

@@ -4,9 +4,6 @@ The 'Script' parameter of a ProgrammableSource
 
 # https://docs.paraview.org/en/latest/ReferenceManual/pythonProgrammableFilter.html#programmable-filter
 
-from vtk.numpy_interface import algorithms as algs
-from vtk.numpy_interface import dataset_adapter as dsa
-
 def GetUpdateTimestep(algorithm):
     """
     Returns the requested time value, or None if not present
