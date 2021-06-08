@@ -14,7 +14,7 @@ executive = self.GetExecutive()
 outInfo = executive.GetOutputInformation(0)
 
 # Load files
-self.by = np.load(get_path('by.npy'))
+self.by = np.load(get_path('By.npy'))
 self.x = np.load(get_path('x.npy'))
 self.y = np.load(get_path('y.npy'))
 self.y = np.load(get_path('y.npy'))
