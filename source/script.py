@@ -18,7 +18,10 @@ def GetUpdateTimestep(algorithm):
     return outInfo.Get(executive.UPDATE_TIME_STEP()) \
               if outInfo.Has(executive.UPDATE_TIME_STEP()) else None
 
-req_time = int(GetUpdateTimestep(self) or 0)
+req_time = int((
+    (GetUpdateTimestep(self) or self.t[0]) - self.t[0])/
+    (self.t[-1] - self.t[0]) * (len(self.t) - 1)
+)
 
 data = self.by[:,:,req_time]
 
