@@ -21,6 +21,16 @@ self.y = np.load(get_path('y.npy'))
 self.t = np.load(get_path('t.npy'))
 print("Files loaded!")
 
+print(self.by.shape)
+print(self.x.shape)
+print(self.y.shape)
+print(self.t.shape)
+
+# Define re-usable grid
+X, Y = np.meshgrid(self.x, self.y)
+self.xgrid = X.ravel()
+self.ygrid = Y.ravel()
+
 # Set boundaries
 paraview.util.SetOutputWholeExtent(self, (
     # (xmin, xmax, ymin, ymax, zmin, zmax)
