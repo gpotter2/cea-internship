@@ -33,14 +33,14 @@ output.SetExtent(exts)
 # Get data at specific timeframe
 data = self.by[:,:,req_time]
 
-# Generate points grid
-points = algs.make_vector(self.xgrid, self.ygrid, np.zeros(self.xgrid.shape))
-pts = vtk.vtkPoints()
-pts.SetData(dsa.numpyTovtkDataArray(points, "Points"))
+# DEBUG: fill space with plane
+data = np.broadcast_to(data[..., np.newaxis], data.shape + (self.zlength,))
 
-# Set the points to output
-output.SetPoints(pts)
-output.PointData.append(data.ravel(), "By")
+# Generate points grid (not required on images)
+#pts = vtk.vtkPoints()
+#pts.SetData(dsa.numpyTovtkDataArray(self.points, "Points"))
+
+output.PointData.append(data.ravel(order="F"), "By")
 output.PointData.SetActiveScalars("By")
 
 # Set current timestamp
