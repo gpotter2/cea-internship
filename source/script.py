@@ -9,6 +9,7 @@ import numpy as np
 from vtk.numpy_interface import algorithms as algs
 from vtk.numpy_interface import dataset_adapter as dsa
 
+# A util to get the current timestamp
 def GetUpdateTimestep(algorithm):
     """
     Returns the requested time value, or None if not present
@@ -23,29 +24,24 @@ req_time = int((
     (self.t[-1] - self.t[0]) * (len(self.t) - 1)
 )
 
+# Configure output
+executive = self.GetExecutive()
+outInfo = executive.GetOutputInformation(0)
+exts = [executive.UPDATE_EXTENT().Get(outInfo, i) for i in range(6)]
+output.SetExtent(exts)
+
+# Get data at specific timeframe
 data = self.by[:,:,req_time]
 
+# Generate points grid
 points = algs.make_vector(self.xgrid, self.ygrid, np.zeros(self.xgrid.shape))
 pts = vtk.vtkPoints()
 pts.SetData(dsa.numpyTovtkDataArray(points, "Points"))
 
+# Set the points to output
 output.SetPoints(pts)
 output.PointData.append(data.ravel(), "By")
 output.PointData.SetActiveScalars("By")
 
-# next, we define the cells i.e. the connectivity for this mesh.
-# here, we are creating merely a point could, so we'll add
-# that as a single poly vextex cell.
-numPts = pts.GetNumberOfPoints()
-# ptIds is the list of point ids in this cell
-# (which is all the points)
-ptIds = vtk.vtkIdList()
-ptIds.SetNumberOfIds(numPts)
-for a in range(numPts):
-    ptIds.SetId(a, a)
-
-# Allocate space for 1 cell.
-output.Allocate(1)
-output.InsertNextCell(vtk.VTK_POLY_VERTEX, ptIds)
-
+# Set current timestamp
 output.GetInformation().Set(output.DATA_TIME_STEP(), req_time)

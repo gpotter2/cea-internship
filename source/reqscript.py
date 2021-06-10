@@ -34,8 +34,8 @@ self.ygrid = Y.ravel()
 # Set boundaries
 paraview.util.SetOutputWholeExtent(self, (
     # (xmin, xmax, ymin, ymax, zmin, zmax)
-    0, self.x.shape[0],
-    0, self.y.shape[0],
+    0, self.x.shape[0] - 1,
+    0, self.y.shape[0] - 1,
     0, 0
 ))
 

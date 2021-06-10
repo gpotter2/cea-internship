@@ -21,7 +21,7 @@ def process(data):
     return HEADER + data
 
 source = ProgrammableSource()
-source.OutputDataSetType = 'vtkPolyData'
+source.OutputDataSetType = 'vtkStructuredGrid'
 with open(os.path.join(__DIR__, 'script.py')) as fd:
     source.Script = fd.read()
 with open(os.path.join(__DIR__, 'reqscript.py')) as fd:
