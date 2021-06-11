@@ -9,7 +9,6 @@ import sys
 try:
     import numpy as np
     import h5py
-    import evtk
 except ImportError as ex:
     print("######################\nMissing dependency !\n" + str(ex) + "\n######################")
     sys.exit(1)
