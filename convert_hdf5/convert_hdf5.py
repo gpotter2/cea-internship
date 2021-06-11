@@ -22,7 +22,7 @@ args = parser.parse_args()
 
 with h5py.File(args.src[0]) as fd:
     print("Reading h5df file...")
-    by = np.asarray(fd['By'], dtype='float32')
+    by = np.asarray(fd['By'], dtype='float16')
     x = np.asarray(fd['x'])/np.cos(np.pi/4)
     y = np.asarray(fd['y'])
     t = np.asarray(fd['t'])
