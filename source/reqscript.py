@@ -6,6 +6,7 @@ The 'RequestInformation Script' parameter of a ProgrammableSource
 
 import os
 import numpy as np
+import cupy
 
 import paraview.util
 
@@ -25,6 +26,11 @@ self.t = np.load(get_path('t.npy'))
 print("Files loaded!")
 
 self.x, self.y = self.y, self.x
+
+# Apply fourier transform
+print("Applying fourier transform...")
+self.byfft = cupy.fft.fftn(self.by, axes=(0,1,2), norm="forward")
+print("OK!")
 
 # print("Debug")
 # print(self.by.shape)
