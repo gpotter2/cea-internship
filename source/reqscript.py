@@ -40,6 +40,13 @@ print("OK!")
 # Define Z axis (arbitrary)
 self.zlength = 30
 self.z = np.arange(0, self.zlength, 1)
+self.dz = self.z[1] - self.z[0]
+
+# Build frequences grid
+freqx = np.fft.fftfreq(x.size, d=self.x[1] - self.x[0])
+freqy = np.fft.fftfreq(y.size, d=self.y[1] - self.y[0])
+freqt = np.fft.fftfreq(t.size, d=self.t[1] - self.t[0])
+self.FY, self.FX, self.FT = np.meshgrid(sy, sx, om, indexing='ij')
 
 ## Define re-usable grid
 #X, Y, Z = np.meshgrid(self.x, self.y, self.z)

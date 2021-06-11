@@ -31,7 +31,10 @@ exts = [executive.UPDATE_EXTENT().Get(outInfo, i) for i in range(6)]
 output.SetExtent(exts)
 
 # Get data at specific timeframe
-data = self.by[:,:,req_time]
+data = self.byfft[:,:,req_time]
+
+# Propagate
+data = data*np.exp(-np.pi * 1j * (self.FX**2 + self.FY**2) * self.dz / self.FT)
 
 # DEBUG: fill space with plane
 data = np.broadcast_to(data[..., np.newaxis], data.shape + (self.zlength,))
