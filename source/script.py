@@ -4,8 +4,7 @@ The 'Script' parameter of a ProgrammableSource
 
 # https://docs.paraview.org/en/latest/ReferenceManual/pythonProgrammableFilter.html#programmable-filter
 
-import cupy
-import numpy as np
+import cupy as np
 
 from vtk.numpy_interface import algorithms as algs
 from vtk.numpy_interface import dataset_adapter as dsa

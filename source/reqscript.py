@@ -5,8 +5,7 @@ The 'RequestInformation Script' parameter of a ProgrammableSource
 # https://docs.paraview.org/en/latest/ReferenceManual/pythonProgrammableFilter.html#programmable-filter
 
 import os
-import numpy as np
-import cupy
+import cupy as np
 
 import paraview.util
 
@@ -29,7 +28,7 @@ self.x, self.y = self.y, self.x
 
 # Apply fourier transform
 print("Applying fourier transform...")
-self.byfft = cupy.fft.fftn(self.by, axes=(0,1,2), norm="forward")
+self.byfft = np.fft.fftn(self.by, axes=(0,1,2), norm="forward")
 print("OK!")
 
 # print("Debug")
