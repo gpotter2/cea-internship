@@ -4,7 +4,7 @@ The 'Script' parameter of a ProgrammableSource
 
 # https://docs.paraview.org/en/latest/ReferenceManual/pythonProgrammableFilter.html#programmable-filter
 
-import cupy as np
+import numpy as np
 
 from vtk.numpy_interface import algorithms as algs
 from vtk.numpy_interface import dataset_adapter as dsa
@@ -33,11 +33,9 @@ output.SetExtent(exts)
 # Get data at specific timeframe
 data = self.byfft[:,:,req_time]
 
-# Propagate
-data = data*np.exp(-np.pi * 1j * (self.FX**2 + self.FY**2) * self.dz / self.FT)
-
 # DEBUG: fill space with plane
-data = np.broadcast_to(data[..., np.newaxis], data.shape + (self.zlength,))
+# data = np.broadcast_to(data[..., np.newaxis],
+#                        data.shape + (self.zlength,))
 
 # Generate points grid (not required on images)
 #pts = vtk.vtkPoints()
