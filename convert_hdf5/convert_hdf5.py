@@ -27,6 +27,11 @@ with h5py.File(args.src[0]) as fd:
     y = np.asarray(fd['y'])
     t = np.asarray(fd['t'])
 
+print("Subsampling plane...")
+by = by[::2, ::2, ::]
+x = x[::2]
+y = y[::2]
+
 print("Writing numpy files...")
 
 def get_path(name):
