@@ -81,6 +81,6 @@ for i in prog:
     for z in range(zlength):
         frame[:,:,z] = data[z][:,:,i]
     prog.set_description("Dumping")
-    np.save(frame, get_path("f%s.npy" % i, ["frames"]))
+    np.save(get_path("f%s.npy" % i, ["frames"]), frame)
 
 print("done")
