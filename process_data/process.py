@@ -12,7 +12,7 @@ import cupyx as cpx
 from tqdm import tqdm
 
 def get_path(x, path=[]):
-    return os.path.abspath(*([os.path.join(os.path.dirname(__file__)] + path + [x])))
+    return os.path.abspath(os.path.join(*([os.path.dirname(__file__)] + path + [x])))
 
 # Load files
 print("Loading files...", end="", flush=True)
@@ -48,11 +48,19 @@ print("OK")
 data = []
 
 # Propagate
+
 print("Building propagation vector...", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
-propag = cp.asarray(np.exp(-np.pi * 1j * (FX**2 + FY**2) * dz / FT),
+propag = np.zeros(by.shape)
+FTi, FTni = (np.abs(FT) > 0.01), (np.abs(FT) <= 0.01)  # Do not try to divide by 0
+propag[FTi] = np.exp(-np.pi * 1j * (FX[FTi]**2 + FY[FTi]**2) * dz / FT[FTi])
+propag[FTni] = 0
+print("OK")
+print("Copying propagation vector to GPU...", end="", flush=True)
+propag = cp.asarray(propag,
                     dtype="complex64")
 print("OK")
+
 prog = tqdm(range(zlength))
 prog.set_description("Propagating")
 for i in prog:
