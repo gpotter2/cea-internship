@@ -9,49 +9,56 @@ import numpy as np
 import cupy as cp
 import cupyx as cpx
 
+from tqdm import tqdm
+
+def get_path(x):
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "npy_files", x))
+
 # Some consts
 c = 299792458
 
 # Load files
-print("Loading files...")
-self.by = np.load(get_path('By.npy'))
-self.x = np.load(get_path('x.npy'))
-self.y = np.load(get_path('y.npy'))
-self.t = np.load(get_path('t.npy'))
-print("Files loaded!")
-
-self.x, self.y = self.y, self.x
+print("Loading files...", end="", flush=True)
+by = np.load(get_path('By.npy'))
+x = np.load(get_path('x.npy'))
+y = np.load(get_path('y.npy'))
+t = np.load(get_path('t.npy'))
+print("OK")
 
 # Apply discrete fourier transform
-print("Moving data to GPU. Allocation array: %s" % str(self.by.shape))
-self.byfft = cp.asarray(self.by, dtype="complex64")
-print("Applying fourier transform...")
-self.byfft = cpx.scipy.fft.fftn(self.byfft,
-                                axes=(0,1,2),
-                                norm="forward",
-                                overwrite_x=True)
+print("Moving data to GPU. Allocation array: %s..." % str(by.shape), end="", flush=True)
+byfft = cp.asarray(by, dtype="complex64")
+print("OK")
+print("Applying fourier transform...", end="", flush=True)
+byfft = np.fft.fftn(by,
+                    axes=(0,1,2),
+                    norm="forward")
 
-print("OK!")
+print("OK")
 
 # Define Z axis (arbitrary)
-self.zlength = 30
-self.dz = 1 / self.zlength
+zlength = 30
+dz = 1 / zlength
 
+print("Building freq grid...", end="", flush=True)
 # Build frequences grid
-freqx = np.fft.fftfreq(self.x.size, d=self.x[1] - self.x[0])
-freqy = np.fft.fftfreq(self.y.size, d=self.y[1] - self.y[0])
-freqt = np.fft.fftfreq(self.t.size, d=self.t[1] - self.t[0])
-self.FY, self.FX, self.FT = np.meshgrid(freqy, freqx, freqt, indexing='ij')
+freqx = np.fft.fftfreq(x.size, d=x[1] - x[0])
+freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
+freqt = np.fft.fftfreq(t.size, d=t[1] - t[0])
+FY, FX, FT = np.meshgrid(freqy, freqx, freqt, indexing='ij')
+print("OK")
 
-self.data = []
+data = []
 
 # Propagate
 print("Propagating...")
-# data = data * np.exp(-np.pi * 1j * (self.FX**2 + self.FY**2) * self.dz / self.FT)
-for i in range(self.zlength):
-    self.byfft *= np.exp(-np.pi * 1j * self.FT * self.dz / c)
-    v = cupyx.scipy.fftpack.ifftn(self.byfft, axes=(0,1,2), norm="backward")
-    self.data.append(np.asarray(v))
+# data = data * np.exp(-np.pi * 1j * (FX**2 + FY**2) * dz / FT)
+for i in tqdm(range(zlength)):
+    print(byfft.shape)
+    print(FT.shape)
+    byfft *= np.asarray(np.exp(-np.pi * 1j * FT * dz / c))
+    v = cupyx.scipy.fftpack.ifftn(cp.asarray(byfft), axes=(0,1,2), norm="backward")
+    data.append(np.asarray(v))
     del v
 
 print("done")
