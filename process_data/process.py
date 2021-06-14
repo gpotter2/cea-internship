@@ -11,18 +11,15 @@ import cupyx as cpx
 
 from tqdm import tqdm
 
-def get_path(x):
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "npy_files", x))
-
-# Some consts
-c = 299792458
+def get_path(x, path=[]):
+    return os.path.abspath(*([os.path.join(os.path.dirname(__file__)] + path + [x])))
 
 # Load files
 print("Loading files...", end="", flush=True)
-by = np.load(get_path('By.npy'))
-x = np.load(get_path('x.npy'))
-y = np.load(get_path('y.npy'))
-t = np.load(get_path('t.npy'))
+by = np.load(get_path('By.npy', ["..", "npy_files"]))
+x = np.load(get_path('x.npy', ["..", "npy_files"]))
+y = np.load(get_path('y.npy', ["..", "npy_files"]))
+t = np.load(get_path('t.npy', ["..", "npy_files"]))
 print("OK")
 
 # Apply discrete fourier transform
@@ -52,11 +49,10 @@ data = []
 
 # Propagate
 print("Building propagation vector...", end="", flush=True)
-# TODO: heavyside?
-propag = cp.asarray(np.exp(-np.pi * 1j * FT * dz / c),
+# See PROPAGATION_DEMO.md for explanation of this formula
+propag = cp.asarray(np.exp(-np.pi * 1j * (FX**2 + FY**2) * dz / FT),
                     dtype="complex64")
 print("OK")
-# data = data * np.exp(-np.pi * 1j * (FX**2 + FY**2) * dz / FT)
 prog = tqdm(range(zlength))
 prog.set_description("Propagating")
 for i in prog:
@@ -66,11 +62,17 @@ for i in prog:
     data.append(np.real(v.get()))
     del v
 
+dirpath = get_path("", ["frames"])
+if not os.path.exists(dirpath):
+    os.mkdir(dirpath)
+
 prog = tqdm(range(len(t)))
-prog.set_description("Building frames")
-frame = np.empty(x.shape + y.shape + (zlength,))
+frame = np.empty(y.shape + x.shape + (zlength,))
 for i in prog:
+    prog.set_description("Building frame")
     for z in range(zlength):
         frame[:,:,z] = data[z][:,:,i]
+    prog.set_description("Dumping")
+    frame.dump(get_path("f%s.npy" % i, ["frames"]))
 
 print("done")
