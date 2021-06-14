@@ -80,11 +80,10 @@ if not os.path.exists(dirpath):
 prog = tqdm(range(len(t)))
 frame = np.empty(x.shape + y.shape + (zlength,))
 for i in prog:
-    prog.set_description("Building frame")
+    prog.set_description("Building frames")
     for z in range(zlength):
         # We transpose the frame to put x and y axis back
         frame[:,:,z] = data[z][:,:,i].transpose()
-    prog.set_description("Dumping")
     np.save(get_path("f%s.npy" % i, ["frames"]), frame)
 
 print("done")
