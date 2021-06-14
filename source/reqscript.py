@@ -11,12 +11,8 @@ import numpy as np
 import cupy as cp
 import cupyx as cpx
 
-# Read config
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from config import dz as _dz, zlength as _zlength
-self.dz = _dz
-self.zlength = _zlength
+self.dz = dz
+self.zlength = zlength
 
 # Configure output
 executive = self.GetExecutive()

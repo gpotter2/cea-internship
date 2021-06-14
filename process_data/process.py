@@ -57,7 +57,7 @@ print("Building propagation vector...", end="", flush=True)
 propag = np.zeros(by.shape, dtype="complex64")
 FTi, FTni = (np.abs(FT) > 0.01), (np.abs(FT) <= 0.01)  # Do not try to divide by 0
 propag[FTi] = np.exp(-np.pi * 1j * (FX[FTi]**2 + FY[FTi]**2) * dz / FT[FTi])
-propag[FTni] = 0
+propag[FTni] = 0.
 print("OK")
 print("Copying propagation vector to GPU...", end="", flush=True)
 propag = cp.asarray(propag,

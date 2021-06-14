@@ -34,7 +34,8 @@ output.SetExtent(exts)
 # Get data at specific timeframe
 data = np.load(get_path("f%s.npy" % req_time, True))
 
-# DEBUG: fill space with plane
+# DEBUG: fill space with first plane
+# data = data[:,:,0]
 # data = np.broadcast_to(data[..., np.newaxis],
 #                        data.shape + (self.zlength,))
 

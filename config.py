@@ -1,5 +1,5 @@
 # Config
-zlength = 30
+zlength = 10
 
 # Constants
 foc_pos = 56

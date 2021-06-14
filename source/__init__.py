@@ -14,6 +14,11 @@ from paraview.simple import *
 import os
 __DIR__ = os.path.abspath(os.path.dirname(__file__))
 
+# Read config
+import sys, os
+sys.path.append(os.path.join(__DIR__, ".."))
+from config import dz, zlength
+
 HEADER = """
 ### GENERATED HEADER ###
 import os
@@ -24,9 +29,19 @@ def get_path(name, frames=False):
     if frames:
         return os.path.abspath(os.path.join('%s', name))
     return os.path.abspath(os.path.join('%s', name))
+
+dz = %s
+zlength = %s
+
 ### END OF HEADER ###
 
-""" % (ACTIVATE_THIS_ENV, PATH_TO_FRAMES, PATH_TO_NPY)
+""" % (
+    ACTIVATE_THIS_ENV,
+    PATH_TO_FRAMES,
+    PATH_TO_NPY,
+    dz,
+    zlength
+)
 
 def process(data):
     return HEADER + data
