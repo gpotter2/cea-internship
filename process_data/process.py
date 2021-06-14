@@ -34,7 +34,6 @@ byfft = cpx.scipy.fft.fftn(byfft,
                            axes=(0,1,2),
                            norm="forward",
                            overwrite_x=True)
-
 print("OK")
 
 # Define Z axis (arbitrary)
@@ -53,7 +52,9 @@ data = []
 
 # Propagate
 print("Building propagation vector...", end="", flush=True)
-propag = cp.asarray(np.exp(-np.pi * 1j * FT * dz / c), dtype="complex64")
+# TODO: heavyside?
+propag = cp.asarray(np.exp(-np.pi * 1j * FT * dz / c),
+                    dtype="complex64")
 print("OK")
 # data = data * np.exp(-np.pi * 1j * (FX**2 + FY**2) * dz / FT)
 prog = tqdm(range(zlength))
@@ -64,7 +65,7 @@ for i in prog:
     v = cpx.scipy.fftpack.ifftn(cp.asarray(byfft),
                                 axes=(0,1,2))
     prog.set_description("Moving data to RAM...")
-    data.append(np.asarray(v.get(), dtype="float32"))
+    data.append(np.real(v.get()))
     del v
 
 print("done")
