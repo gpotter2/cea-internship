@@ -51,7 +51,7 @@ data = []
 
 print("Building propagation vector...", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
-propag = np.zeros(by.shape)
+propag = np.zeros(by.shape, dtype="complex64")
 FTi, FTni = (np.abs(FT) > 0.01), (np.abs(FT) <= 0.01)  # Do not try to divide by 0
 propag[FTi] = np.exp(-np.pi * 1j * (FX[FTi]**2 + FY[FTi]**2) * dz / FT[FTi])
 propag[FTni] = 0
@@ -81,6 +81,6 @@ for i in prog:
     for z in range(zlength):
         frame[:,:,z] = data[z][:,:,i]
     prog.set_description("Dumping")
-    frame.dump(get_path("f%s.npy" % i, ["frames"]))
+    np.save(frame, get_path("f%s.npy" % i, ["frames"]))
 
 print("done")

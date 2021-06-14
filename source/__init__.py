@@ -5,6 +5,7 @@ A ProgramableSource object to read H5DF files into paraview
 # Config
 
 PATH_TO_NPY = "/home/gpotter/pv_work/npy_files/"
+PATH_TO_FRAMES = "/home/gpotter/pv_work/process_data/frames/"
 ACTIVATE_THIS_ENV = "/home/gpotter/.miniconda3/bin/activate_this.py"
 
 # https://docs.paraview.org/en/latest/ReferenceManual/pythonProgrammableFilter.html#programmable-filter
@@ -14,12 +15,18 @@ import os
 __DIR__ = os.path.abspath(os.path.dirname(__file__))
 
 HEADER = """
+### GENERATED HEADER ###
+import os
 activate_this="%s"
 exec(open(activate_this).read(), dict(__file__=activate_this))
 
-def get_path(name):
+def get_path(name, frames=False):
+    if frames:
+        return os.path.abspath(os.path.join('%s', name))
     return os.path.abspath(os.path.join('%s', name))
-""" % (ACTIVATE_THIS_ENV, PATH_TO_NPY)
+### END OF HEADER ###
+
+""" % (ACTIVATE_THIS_ENV, PATH_TO_FRAMES, PATH_TO_NPY)
 
 def process(data):
     return HEADER + data
