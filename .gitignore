@@ -1,2 +1,9 @@
+*.pyc
+*.pyo
+dist/
+build/
+MANIFEST
+*.egg-info/
+
 npy_files/
 process_data/frames

@@ -68,7 +68,7 @@ prog = tqdm(range(zlength))
 prog.set_description("Propagating")
 for i in prog:
     byfft *= propag
-    v = cpx.scipy.fftpack.ifftn(cp.asarray(byfft),
+    v = cpx.scipy.fftpack.ifftn(byfft,
                                 axes=(0,1,2))
     data.append(cp.real(v).get())
     del v
