@@ -66,7 +66,7 @@ for i in prog:
     v = cpx.scipy.fftpack.ifftn(cp.asarray(byfft),
                                 axes=(0,1,2))
     prog.set_description("Moving data to RAM...")
-    data.append(v.get())
+    data.append(np.asarray(v.get(), dtype="float32"))
     del v
 
 print("done")
