@@ -42,8 +42,8 @@ print("OK")
 
 print("Building freq grid...", end="", flush=True)
 # Build frequences grid
-freqx = np.fft.fftfreq(x.size, d=x[1] - x[0])
 freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
+freqx = np.fft.fftfreq(x.size, d=x[1] - x[0])
 freqt = np.fft.fftfreq(t.size, d=t[1] - t[0])
 FY, FX, FT = np.meshgrid(freqy, freqx, freqt, indexing='ij')
 print("OK")
@@ -84,6 +84,7 @@ for i in prog:
     for z in range(zlength):
         frame[:,:,z] = data[z][:,:,i]
     prog.set_description("Dumping")
-    np.save(get_path("f%s.npy" % i, ["frames"]), frame)
+    # We transpose the frame to put x and y axis back
+    np.save(get_path("f%s.npy" % i, ["frames"]), frame.transpose((0,1))
 
 print("done")
