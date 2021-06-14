@@ -67,7 +67,7 @@ for i in prog:
     byfft *= propag
     v = cpx.scipy.fftpack.ifftn(cp.asarray(byfft),
                                 axes=(0,1,2))
-    data.append(np.real(v.get()))
+    data.append(cp.real(v).get())
     del v
 
 dirpath = get_path("", ["frames"])
