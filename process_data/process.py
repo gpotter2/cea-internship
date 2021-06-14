@@ -26,7 +26,7 @@ t = np.load(get_path('t.npy'))
 print("OK")
 
 # Apply discrete fourier transform
-print("Moving data to GPU. Allocating array: %s..." % str(by.shape), end="", flush=True)
+print("Moving data to GPU. Allocating array %s..." % str(by.shape), end="", flush=True)
 byfft = cp.asarray(by, dtype="complex64")
 print("OK")
 print("Applying fourier transform...", end="", flush=True)
@@ -58,14 +58,19 @@ propag = cp.asarray(np.exp(-np.pi * 1j * FT * dz / c),
 print("OK")
 # data = data * np.exp(-np.pi * 1j * (FX**2 + FY**2) * dz / FT)
 prog = tqdm(range(zlength))
+prog.set_description("Propagating")
 for i in prog:
-    prog.set_description("Propagating...")
     byfft *= propag
-    prog.set_description("FFT...")
     v = cpx.scipy.fftpack.ifftn(cp.asarray(byfft),
                                 axes=(0,1,2))
-    prog.set_description("Moving data to RAM...")
     data.append(np.real(v.get()))
     del v
+
+prog = tqdm(range(len(t)))
+prog.set_description("Building frames")
+frame = np.empty(x.shape + y.shape + (zlength,))
+for i in prog:
+    for z in range(zlength):
+        frame[:,:,z] = data[z][:,:,i]
 
 print("done")
