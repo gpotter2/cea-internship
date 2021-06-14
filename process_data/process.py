@@ -85,6 +85,6 @@ for i in prog:
         frame[:,:,z] = data[z][:,:,i]
     prog.set_description("Dumping")
     # We transpose the frame to put x and y axis back
-    np.save(get_path("f%s.npy" % i, ["frames"]), frame.transpose((0,1))
+    np.save(get_path("f%s.npy" % i, ["frames"]), frame.transpose((0,1)))
 
 print("done")
