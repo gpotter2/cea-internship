@@ -42,8 +42,6 @@ data = np.load(get_path("f%s.npy" % req_time, True))
 #pts = vtk.vtkPoints()
 #pts.SetData(dsa.numpyTovtkDataArray(self.points, "Points"))
 
-print(data)
-
 output.PointData.append(data.ravel(order="F"), "By")
 output.PointData.SetActiveScalars("By")
 

@@ -11,6 +11,13 @@ import numpy as np
 import cupy as cp
 import cupyx as cpx
 
+# Read config
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from config import dz as _dz, zlength as _zlength
+self.dz = _dz
+self.zlength = _zlength
+
 # Configure output
 executive = self.GetExecutive()
 outInfo = executive.GetOutputInformation(0)
@@ -22,8 +29,6 @@ self.nbframes = builtins.sum(1 for _ in glob.iglob(get_path("*", True)))
 self.x = np.load(get_path("x.npy"))
 self.y = np.load(get_path("y.npy"))
 self.t = np.load(get_path("t.npy"))[:self.nbframes]
-self.zlength = 30
-self.dz = 1 / self.zlength
 
 ## Define re-usable grid
 #X, Y, Z = np.meshgrid(self.x, self.y, self.z)

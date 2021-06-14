@@ -14,6 +14,11 @@ from tqdm import tqdm
 def get_path(x, path=[]):
     return os.path.abspath(os.path.join(*([os.path.dirname(__file__)] + path + [x])))
 
+# Read config
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from config import dz, zlength
+
 # Load files
 print("Loading files...", end="", flush=True)
 by = np.load(get_path('By.npy', ["..", "npy_files"]))
@@ -34,10 +39,6 @@ cpx.scipy.fft.fftn(byfft,
                    norm="forward",
                    overwrite_x=True)
 print("OK")
-
-# Define Z axis (arbitrary)
-zlength = 30
-dz = 1 / zlength
 
 print("Building freq grid...", end="", flush=True)
 # Build frequences grid
