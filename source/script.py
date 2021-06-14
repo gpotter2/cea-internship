@@ -35,9 +35,9 @@ output.SetExtent(exts)
 data = np.load(get_path("f%s.npy" % req_time, True))
 
 # DEBUG: fill space with first plane
-data = data[:,:,0]
-data = np.broadcast_to(data[..., np.newaxis],
-                       data.shape + (self.zlength,))
+# data = data[:,:,0]
+# data = np.broadcast_to(data[..., np.newaxis],
+#                        data.shape + (self.zlength,))
 
 # Generate points grid (not required on images)
 #pts = vtk.vtkPoints()
