@@ -58,8 +58,6 @@ print("OK")
 # data = data * np.exp(-np.pi * 1j * (FX**2 + FY**2) * dz / FT)
 prog = tqdm(range(zlength))
 for i in prog:
-    print(byfft.shape)
-    print(FT.shape)
     prog.set_description("Propagating...")
     byfft *= propag
     prog.set_description("FFT...")
