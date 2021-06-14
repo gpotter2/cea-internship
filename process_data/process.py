@@ -53,7 +53,7 @@ data = []
 
 # Propagate
 print("Building propagation vector...", end="", flush=True)
-propag = cp.asarray(np.exp(-np.pi * 1j * FT * dz / c), dtype="float32")
+propag = cp.asarray(np.exp(-np.pi * 1j * FT * dz / c), dtype="complex32")
 print("OK")
 # data = data * np.exp(-np.pi * 1j * (FX**2 + FY**2) * dz / FT)
 prog = tqdm(range(zlength))
