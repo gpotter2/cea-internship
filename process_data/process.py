@@ -26,11 +26,13 @@ print("OK")
 print("Moving data to GPU. Allocating array %s..." % str(by.shape), end="", flush=True)
 byfft = cp.asarray(by, dtype="complex64")
 print("OK")
-print("Applying fourier transform...", end="", flush=True)
-byfft = cpx.scipy.fft.fftn(byfft,
-                           axes=(0,1,2),
-                           norm="forward",
-                           overwrite_x=True)
+
+# FFT
+print("Applying discrete fast fourier transform...", end="", flush=True)
+cpx.scipy.fft.fftn(byfft,
+                   axes=(0,1,2),
+                   norm="forward",
+                   overwrite_x=True)
 print("OK")
 
 # Define Z axis (arbitrary)
