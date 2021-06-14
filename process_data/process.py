@@ -52,8 +52,9 @@ print("OK")
 data = []
 
 # Propagate
-print("Starting propagation...")
+print("Building propagation vector...", end="", flush=True)
 propag = cp.asarray(np.exp(-np.pi * 1j * FT * dz / c), dtype="float32")
+print("OK")
 # data = data * np.exp(-np.pi * 1j * (FX**2 + FY**2) * dz / FT)
 prog = tqdm(range(zlength))
 for i in prog:
@@ -65,7 +66,7 @@ for i in prog:
     v = cpx.scipy.fftpack.ifftn(cp.asarray(byfft),
                                 axes=(0,1,2))
     prog.set_description("Moving data to RAM...")
-    data.append(np.asarray(v))
+    data.append(v.get())
     del v
 
 print("done")
