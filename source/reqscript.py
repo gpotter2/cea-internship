@@ -8,8 +8,6 @@ import builtins
 import glob
 
 import numpy as np
-import cupy as cp
-import cupyx as cpx
 
 self.dz = dz
 self.zlength = zlength
