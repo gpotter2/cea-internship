@@ -30,10 +30,10 @@ print("Moving data to GPU. Allocation array: %s..." % str(by.shape), end="", flu
 byfft = cp.asarray(by, dtype="complex64")
 print("OK")
 print("Applying fourier transform...", end="", flush=True)
-byfft = cupyx.scipy.fft.fftn(byfft,
-                             axes=(0,1,2),
-                             norm="forward",
-                             overwrite_x=True)
+byfft = cpx.scipy.fft.fftn(byfft,
+                           axes=(0,1,2),
+                           norm="forward",
+                           overwrite_x=True)
 
 print("OK")
 
@@ -62,7 +62,9 @@ for i in prog:
     prog.set_description("Propagating...")
     byfft *= propag
     prog.set_description("FFT...")
-    v = cupyx.scipy.fftpack.ifftn(cp.asarray(byfft), axes=(0,1,2), norm="backward")
+    v = cpx.scipy.fftpack.ifftn(cp.asarray(byfft),
+                                axes=(0,1,2),
+                                norm="backward")
     prog.set_description("Moving data to RAM...")
     data.append(np.asarray(v))
     del v
