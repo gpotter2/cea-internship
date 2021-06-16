@@ -46,7 +46,7 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
 
 # Set time steps
 outInfo.Remove(executive.TIME_STEPS())
-for timestep in self.t:
+for timestep in np.arange(0, MAX_TIME, dz):
     outInfo.Append(executive.TIME_STEPS(), timestep)
 
 outInfo.Remove(executive.TIME_RANGE())
