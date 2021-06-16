@@ -19,8 +19,10 @@ self.nbframes = builtins.sum(1 for _ in glob.iglob(get_path("*", True)))
 # Read axis
 self.x = np.load(get_path("x.npy"))
 self.y = np.load(get_path("y.npy"))
-# We crop because maybe processing was cancelled (frame files missing)
-self.t = np.load(get_path("t.npy"))[:self.nbframes]
+self.t = np.load(get_path("t.npy"))
+if self.nbframes > 1:
+    # We crop because maybe processing was cancelled (frame files missing)
+    self.t = self.t[:self.nbframes]
 
 self.zlength = self.t.shape[0] if zlength < 0 else zlength
 
