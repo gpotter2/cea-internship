@@ -9,8 +9,6 @@ import glob
 
 import numpy as np
 
-self.zlength = zlength
-
 # Configure output
 executive = self.GetExecutive()
 outInfo = executive.GetOutputInformation(0)
@@ -23,6 +21,8 @@ self.x = np.load(get_path("x.npy"))
 self.y = np.load(get_path("y.npy"))
 # We crop because maybe processing was cancelled (frame files missing)
 self.t = np.load(get_path("t.npy"))[:self.nbframes]
+
+self.zlength = self.t.shape[0] if zlength < 0 else zlength
 
 ## Define re-usable grid
 #X, Y, Z = np.meshgrid(self.x, self.y, self.z)
@@ -46,7 +46,7 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
 
 # Set time steps
 outInfo.Remove(executive.TIME_STEPS())
-for timestep in np.arange(0, MAX_TIME, dz):
+for timestep in np.arange(0, MAX_TIME, abs(dz)):
     outInfo.Append(executive.TIME_STEPS(), timestep)
 
 outInfo.Remove(executive.TIME_RANGE())
