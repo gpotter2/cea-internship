@@ -77,7 +77,7 @@ for i in prog:
     v = cpx.scipy.fftpack.ifftn(byfft,
                                 axes=(0,1,2))
     frame = cp.real(v[:,:,:zlength]).transpose(1, 0, 2).get()
-    np.save(get_path("f%s.npy" % i, ["frames"]), frame)
+    np.savez(get_path("f%s.npz" % i, ["frames"]), frame)
     del v
 
 print("done")

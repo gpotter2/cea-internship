@@ -31,7 +31,7 @@ exts = [executive.UPDATE_EXTENT().Get(outInfo, i) for i in range(6)]
 output.SetExtent(exts)
 
 # Get data at specific timeframe
-data = np.load(get_path("f%s.npy" % req_time, True))
+data = np.load(get_path("f%s.npz" % req_time, True))
 
 # DEBUG: fill space with first plane
 # data = data[:,:,0]
