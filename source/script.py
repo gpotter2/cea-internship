@@ -6,10 +6,6 @@ The 'Script' parameter of a ProgrammableSource
 
 import numpy as np
 
-from vtk.numpy_interface import algorithms as algs
-from vtk.numpy_interface import dataset_adapter as dsa
-
-
 executive = self.GetExecutive()
 outInfo = executive.GetOutputInformation(0)
 
@@ -41,8 +37,9 @@ fnpz.close()
 #                        data.shape + (self.zlength,))
 
 # Generate points grid (not required on images)
-#pts = vtk.vtkPoints()
-#pts.SetData(dsa.numpyTovtkDataArray(self.points, "Points"))
+# from vtk.numpy_interface import dataset_adapter as dsa
+# pts = vtk.vtkPoints()
+# pts.SetData(dsa.numpyTovtkDataArray(self.points, "Points"))
 
 output.PointData.append(data.ravel(order="F"), "By")
 output.PointData.SetActiveScalars("By")

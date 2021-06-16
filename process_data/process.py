@@ -17,7 +17,7 @@ def get_path(x, path=[]):
 # Read config
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from config import dz, zlength, MAX_TIME
+from config import dz, zlength, MAX_TIME, time_drop
 
 # Load files
 print("Loading files...", end="", flush=True)
@@ -76,7 +76,7 @@ for i in prog:
     byfft *= propag
     v = cpx.scipy.fftpack.ifftn(byfft,
                                 axes=(0,1,2))
-    frame = cp.real(v[:,:,:zlength:4]).transpose(1, 0, 2).get()
+    frame = cp.real(v[:,:,:zlength:time_drop]).transpose(1, 0, 2).get()
     np.savez(get_path("f%s.npz" % i, ["frames"]), frame=frame)
     del v
 
