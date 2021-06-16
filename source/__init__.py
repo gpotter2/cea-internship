@@ -32,7 +32,7 @@ activate_this="%s"
 exec(open(activate_this).read(), dict(__file__=activate_this))
 
 def get_path(x, folder=""):
-    return os.path.abspath(os.path.join(%s, folder, x))
+    return os.path.abspath(os.path.join("%s", folder, x))
 
 dz = %s
 zlength = %s
