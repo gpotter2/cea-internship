@@ -17,7 +17,7 @@ __DIR__ = os.path.abspath(os.path.dirname(__file__))
 # Read config
 import sys, os
 sys.path.append(os.path.join(__DIR__, ".."))
-from config import zlength, MAX_TIME
+from config import dz, zlength, MAX_TIME
 
 HEADER = """
 ### GENERATED HEADER ###
@@ -30,6 +30,7 @@ def get_path(name, frames=False):
         return os.path.abspath(os.path.join('%s', name))
     return os.path.abspath(os.path.join('%s', name))
 
+dz = %s
 zlength = %s
 MAX_TIME = %s
 
@@ -39,6 +40,7 @@ MAX_TIME = %s
     ACTIVATE_THIS_ENV,
     PATH_TO_FRAMES,
     PATH_TO_NPY,
+    dz,
     zlength,
     MAX_TIME
 )

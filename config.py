@@ -1,6 +1,6 @@
 # Config
-zlength = 100  # Crop the current image to zlength in z
-MAX_TIME = 100  # How many instants we propagate
+zlength = -1  # Crop the current image to zlength in z. Negative for no cropping (big size)
+MAX_TIME = 3  # How many instants we propagate
 dz = 5  # How much we move on each instant
 
 # Constants (unused)

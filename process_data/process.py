@@ -27,6 +27,8 @@ y = np.load(get_path('y.npy', ["..", "npy_files"]))
 t = np.load(get_path('t.npy', ["..", "npy_files"]))
 print("OK")
 
+zlength = t.shape[0] if zlength < 0 else zlength
+
 # Apply discrete fourier transform
 print("Moving data to GPU. Allocating array %s..." % str(by.shape), end="", flush=True)
 byfft = cp.asarray(by, dtype="complex64")

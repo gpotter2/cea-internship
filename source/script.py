@@ -23,8 +23,7 @@ def GetUpdateTimestep():
 
 # Build time index
 req_time = int((
-    (GetUpdateTimestep() or self.t[0]) - self.t[0])/
-    (self.t[-1] - self.t[0]) * (len(self.t) - 1)
+    (GetUpdateTimestep() or 0)) / dz
 )
 
 # Configure output
