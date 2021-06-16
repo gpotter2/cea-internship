@@ -43,7 +43,7 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
     self.t[1] - self.t[0]
 )
 
-MAX_TIME = min(self.nbframes, MAX_TIME)
+MAX_TIME = builtins.min(self.nbframes, MAX_TIME)
 
 # Set time steps
 outInfo.Remove(executive.TIME_STEPS())
