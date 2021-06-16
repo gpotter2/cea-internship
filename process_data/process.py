@@ -17,7 +17,7 @@ def get_path(x, path=[]):
 # Read config
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from config import dz, zlength
+from config import dz, initial_dz, zlength
 
 # Load files
 print("Loading files...", end="", flush=True)

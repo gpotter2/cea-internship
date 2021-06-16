@@ -9,7 +9,6 @@ import glob
 
 import numpy as np
 
-self.dz = dz
 self.zlength = zlength
 
 # Configure output
@@ -42,7 +41,7 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
     # (dx, dy, dz)
     self.x[1] - self.x[0],
     self.y[1] - self.y[0],
-    self.dz
+    self.t[1] - self.t[0]
 )
 
 # Set time steps
@@ -51,5 +50,5 @@ for timestep in self.t:
     outInfo.Append(executive.TIME_STEPS(), timestep)
 
 outInfo.Remove(executive.TIME_RANGE())
-outInfo.Append(executive.TIME_RANGE(), self.t[0])
-outInfo.Append(executive.TIME_RANGE(), self.t[-1])
+outInfo.Append(executive.TIME_RANGE(), 0)
+outInfo.Append(executive.TIME_RANGE(), MAX_TIME)
