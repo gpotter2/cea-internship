@@ -22,6 +22,8 @@ from config import (
     STORAGE_FOLDER,
     dz,
     time_drop,
+    x_drop,
+    y_drop,
     zlength,
 )
 
@@ -37,6 +39,8 @@ def get_path(x, folder=""):
 dz = %s
 zlength = %s
 MAX_TIME = %s
+x_drop = %s
+y_drop = %s
 time_drop = %s
 
 ### END OF HEADER ###
@@ -47,6 +51,8 @@ time_drop = %s
     dz,
     zlength,
     MAX_TIME,
+    x_drop,
+    y_drop,
     time_drop
 )
 

@@ -17,8 +17,8 @@ outInfo = executive.GetOutputInformation(0)
 self.nbframes = builtins.sum(1 for _ in glob.iglob(get_path("*", "frames")))
 
 # Read axis
-self.x = np.load(get_path("x.npy", "npy_files"))
-self.y = np.load(get_path("y.npy", "npy_files"))
+self.x = np.load(get_path("x.npy", "npy_files"))[::x_drop]
+self.y = np.load(get_path("y.npy", "npy_files"))[::y_drop]
 self.t = np.load(get_path("t.npy", "npy_files"))[::time_drop]
 
 self.zlength = self.t.shape[0] if zlength < 1 else zlength
