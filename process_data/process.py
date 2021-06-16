@@ -64,26 +64,18 @@ propag = cp.asarray(propag,
                     dtype="complex64")
 print("OK")
 
-prog = tqdm(range(zlength))
-prog.set_description("Propagating")
-for i in prog:
-    byfft *= propag
-    v = cpx.scipy.fftpack.ifftn(byfft,
-                                axes=(0,1,2))
-    data.append(cp.real(v).get())
-    del v
-
 dirpath = get_path("", ["frames"])
 if not os.path.exists(dirpath):
     os.mkdir(dirpath)
 
 prog = tqdm(range(len(t)))
-frame = np.empty(x.shape + y.shape + (zlength,))
+prog.set_description("Propagating")
 for i in prog:
-    prog.set_description("Building frames")
-    for z in range(zlength):
-        # We transpose the frame to put x and y axis back
-        frame[:,:,z] = data[z][:,:,i].transpose()
+    byfft *= propag
+    v = cpx.scipy.fftpack.ifftn(byfft,
+                                axes=(0,1,2))
+    frame = cp.real(v[:,:,:zlength]).get()
     np.save(get_path("f%s.npy" % i, ["frames"]), frame)
+    del v
 
 print("done")
