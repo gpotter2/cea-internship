@@ -17,7 +17,7 @@ def get_path(x, path=[]):
 # Read config
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from config import dz, initial_dz, zlength
+from config import dz, zlength, MAX_TIME
 
 # Load files
 print("Loading files...", end="", flush=True)
@@ -70,7 +70,7 @@ dirpath = get_path("", ["frames"])
 if not os.path.exists(dirpath):
     os.mkdir(dirpath)
 
-prog = tqdm(range(len(t)))
+prog = tqdm(range(MAX_TIME))
 prog.set_description("Propagating")
 for i in prog:
     byfft *= propag
