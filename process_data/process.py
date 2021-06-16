@@ -11,20 +11,26 @@ import cupyx as cpx
 
 from tqdm import tqdm
 
-def get_path(x, path=[]):
-    return os.path.abspath(os.path.join(*([os.path.dirname(__file__)] + path + [x])))
-
 # Read config
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from config import dz, zlength, MAX_TIME, time_drop
+from config import (
+    MAX_TIME,
+    STORAGE_FOLDER,
+    dz,
+    time_drop,
+    zlength,
+)
+
+def get_path(x, folder=""):
+    return os.path.abspath(os.path.join(STORAGE_FOLDER, folder, x))
 
 # Load files
 print("Loading files...", end="", flush=True)
-by = np.load(get_path('By.npy', ["..", "npy_files"]))
-x = np.load(get_path('x.npy', ["..", "npy_files"]))
-y = np.load(get_path('y.npy', ["..", "npy_files"]))
-t = np.load(get_path('t.npy', ["..", "npy_files"]))
+by = np.load(get_path('By.npy', "npy_files"))
+x = np.load(get_path('x.npy', "npy_files"))
+y = np.load(get_path('y.npy', "npy_files"))
+t = np.load(get_path('t.npy', "npy_files"))
 print("OK")
 
 zlength = t.shape[0] if zlength < 0 else zlength
@@ -66,7 +72,7 @@ propag = cp.asarray(propag,
                     dtype="complex64")
 print("OK")
 
-dirpath = get_path("", ["frames"])
+dirpath = get_path("", "frames")
 if not os.path.exists(dirpath):
     os.mkdir(dirpath)
 
@@ -77,7 +83,7 @@ for i in prog:
     v = cpx.scipy.fftpack.ifftn(byfft,
                                 axes=(0,1,2))
     frame = cp.real(v[:,:,:zlength:time_drop]).transpose(1, 0, 2).get()
-    np.savez(get_path("f%s.npz" % i, ["frames"]), frame=frame)
+    np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
     del v
 
 print("done")

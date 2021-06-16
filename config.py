@@ -5,6 +5,8 @@ dz = -10  # How much we move on each instant
 
 time_drop = 4  # How much we drop of time precision for the visualisation
 
+STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
+
 # Constants (unused)
 foc_pos = 56
 antenna_from_foc = 10

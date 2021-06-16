@@ -27,7 +27,7 @@ exts = [executive.UPDATE_EXTENT().Get(outInfo, i) for i in range(6)]
 output.SetExtent(exts)
 
 # Get data at specific timeframe
-fnpz = np.load(get_path("f%s.npz" % req_time, True))
+fnpz = np.load(get_path("f%s.npz" % req_time, "frames"))
 data = fnpz['frame']
 fnpz.close()
 
