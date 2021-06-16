@@ -47,8 +47,8 @@ MAX_TIME = builtins.min(self.nbframes, MAX_TIME)
 
 # Set time steps
 outInfo.Remove(executive.TIME_STEPS())
-for timestep in np.arange(0, MAX_TIME, abs(dz)):
-    outInfo.Append(executive.TIME_STEPS(), timestep)
+for timestep in range(0, MAX_TIME):
+    outInfo.Append(executive.TIME_STEPS(), timestep * abs(dz))
 
 outInfo.Remove(executive.TIME_RANGE())
 outInfo.Append(executive.TIME_RANGE(), 0)

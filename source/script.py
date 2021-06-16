@@ -19,7 +19,7 @@ def GetUpdateTimestep():
 
 # Build time index
 req_time = int((
-    (GetUpdateTimestep() or 0)) / dz
+    (GetUpdateTimestep() or 0)) / abs(dz)
 )
 
 # Configure output
