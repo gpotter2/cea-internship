@@ -17,7 +17,7 @@ __DIR__ = os.path.abspath(os.path.dirname(__file__))
 # Read config
 import sys, os
 sys.path.append(os.path.join(__DIR__, ".."))
-from config import dz, zlength, MAX_TIME
+from config import dz, zlength, MAX_TIME, time_drop
 
 HEADER = """
 ### GENERATED HEADER ###
@@ -33,6 +33,7 @@ def get_path(name, frames=False):
 dz = %s
 zlength = %s
 MAX_TIME = %s
+time_drop = %s
 
 ### END OF HEADER ###
 
@@ -42,7 +43,8 @@ MAX_TIME = %s
     PATH_TO_NPY,
     dz,
     zlength,
-    MAX_TIME
+    MAX_TIME,
+    time_drop
 )
 
 def process(data):
