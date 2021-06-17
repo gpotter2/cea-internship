@@ -32,7 +32,7 @@ def get_path(x, folder=""):
 parser = argparse.ArgumentParser(description='Process numpy files to create frames')
 parser.add_argument('--filter-lowpass', type=float, nargs=1,
                     help='Applies a low-pass filter to a frequence')
-parser.add_argument('--filter-highpass', type=str, nargs=1,
+parser.add_argument('--filter-highpass', type=float, nargs=1,
                     help='Applies a low-pass filter to a frequence')
 args = parser.parse_args()
 
