@@ -1,7 +1,7 @@
 # Config
 zlength = -1  # Crop the current image to zlength in z. Negative for no cropping (big size)
 MAX_TIME = 100  # How many instants we propagate
-dz = -10  # How much we move on each instant
+dz = -1  # How much we move on each instant
 
 # How much we drop of precision for the visualisation.
 # Note that there is already a /2 for X and Y before the calculus to make
