@@ -5,6 +5,7 @@ Process the data:
     - generate frames
 """
 
+import argparse
 import os
 import numpy as np
 import cupy as cp
@@ -77,13 +78,15 @@ aFT = np.abs(FT)
 FTi, FTni = (aFT > 0.01), (aFT <= 0.01)  # Do not try to divide by 0
 # Check for filter
 if args.filter_lowpass:
-    print("- Applying Lowpass W<%s" % args.filter_lowpass)
-    FTi = FTi & (aFT <= args.filter_lowpass)
-    FTni = FTni | (aFT > args.filter_lowpass)
+    fl = args.filter_lowpass[0]
+    print("- Applying Lowpass W<%s" % fl)
+    FTi = FTi & (aFT <= fl)
+    FTni = FTni | (aFT > fl)
 if args.filter_highpass:
-    print("- Applying Highpass W>%s" % args.filter_highpass)
-    FTi = FTi & (aFT >= args.filter_highpass)
-    FTni = FTni | (aFT < args.filter_highpass)
+    fl = args.filter_highpass[0]
+    print("- Applying Highpass W>%s" % fl)
+    FTi = FTi & (aFT >= fl)
+    FTni = FTni | (aFT < fl)
 del aFT
 # Do propag
 propag[FTi] = np.exp(-np.pi * 1j * (FX[FTi]**2 + FY[FTi]**2) * dz / FT[FTi])
