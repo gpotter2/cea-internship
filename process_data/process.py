@@ -1,8 +1,9 @@
 """
-The 'RequestInformation Script' parameter of a ProgrammableSource
+Process the data:
+    - read npy files
+    - propagate files
+    - generate frames
 """
-
-# https://docs.paraview.org/en/latest/ReferenceManual/pythonProgrammableFilter.html#programmable-filter
 
 import os
 import numpy as np
@@ -26,6 +27,13 @@ from config import (
 
 def get_path(x, folder=""):
     return os.path.abspath(os.path.join(STORAGE_FOLDER, folder, x))
+
+parser = argparse.ArgumentParser(description='Process numpy files to create frames')
+parser.add_argument('--filter-lowpass', type=float, nargs=1,
+                    help='Applies a low-pass filter to a frequence')
+parser.add_argument('--filter-highpass', type=str, nargs=1,
+                    help='Applies a low-pass filter to a frequence')
+args = parser.parse_args()
 
 # Load files
 print("Loading files...", end="", flush=True)
@@ -65,7 +73,19 @@ data = []
 print("Building propagation vector...", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
 propag = np.zeros(by.shape, dtype="complex64")
-FTi, FTni = (np.abs(FT) > 0.01), (np.abs(FT) <= 0.01)  # Do not try to divide by 0
+aFT = np.abs(FT)
+FTi, FTni = (aFT > 0.01), (aFT <= 0.01)  # Do not try to divide by 0
+# Check for filter
+if args.filter_lowpass:
+    print("- Applying Lowpass W<%s" % args.filter_lowpass)
+    FTi = FTi & (aFT <= args.filter_lowpass)
+    FTni = FTni | (aFT > args.filter_lowpass)
+if args.filter_highpass:
+    print("- Applying Highpass W>%s" % args.filter_highpass)
+    FTi = FTi & (aFT >= args.filter_highpass)
+    FTni = FTni | (aFT < args.filter_highpass)
+del aFT
+# Do propag
 propag[FTi] = np.exp(-np.pi * 1j * (FX[FTi]**2 + FY[FTi]**2) * dz / FT[FTi])
 propag[FTni] = 0.
 print("OK")
