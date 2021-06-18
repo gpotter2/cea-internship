@@ -59,7 +59,7 @@ print("Moving data to GPU. Allocating array %sx%sx%s..." % by.shape, end="", flu
 byfft = cp.asarray(by, dtype="complex64")
 print("OK")
 
-# FFT
+# FW
 print("Applying discrete fast fourier transform...", end="", flush=True)
 cpx.scipy.fft.fftn(byfft,
                    axes=(0,1,2),
@@ -67,13 +67,16 @@ cpx.scipy.fft.fftn(byfft,
                    overwrite_x=True)
 print("OK")
 
-print("Building freq grid...", end="", flush=True)
-# Build frequences grid
-freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
-freqx = np.fft.fftfreq(x.size, d=x[1] - x[0])
-freqt = np.fft.fftfreq(t.size, d=t[1] - t[0])
-FY, FX, FT = np.meshgrid(freqy, freqx, freqt, indexing='ij')
-print("OK")
+def build_freq_grid(x, y, z):
+    print("Building freq grid...", end="", flush=True)
+    # Build frequences grid
+    freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
+    freqx = np.fft.fftfreq(x.size, d=x[1] - x[0])
+    freqt = np.fft.fftfreq(t.size, d=t[1] - t[0])
+    KY, KX, W = np.meshgrid(freqy, freqx, freqt, indexing='ij')
+    print("OK")
+
+KY, KX, X = build_freq_grid(x, y, t)
 
 data = []
 
@@ -82,25 +85,27 @@ data = []
 print("Building propagation vector (slow).", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
 propag = np.zeros(by.shape, dtype="complex64")
-aFT = np.abs(FT)
-FTi, FTni = (aFT > 0.01), (aFT <= 0.01)  # Do not try to divide by 0
+aW = np.abs(W)
+Wi, Wni = (aW > 0.01), (aW <= 0.01)  # Do not try to divide by 0
 # Check for filter
 if args.filter_lowpass:
     fl = args.filter_lowpass[0]
-    FTi = FTi & (aFT <= fl)
-    FTni = FTni | (aFT > fl)
+    Wi = Wi & (aW <= fl)
+    Wni = Wni | (aW > fl)
 if args.filter_highpass:
     fl = args.filter_highpass[0]
-    FTi = FTi & (aFT >= fl)
-    FTni = FTni | (aFT < fl)
-del aFT
+    Wi = Wi & (aW >= fl)
+    Wni = Wni | (aW < fl)
+del aW
 # Do propag
 if PROPAGATION_TYPE == "z":
-    propag[FTi] = np.exp(-np.pi * 1j * (FX[FTi]**2 + FY[FTi]**2) * dz / FT[FTi])
+    propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dz / W[Wi])
+    propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
-    propag[FTi] = np.exp(np.pi * 2j * FT[FTi] * (1 - 0.5 * (FX[FTi]**2 + FY[FTi]**2) / FT[FTi]**2) * dz)
+    KZ2 = W**2 - KX**2 - KY**2
+    KZ2[KZ2 < 0] = 0
+    propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * dz)
 print(".", end="", flush=True)
-propag[FTni] = 0.
 print("OK")
 print("Copying propagation vector to GPU...", end="", flush=True)
 propag = cp.asarray(propag,
@@ -126,7 +131,7 @@ if PROPAGATION_TYPE == "z":
 elif PROPAGATION_TYPE == "t":
     # First propagate on z
     prog = tqdm(range(third_axis_length))
-    prog.set_description("1/2 Propagating on z")
+    prog.set_description("1/3 Propagating on z")
     data = []
     for i in prog:
         byfft *= propag
@@ -136,13 +141,16 @@ elif PROPAGATION_TYPE == "t":
             v[::y_drop, ::x_drop, :]
         ).transpose(1, 0, 2).get())
         del v
-    # Then build the frames on t
-    prog = tqdm(range(data[0].shape[2]))
+    print("2/3 Building first grid")
+    # Then build the first grid on 0
     frame = np.empty(data[0].shape[:2] + (third_axis_length,))
+    for z in range(third_axis_length):
+        frame[:,:,z] = data[z][:,:,i]
+    # Finally propagate on time
+    prog = tqdm(range(data[0].shape[2]))
+    prog.set_description("3/3 Propagating on t")
     for i in prog:
-        prog.set_description("2/2 Building frames")
         for z in range(third_axis_length):
-            # We transpose the frame to put x and y axis back
             frame[:,:,z] = data[z][:,:,i]
         np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
 
