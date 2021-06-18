@@ -21,7 +21,7 @@ from config import (
     PROPAGATION_TYPE,
     STORAGE_FOLDER,
     dz,
-    third_axis_length,
+    z_length,
     time_drop,
     x_drop,
     y_drop,
@@ -37,6 +37,8 @@ parser.add_argument('--filter-highpass', type=float, nargs=1,
                     help='Applies a low-pass filter to a frequence')
 args = parser.parse_args()
 
+print("PROPAGATION TYPE: %s" % PROPAGATION_TYPE)
+
 # Load files
 print("Loading files...", end="", flush=True)
 by = np.load(get_path('By.npy', "npy_files"))
@@ -45,7 +47,10 @@ y = np.load(get_path('y.npy', "npy_files"))
 t = np.load(get_path('t.npy', "npy_files"))
 print("OK")
 
-third_axis_length = t.shape[0] if third_axis_length < 0 else third_axis_length
+if PROPAGATION_TYPE == "z":
+    third_axis_length = t.shape[0]
+else:
+    third_axis_length = z_length
 
 # Apply discrete fourier transform
 print("Moving data to GPU. Allocating array %s..." % str(by.shape), end="", flush=True)
@@ -72,10 +77,11 @@ data = []
 
 # Propagate
 
-print("Building propagation vector...", end="", flush=True)
+print("Building propagation vector.", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
 propag = np.zeros(by.shape, dtype="complex64")
 aFT = np.abs(FT)
+print(".", end="", flush=True)
 FTi, FTni = (aFT > 0.01), (aFT <= 0.01)  # Do not try to divide by 0
 # Check for filter
 if args.filter_lowpass:
@@ -91,6 +97,7 @@ if args.filter_highpass:
 del aFT
 # Do propag
 propag[FTi] = np.exp(-np.pi * 1j * (FX[FTi]**2 + FY[FTi]**2) * dz / FT[FTi])
+print(".", end="", flush=True)
 propag[FTni] = 0.
 print("OK")
 print("Copying propagation vector to GPU...", end="", flush=True)
@@ -102,7 +109,6 @@ dirpath = get_path("", "frames")
 if not os.path.exists(dirpath):
     os.mkdir(dirpath)
 
-print("PROPAGATION TYPE: %s" % PROPAGATION_TYPE)
 if PROPAGATION_TYPE == "z":
     prog = tqdm(range(MAX_INSTANT))
     prog.set_description("1/1 Propagating on z")
@@ -129,15 +135,13 @@ elif PROPAGATION_TYPE == "t":
         ).get())
         del v
     # Then build the frames on t
-    prog = tqdm(range(len(MAX_INSTANT)))
-    frame = np.empty(x.shape + y.shape + (third_axis_length,))
+    prog = tqdm(range(MAX_INSTANT))
+    frame = np.empty(data[0].shape[:2][::-1] + (third_axis_length,))
     for i in prog:
         prog.set_description("2/2 Building frames")
         for z in range(third_axis_length):
             # We transpose the frame to put x and y axis back
             frame[:,:,z] = data[z][:,:,i].transpose()
         np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
-
-    print("done")
 
 print("done")

@@ -21,7 +21,10 @@ self.x = np.load(get_path("x.npy", "npy_files"))[::x_drop]
 self.y = np.load(get_path("y.npy", "npy_files"))[::y_drop]
 self.t = np.load(get_path("t.npy", "npy_files"))[::time_drop]
 
-self.third_axis_length = self.t.shape[0] if third_axis_length < 1 else third_axis_length
+if PROPAGATION_TYPE == "z":
+    self.third_axis_length = self.t.shape[0]
+else:
+    self.third_axis_length = z_length
 
 ## Define re-usable grid
 #X, Y, Z = np.meshgrid(self.x, self.y, self.z)

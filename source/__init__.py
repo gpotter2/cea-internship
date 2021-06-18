@@ -22,7 +22,7 @@ from config import (
     PROPAGATION_TYPE,
     STORAGE_FOLDER,
     dz,
-    third_axis_length,
+    z_length,
     time_drop,
     x_drop,
     y_drop,
@@ -40,7 +40,7 @@ def get_path(x, folder=""):
 MAX_INSTANT = %s
 PROPAGATION_TYPE = %s
 dz = %s
-third_axis_length = %s
+z_length = %s
 time_drop = %s
 x_drop = %s
 y_drop = %s
@@ -54,7 +54,7 @@ y_drop = %s
     MAX_INSTANT,
     PROPAGATION_TYPE,
     dz,
-    third_axis_length,
+    z_length,
     time_drop,
     x_drop,
     y_drop,
