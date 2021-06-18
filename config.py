@@ -5,8 +5,8 @@
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
 
-MAX_INSTANT = 1000  # How many instants we propagate
-dz = -1  # How much we move between two z
+MAX_INSTANT = 10  # How many instants we propagate
+dz = -0.1  # How much we move between two z
 
 # How much we drop of precision for the visualisation.
 # Note that there is already a /2 for X and Y before the calculus to make
@@ -19,7 +19,7 @@ time_drop = 8
 
 # PROPAGATION T ONLY CONFIG
 z_length = 100
-time_step = 10  # Jump over X frames
+time_step = 1  # Jump over X frames
 
 # Storage
 STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
