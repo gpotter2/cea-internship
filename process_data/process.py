@@ -17,13 +17,14 @@ from tqdm import tqdm
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from config import (
-    MAX_TIME,
+    MAX_INSTANT,
+    PROPAGATION_TYPE,
     STORAGE_FOLDER,
     dz,
+    third_axis_length,
+    time_drop,
     x_drop,
     y_drop,
-    time_drop,
-    zlength,
 )
 
 def get_path(x, folder=""):
@@ -44,7 +45,7 @@ y = np.load(get_path('y.npy', "npy_files"))
 t = np.load(get_path('t.npy', "npy_files"))
 print("OK")
 
-zlength = t.shape[0] if zlength < 0 else zlength
+third_axis_length = t.shape[0] if third_axis_length < 0 else third_axis_length
 
 # Apply discrete fourier transform
 print("Moving data to GPU. Allocating array %s..." % str(by.shape), end="", flush=True)
@@ -101,16 +102,42 @@ dirpath = get_path("", "frames")
 if not os.path.exists(dirpath):
     os.mkdir(dirpath)
 
-prog = tqdm(range(MAX_TIME))
-prog.set_description("Propagating")
-for i in prog:
-    byfft *= propag
-    v = cpx.scipy.fftpack.ifftn(byfft,
-                                axes=(0,1,2))
-    frame = cp.real(
-        v[::y_drop, ::x_drop, :zlength:time_drop]
-    ).transpose(1, 0, 2).get()
-    np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
-    del v
+print("PROPAGATION TYPE: %s" % PROPAGATION_TYPE)
+if PROPAGATION_TYPE == "z":
+    prog = tqdm(range(MAX_INSTANT))
+    prog.set_description("1/1 Propagating on z")
+    for i in prog:
+        byfft *= propag
+        v = cpx.scipy.fftpack.ifftn(byfft,
+                                    axes=(0,1,2))
+        frame = cp.real(
+            v[::y_drop, ::x_drop, :third_axis_length:time_drop]
+        ).transpose(1, 0, 2).get()
+        np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
+        del v
+elif PROPAGATION_TYPE == "t":
+    # First propagate on z
+    prog = tqdm(range(third_axis_length))
+    prog.set_description("1/2 Propagating")
+    data = []
+    for i in prog:
+        byfft *= propag
+        v = cpx.scipy.fftpack.ifftn(byfft,
+                                    axes=(0,1,2))
+        data.append(cp.real(
+            v[::y_drop, ::x_drop, :MAX_INSTANT]
+        ).get())
+        del v
+    # Then build the frames on t
+    prog = tqdm(range(len(MAX_INSTANT)))
+    frame = np.empty(x.shape + y.shape + (third_axis_length,))
+    for i in prog:
+        prog.set_description("2/2 Building frames")
+        for z in range(third_axis_length):
+            # We transpose the frame to put x and y axis back
+            frame[:,:,z] = data[z][:,:,i].transpose()
+        np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
+
+    print("done")
 
 print("done")

@@ -18,13 +18,14 @@ __DIR__ = os.path.abspath(os.path.dirname(__file__))
 import sys, os
 sys.path.append(os.path.join(__DIR__, ".."))
 from config import (
-    MAX_TIME,
+    MAX_INSTANT,
+    PROPAGATION_TYPE,
     STORAGE_FOLDER,
     dz,
+    third_axis_length,
     time_drop,
     x_drop,
     y_drop,
-    zlength,
 )
 
 HEADER = """
@@ -36,24 +37,27 @@ exec(open(activate_this).read(), dict(__file__=activate_this))
 def get_path(x, folder=""):
     return os.path.abspath(os.path.join("%s", folder, x))
 
+MAX_INSTANT = %s
+PROPAGATION_TYPE = %s
 dz = %s
-zlength = %s
-MAX_TIME = %s
+third_axis_length = %s
+time_drop = %s
 x_drop = %s
 y_drop = %s
-time_drop = %s
 
 ### END OF HEADER ###
 
 """ % (
     ACTIVATE_THIS_ENV,
     STORAGE_FOLDER,
+    #
+    MAX_INSTANT,
+    PROPAGATION_TYPE,
     dz,
-    zlength,
-    MAX_TIME,
+    third_axis_length,
+    time_drop,
     x_drop,
     y_drop,
-    time_drop
 )
 
 def process(data):

@@ -19,7 +19,9 @@ def GetUpdateTimestep():
 
 # Build time index
 req_time = int((
-    (GetUpdateTimestep() or 0)) / abs(dz)
+    (GetUpdateTimestep() or 0)) / (
+        abs(dz) if PROPAGATION_TYPE == "z" else (selt.t[1] - self.t[0])
+    )
 )
 
 # Configure output

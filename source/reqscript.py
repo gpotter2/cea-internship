@@ -21,7 +21,7 @@ self.x = np.load(get_path("x.npy", "npy_files"))[::x_drop]
 self.y = np.load(get_path("y.npy", "npy_files"))[::y_drop]
 self.t = np.load(get_path("t.npy", "npy_files"))[::time_drop]
 
-self.zlength = self.t.shape[0] if zlength < 1 else zlength
+self.third_axis_length = self.t.shape[0] if third_axis_length < 1 else third_axis_length
 
 ## Define re-usable grid
 #X, Y, Z = np.meshgrid(self.x, self.y, self.z)
@@ -34,22 +34,25 @@ outInfo.Set(executive.WHOLE_EXTENT(),
     # (xmin, xmax, ymin, ymax, zmin, zmax)
     0, self.x.shape[0] - 1,
     0, self.y.shape[0] - 1,
-    0, self.zlength - 1
+    0, self.third_axis_length - 1
 )
+dt = self.t[1] - self.t[0]
 outInfo.Set(vtk.vtkDataObject.SPACING(),
     # (dx, dy, dz)
     self.x[1] - self.x[0],
     self.y[1] - self.y[0],
-    self.t[1] - self.t[0]
+    dt if PROPAGATION_TYPE == "z" else abs(dz)
 )
 
-MAX_TIME = builtins.min(self.nbframes, MAX_TIME)
+MAX_INSTANT = builtins.min(self.nbframes, MAX_INSTANT)
 
 # Set time steps
 outInfo.Remove(executive.TIME_STEPS())
-for timestep in range(0, MAX_TIME):
-    outInfo.Append(executive.TIME_STEPS(), timestep * abs(dz))
+for timestep in range(0, MAX_INSTANT):
+    outInfo.Append(executive.TIME_STEPS(), timestep * (
+        abs(dz) if PROPAGATION_TYPE == "z" else dt
+    )
 
 outInfo.Remove(executive.TIME_RANGE())
 outInfo.Append(executive.TIME_RANGE(), 0)
-outInfo.Append(executive.TIME_RANGE(), MAX_TIME)
+outInfo.Append(executive.TIME_RANGE(), MAX_INSTANT)
