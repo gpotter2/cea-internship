@@ -54,7 +54,7 @@ outInfo.Remove(executive.TIME_STEPS())
 for timestep in range(0, MAX_INSTANT):
     outInfo.Append(executive.TIME_STEPS(), timestep * (
         abs(dz) if PROPAGATION_TYPE == "z" else dt
-    )
+    ))
 
 outInfo.Remove(executive.TIME_RANGE())
 outInfo.Append(executive.TIME_RANGE(), 0)
