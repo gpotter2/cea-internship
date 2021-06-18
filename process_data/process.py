@@ -77,7 +77,7 @@ data = []
 
 # Propagate
 
-print("Building propagation vector.", end="", flush=True)
+print("Building propagation vector (slow).", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
 propag = np.zeros(by.shape, dtype="complex64")
 aFT = np.abs(FT)
@@ -132,16 +132,16 @@ elif PROPAGATION_TYPE == "t":
                                     axes=(0,1,2))
         data.append(cp.real(
             v[::y_drop, ::x_drop, :MAX_INSTANT:time_drop]
-        ).get())
+        ).transpose(1, 0, 2).get())
         del v
     # Then build the frames on t
-    prog = tqdm(data[0].shape[2])
-    frame = np.empty(data[0].shape[:2][::-1] + (third_axis_length,))
+    prog = tqdm(range(data[0].shape[2]))
+    frame = np.empty(data[0].shape[:2] + (third_axis_length,))
     for i in prog:
         prog.set_description("2/2 Building frames")
         for z in range(third_axis_length):
             # We transpose the frame to put x and y axis back
-            frame[:,:,z] = data[z][:,:,i].transpose()
+            frame[:,:,z] = data[z][:,:,i]
         np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
 
 print("done")
