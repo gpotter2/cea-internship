@@ -38,6 +38,9 @@ parser.add_argument('--filter-highpass', type=float, nargs=1,
 args = parser.parse_args()
 
 print("PROPAGATION TYPE: %s" % PROPAGATION_TYPE)
+if args.filter_lowpass or args.filter_highpass:
+    print("FILTER: %s, fc=%s" % (args.filter_lowpass and "lowpass" or "highpass",
+                                (args.filter_lowpass or args.filter_highpass)[0]))
 
 # Load files
 print("Loading files...", end="", flush=True)
@@ -81,17 +84,14 @@ print("Building propagation vector (slow).", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
 propag = np.zeros(by.shape, dtype="complex64")
 aFT = np.abs(FT)
-print(".", end="", flush=True)
 FTi, FTni = (aFT > 0.01), (aFT <= 0.01)  # Do not try to divide by 0
 # Check for filter
 if args.filter_lowpass:
     fl = args.filter_lowpass[0]
-    print("- Applying Lowpass W<%s" % fl)
     FTi = FTi & (aFT <= fl)
     FTni = FTni | (aFT > fl)
 if args.filter_highpass:
     fl = args.filter_highpass[0]
-    print("- Applying Highpass W>%s" % fl)
     FTi = FTi & (aFT >= fl)
     FTni = FTni | (aFT < fl)
 del aFT
