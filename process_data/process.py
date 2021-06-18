@@ -120,21 +120,21 @@ if PROPAGATION_TYPE == "z":
         v = cpx.scipy.fftpack.ifftn(byfft,
                                     axes=(0,1,2))
         frame = cp.real(
-            v[::y_drop, ::x_drop, :third_axis_length:time_drop]
+            v[::y_drop, ::x_drop, :third_axis_length]
         ).transpose(1, 0, 2).get()
         np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
         del v
 elif PROPAGATION_TYPE == "t":
     # First propagate on z
     prog = tqdm(range(third_axis_length))
-    prog.set_description("1/2 Propagating")
+    prog.set_description("1/2 Propagating on z")
     data = []
     for i in prog:
         byfft *= propag
         v = cpx.scipy.fftpack.ifftn(byfft,
                                     axes=(0,1,2))
         data.append(cp.real(
-            v[::y_drop, ::x_drop, ::time_drop][:,:,:MAX_INSTANT]
+            v[::y_drop, ::x_drop, :]
         ).transpose(1, 0, 2).get())
         del v
     # Then build the frames on t

@@ -15,11 +15,9 @@ x_drop = 2
 y_drop = 2
 
 # PROPAGATION Z ONLY CONFIG
-time_drop = 8
 
 # PROPAGATION T ONLY CONFIG
 z_length = 100
-time_step = 10  # Jump over X frames
 
 # Storage
 STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
@@ -30,7 +28,3 @@ antenna_from_foc = 10
 initial_dz = antenna_from_foc - foc_pos
 
 # --- End of config --- #
-
-# Logic
-if PROPAGATION_TYPE == "t":
-    time_drop = time_step

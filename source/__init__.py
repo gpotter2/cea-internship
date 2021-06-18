@@ -23,7 +23,6 @@ from config import (
     STORAGE_FOLDER,
     dz,
     z_length,
-    time_drop,
     x_drop,
     y_drop,
 )
@@ -41,7 +40,6 @@ MAX_INSTANT = %s
 PROPAGATION_TYPE = "%s"
 dz = %s
 z_length = %s
-time_drop = %s
 x_drop = %s
 y_drop = %s
 
@@ -55,7 +53,6 @@ y_drop = %s
     PROPAGATION_TYPE,
     dz,
     z_length,
-    time_drop,
     x_drop,
     y_drop,
 )
