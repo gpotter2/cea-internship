@@ -99,7 +99,7 @@ del aFT
 if PROPAGATION_TYPE == "z":
     propag[FTi] = np.exp(-np.pi * 1j * (FX[FTi]**2 + FY[FTi]**2) * dz / FT[FTi])
 elif PROPAGATION_TYPE == "t":
-    propag[FTi] = np.exp(np.pi * 2j * FT[FTi] * (1 - 0.5 * (FX[FTi]**2 - FY[FTi]**2) / FT[FTi]**2) * dz)
+    propag[FTi] = np.exp(np.pi * 2j * FT[FTi] * (1 - 0.5 * (FX[FTi]**2 + FY[FTi]**2) / FT[FTi]**2) * dz)
 print(".", end="", flush=True)
 propag[FTni] = 0.
 print("OK")
@@ -134,7 +134,7 @@ elif PROPAGATION_TYPE == "t":
         v = cpx.scipy.fftpack.ifftn(byfft,
                                     axes=(0,1,2))
         data.append(cp.real(
-            v[::y_drop, ::x_drop, :MAX_INSTANT:time_drop]
+            v[::y_drop, ::x_drop, ::time_drop][:,:,:MAX_INSTANT]
         ).transpose(1, 0, 2).get())
         del v
     # Then build the frames on t
