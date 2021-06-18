@@ -131,11 +131,11 @@ elif PROPAGATION_TYPE == "t":
         v = cpx.scipy.fftpack.ifftn(byfft,
                                     axes=(0,1,2))
         data.append(cp.real(
-            v[::y_drop, ::x_drop, :MAX_INSTANT]
+            v[::y_drop, ::x_drop, :MAX_INSTANT:time_drop]
         ).get())
         del v
     # Then build the frames on t
-    prog = tqdm(range(MAX_INSTANT))
+    prog = tqdm(data[0].shape[2])
     frame = np.empty(data[0].shape[:2][::-1] + (third_axis_length,))
     for i in prog:
         prog.set_description("2/2 Building frames")

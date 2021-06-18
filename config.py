@@ -5,7 +5,7 @@
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
 
-MAX_INSTANT = 100  # How many instants we propagate
+MAX_INSTANT = 500  # How many instants we propagate
 dz = -1  # How much we move between two z
 
 # How much we drop of precision for the visualisation.
@@ -15,15 +15,22 @@ x_drop = 2
 y_drop = 2
 
 # PROPAGATION Z ONLY CONFIG
-time_drop = 8  # Only used when propagating on z
+time_drop = 8
 
 # PROPAGATION T ONLY CONFIG
 z_length = 100
+time_step = 10  # Jump over X frames
 
-
+# Storage
 STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
 
 # Constants (unused)
 foc_pos = 56
 antenna_from_foc = 10
 initial_dz = antenna_from_foc - foc_pos
+
+# --- End of config --- #
+
+# Logic
+if PROPAGATION_TYPE == "t":
+    time_drop = time_step
