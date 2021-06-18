@@ -53,7 +53,7 @@ else:
     third_axis_length = z_length
 
 # Apply discrete fourier transform
-print("Moving data to GPU. Allocating array %s..." % str(by.shape), end="", flush=True)
+print("Moving data to GPU. Allocating array %sx%sx%s..." % by.shape, end="", flush=True)
 byfft = cp.asarray(by, dtype="complex64")
 print("OK")
 
