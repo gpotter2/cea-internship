@@ -38,7 +38,7 @@ def get_path(x, folder=""):
     return os.path.abspath(os.path.join("%s", folder, x))
 
 MAX_INSTANT = %s
-PROPAGATION_TYPE = %s
+PROPAGATION_TYPE = "%s"
 dz = %s
 z_length = %s
 time_drop = %s
