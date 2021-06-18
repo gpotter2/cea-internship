@@ -22,7 +22,6 @@ from config import (
     STORAGE_FOLDER,
     dz,
     z_length,
-    time_drop,
     x_drop,
     y_drop,
 )
