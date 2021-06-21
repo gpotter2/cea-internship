@@ -148,7 +148,10 @@ elif PROPAGATION_TYPE == "t":
         del v
     # Then build the frames
     frame = np.empty(data[0].shape[:2] + (z_length,))
-    prog = tqdm(range(data[0].shape[2]))
+    timestamps = data[0].shape[2]
+    if MAX_INSTANT > 0:
+        timestamps = min(MAX_INSTANT, timestamps)
+    prog = tqdm(range(timestamps))
     prog.set_description("2/2 Building frames")
     for i in prog:
         for z in range(z_length):

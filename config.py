@@ -7,7 +7,7 @@ import numpy as np
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
 
-MAX_INSTANT = 1000  # How many instants we propagate
+MAX_INSTANT = 500  # How many instants we propagate
 dz = -0.1  # How much we move between two z
 
 # How much we drop precision for the calculations
@@ -23,7 +23,7 @@ y_drop = 2
 # PROPAGATION Z ONLY CONFIG
 
 # PROPAGATION T ONLY CONFIG
-z_length = 100
+z_length = 250
 
 # Storage
 STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
