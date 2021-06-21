@@ -20,10 +20,12 @@ from config import (
     MAX_INSTANT,
     PROPAGATION_TYPE,
     STORAGE_FOLDER,
+    cnob,
+    cnoe,
     dz,
-    z_length,
     x_drop,
     y_drop,
+    z_length,
 )
 
 def get_path(x, folder=""):
@@ -48,11 +50,6 @@ x = np.load(get_path('x.npy', "npy_files"))
 y = np.load(get_path('y.npy', "npy_files"))
 t = np.load(get_path('t.npy', "npy_files"))
 print("OK")
-
-if PROPAGATION_TYPE == "z":
-    third_axis_length = t.shape[0]
-else:
-    third_axis_length = z_length
 
 # Apply discrete fourier transform
 print("Moving data to GPU. Allocating array %sx%sx%s..." % by.shape, end="", flush=True)
@@ -103,7 +100,7 @@ if PROPAGATION_TYPE == "z":
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
     KZ2 = W**2 - KX**2 - KY**2
-    KZ2[KZ2 < 0] = 0
+    KZ2[KZ2 < 0] = 0.
     propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * dz)
 print(".", end="", flush=True)
 print("OK")
@@ -124,13 +121,13 @@ if PROPAGATION_TYPE == "z":
         v = cpx.scipy.fftpack.ifftn(byfft,
                                     axes=(0,1,2))
         frame = cp.real(
-            v[::y_drop, ::x_drop, :third_axis_length]
+            v[::y_drop, ::x_drop, :t.shape[0]] * cnob / cnoe
         ).transpose(1, 0, 2).get()
         np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
         del v
 elif PROPAGATION_TYPE == "t":
     # First propagate on z
-    prog = tqdm(range(third_axis_length))
+    prog = tqdm(range(z_length))
     prog.set_description("1/3 Propagating on z")
     data = []
     for i in prog:
@@ -138,19 +135,19 @@ elif PROPAGATION_TYPE == "t":
         v = cpx.scipy.fftpack.ifftn(byfft,
                                     axes=(0,1,2))
         data.append(cp.real(
-            v[::y_drop, ::x_drop, :]
+            v[::y_drop, ::x_drop, :] * cnob / cnoe
         ).transpose(1, 0, 2).get())
         del v
     print("2/3 Building first grid")
     # Then build the first grid on 0
-    frame = np.empty(data[0].shape[:2] + (third_axis_length,))
-    for z in range(third_axis_length):
+    frame = np.empty(data[0].shape[:2] + (z_length,))
+    for z in range(z_length):
         frame[:,:,z] = data[z][:,:,i]
     # Finally propagate on time
     prog = tqdm(range(data[0].shape[2]))
     prog.set_description("3/3 Propagating on t")
     for i in prog:
-        for z in range(third_axis_length):
+        for z in range(z_length):
             frame[:,:,z] = data[z][:,:,i]
         np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
 
