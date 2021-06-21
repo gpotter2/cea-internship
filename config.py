@@ -1,12 +1,18 @@
 # Config
 
+import numpy as np
+
 # Select mode
 
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
 
 MAX_INSTANT = 1000  # How many instants we propagate
-dz = -1  # How much we move between two z
+dz = -0.1  # How much we move between two z
+
+# How much we drop precision for the calculations
+x_subsampling = 2
+y_subsampling = 2
 
 # How much we drop of precision for the visualisation.
 # Note that there is already a /2 for X and Y before the calculus to make

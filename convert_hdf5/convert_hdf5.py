@@ -13,6 +13,14 @@ except ImportError as ex:
     print("######################\nMissing dependency !\n" + str(ex) + "\n######################")
     sys.exit(1)
 
+# Read config
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from config import (
+    x_subsampling,
+    y_subsampling,
+)
+
 parser = argparse.ArgumentParser(description='Convert HDF5 to NPY')
 parser.add_argument('src', type=str, nargs=1,
                     help='the file to convert')
@@ -28,9 +36,9 @@ with h5py.File(args.src[0]) as fd:
     t = np.asarray(fd['t'])
 
 print("Subsampling plane...")
-by = by[::2, ::2, ::]
-x = x[::2]
-y = y[::2]
+by = by[::y_subsampling, ::x_subsampling, ::]
+x = x[::x_subsampling]
+y = y[::y_subsampling]
 
 print("Writing numpy files...")
 

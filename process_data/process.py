@@ -23,8 +23,11 @@ from config import (
     cnob,
     cnoe,
     dz,
+    c,
     x_drop,
+    x_subsampling,
     y_drop,
+    y_subsampling,
     z_length,
 )
 
@@ -53,7 +56,7 @@ print("OK")
 
 # Apply discrete fourier transform
 print("Moving data to GPU. Allocating array %sx%sx%s..." % by.shape, end="", flush=True)
-byfft = cp.asarray(by, dtype="complex64")
+byfft = cp.asarray(by, dtype="complex64") * cnob / cnoe
 print("OK")
 
 # FW
@@ -64,16 +67,16 @@ cpx.scipy.fft.fftn(byfft,
                    overwrite_x=True)
 print("OK")
 
-def build_freq_grid(x, y, z):
+def build_freq_grid(x, y, t):
     print("Building freq grid...", end="", flush=True)
     # Build frequences grid
-    freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
     freqx = np.fft.fftfreq(x.size, d=x[1] - x[0])
+    freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
     freqt = np.fft.fftfreq(t.size, d=t[1] - t[0])
-    KY, KX, W = np.meshgrid(freqy, freqx, freqt, indexing='ij')
     print("OK")
+    return np.meshgrid(freqy, freqx, freqt, indexing='ij')
 
-KY, KX, X = build_freq_grid(x, y, t)
+KY, KX, W = build_freq_grid(x, y, t)
 
 data = []
 
@@ -94,14 +97,19 @@ if args.filter_highpass:
     Wi = Wi & (aW >= fl)
     Wni = Wni | (aW < fl)
 del aW
-# Do propag
+# Create propag vector
 if PROPAGATION_TYPE == "z":
     propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dz / W[Wi])
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
-    KZ2 = W**2 - KX**2 - KY**2
+    KZ2 = abs(W**2 - KX**2 - KY**2)
     KZ2[KZ2 < 0] = 0.
-    propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * dz)
+    ns = np.zeros(byfft.shape)
+    for i in range(0, t.shape[0]):
+        ns[:,:,i] = np.ones(byfft.shape[:2]) * i
+    print(ns)
+    print(".", end="", flush=True)
+    propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * ns / t.shape[0] * dz)
 print(".", end="", flush=True)
 print("OK")
 print("Copying propagation vector to GPU...", end="", flush=True)
@@ -121,34 +129,30 @@ if PROPAGATION_TYPE == "z":
         v = cpx.scipy.fftpack.ifftn(byfft,
                                     axes=(0,1,2))
         frame = cp.real(
-            v[::y_drop, ::x_drop, :t.shape[0]] * cnob / cnoe
+            v[::y_drop, ::x_drop, :t.shape[0]]
         ).transpose(1, 0, 2).get()
         np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
         del v
 elif PROPAGATION_TYPE == "t":
     # First propagate on z
     prog = tqdm(range(z_length))
-    prog.set_description("1/3 Propagating on z")
+    prog.set_description("1/2 Propagating on z")
     data = []
     for i in prog:
         byfft *= propag
         v = cpx.scipy.fftpack.ifftn(byfft,
                                     axes=(0,1,2))
         data.append(cp.real(
-            v[::y_drop, ::x_drop, :] * cnob / cnoe
+            v[::y_drop, ::x_drop, :]
         ).transpose(1, 0, 2).get())
         del v
-    print("2/3 Building first grid")
-    # Then build the first grid on 0
+    # Then build the frames
     frame = np.empty(data[0].shape[:2] + (z_length,))
-    for z in range(z_length):
-        frame[:,:,z] = data[z][:,:,i]
-    # Finally propagate on time
     prog = tqdm(range(data[0].shape[2]))
-    prog.set_description("3/3 Propagating on t")
+    prog.set_description("2/2 Building frames")
     for i in prog:
         for z in range(z_length):
-            frame[:,:,z] = data[z][:,:,i]
+            frame[:,:,z] = data[z_length - 1 - z][:,:,i]
         np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
 
 print("done")
