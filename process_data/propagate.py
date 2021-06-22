@@ -27,6 +27,10 @@ if PROPAGATION_TYPE == "z":
     by = np.load(get_path('By.npy', "npy_files"))
 elif PROPAGATION_TYPE == "t":
     by = np.load(get_path('By_xyz.npy', "npy_files"))
+    if t.shape[0] // z_drop < z_length:
+        print("Error: z_drop is too high compared to z_length")
+        import sys
+        sys.exit(1)
 print("OK")
 
 KY, KX, W, byfft = build_fft(x, y, t, by)
@@ -97,7 +101,7 @@ elif PROPAGATION_TYPE == "t":
         np.savez(
             get_path("f%s.npz" % i, "frames"),
             frame=cp.real(
-                v[::y_drop, ::x_drop, :z_length]
+                v[::y_drop, ::x_drop, ::z_drop][:,:,:z_length]
             ).transpose(1, 0, 2).get()
         )
         del v

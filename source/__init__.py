@@ -25,6 +25,7 @@ from config import (
     z_length,
     x_drop,
     y_drop,
+    z_drop,
 )
 
 HEADER = """
@@ -42,6 +43,7 @@ dz = %s
 z_length = %s
 x_drop = %s
 y_drop = %s
+z_drop = %s
 
 ### END OF HEADER ###
 
@@ -55,6 +57,7 @@ y_drop = %s
     z_length,
     x_drop,
     y_drop,
+    z_drop,
 )
 
 def process(data):

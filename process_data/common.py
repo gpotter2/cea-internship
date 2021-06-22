@@ -26,6 +26,7 @@ from config import (
     x_subsampling,
     y_drop,
     y_subsampling,
+    z_drop,
     z_length,
 )
 

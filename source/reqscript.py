@@ -44,7 +44,7 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
     # (dx, dy, dz)
     self.x[1] - self.x[0],
     self.y[1] - self.y[0],
-    dt if PROPAGATION_TYPE == "z" else (dt * self.t.shape[0] / z_length)
+    dt if PROPAGATION_TYPE == "z" else (dt * z_drop * self.t.shape[0] / z_length)
 )
 
 MAX_INSTANT = builtins.min(self.nbframes, MAX_INSTANT)
