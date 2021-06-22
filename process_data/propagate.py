@@ -1,38 +1,10 @@
 """
-Process the data:
-    - read npy files
-    - propagate files
-    - generate frames
+Propagate the data
 """
 
-import argparse
-import os
-import numpy as np
-import cupy as cp
-import cupyx as cpx
+from common import *
 
-from tqdm import tqdm
-
-# Read config
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from config import (
-    MAX_INSTANT,
-    PROPAGATION_TYPE,
-    STORAGE_FOLDER,
-    cnob,
-    cnoe,
-    dz,
-    c,
-    x_drop,
-    x_subsampling,
-    y_drop,
-    y_subsampling,
-    z_length,
-)
-
-def get_path(x, folder=""):
-    return os.path.abspath(os.path.join(STORAGE_FOLDER, folder, x))
+# Check args
 
 parser = argparse.ArgumentParser(description='Process numpy files to create frames')
 parser.add_argument('--filter-lowpass', type=float, nargs=1,
@@ -54,37 +26,8 @@ y = np.load(get_path('y.npy', "npy_files"))
 t = np.load(get_path('t.npy', "npy_files"))
 print("OK")
 
-# Apply discrete fourier transform
-print("Moving data to GPU. Allocating array %sx%sx%s..." % by.shape, end="", flush=True)
-byfft = cp.asarray(by, dtype="complex64") * cnob / cnoe
-print("OK")
+KY, KX, W, byfft = build_fft(x, y, t, by)
 
-# FW
-print("Applying discrete fast fourier transform...", end="", flush=True)
-cpx.scipy.fft.fftn(byfft,
-                   axes=(0,1,2),
-                   norm="forward",
-                   overwrite_x=True)
-print("OK")
-
-def build_freq_grid(x, y, t):
-    print("Building freq grid...", end="", flush=True)
-    # Build frequences grid
-    freqx = np.fft.fftfreq(x.size, d=x[1] - x[0])
-    freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
-    freqt = np.fft.fftfreq(t.size, d=t[1] - t[0])
-    print("OK")
-    return np.meshgrid(freqy, freqx, freqt, indexing='ij')
-
-KY, KX, W = build_freq_grid(x, y, t)
-
-data = []
-
-# Propagate
-
-print("Building propagation vector (slow).", end="", flush=True)
-# See PROPAGATION_DEMO.md for explanation of this formula
-propag = np.zeros(by.shape, dtype="complex64")
 aW = np.abs(W)
 Wi, Wni = (aW > 0.01), (aW <= 0.01)  # Do not try to divide by 0
 # Check for filter
@@ -97,6 +40,16 @@ if args.filter_highpass:
     Wi = Wi & (aW >= fl)
     Wni = Wni | (aW < fl)
 del aW
+
+data = []
+
+# Propagate
+
+print("Building propagation vector (slow).", end="", flush=True)
+
+# See PROPAGATION_DEMO.md for explanation of this formula
+
+propag = np.zeros(by.shape, dtype="complex64")
 # Create propag vector
 if PROPAGATION_TYPE == "z":
     propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dz / W[Wi])
@@ -112,6 +65,7 @@ elif PROPAGATION_TYPE == "t":
     propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * ns / t.shape[0] * dz)
 print(".", end="", flush=True)
 print("OK")
+
 print("Copying propagation vector to GPU...", end="", flush=True)
 propag = cp.asarray(propag,
                     dtype="complex64")
