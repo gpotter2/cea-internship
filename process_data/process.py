@@ -107,7 +107,6 @@ elif PROPAGATION_TYPE == "t":
     ns = np.zeros(byfft.shape)
     for i in range(0, t.shape[0]):
         ns[:,:,i] = np.ones(byfft.shape[:2]) * i
-    print(ns)
     print(".", end="", flush=True)
     propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * ns / t.shape[0] * dz)
 print(".", end="", flush=True)

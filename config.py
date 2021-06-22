@@ -23,7 +23,7 @@ y_drop = 2
 # PROPAGATION Z ONLY CONFIG
 
 # PROPAGATION T ONLY CONFIG
-z_length = 250
+z_length = 100
 
 # Storage
 STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
