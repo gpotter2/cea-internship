@@ -11,7 +11,8 @@ exp(i*2*pi * (kx*dx + ky*dy + kz*dz - w*dt))
 exp(i*2*pi * (kz*z - w*z))
 ```
 
-- Data scales are uniform: `w/k = 1`
+- Data scales are uniform: `w/k = 1`.
+- Dispersion relation:
 
 ```
 w = sqrt(kx**2 + ky**2 + kz**2)
