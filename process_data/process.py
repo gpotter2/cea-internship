@@ -102,9 +102,10 @@ if PROPAGATION_TYPE == "z":
     propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dz / W[Wi])
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
-    KZ2 = abs(W**2 - KX**2 - KY**2)
+    KZ2 = abs(W**2 - KX**2 - KY**2)  # XXX
     KZ2[KZ2 < 0] = 0.
     ns = np.zeros(byfft.shape)
+    dz = t.shape[0] / z_length
     for i in range(0, t.shape[0]):
         ns[:,:,i] = np.ones(byfft.shape[:2]) * i
     print(".", end="", flush=True)

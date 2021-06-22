@@ -8,7 +8,6 @@ import numpy as np
 PROPAGATION_TYPE = "t"
 
 MAX_INSTANT = 500  # How many instants we propagate
-dz = -0.1  # How much we move between two z
 
 # How much we drop precision for the calculations
 x_subsampling = 2
@@ -21,6 +20,7 @@ x_drop = 2
 y_drop = 2
 
 # PROPAGATION Z ONLY CONFIG
+dz = -0.1  # How much we move between two z
 
 # PROPAGATION T ONLY CONFIG
 z_length = 100
