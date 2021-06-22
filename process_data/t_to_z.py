@@ -21,13 +21,16 @@ print("Building propagation vector (slow).", end="", flush=True)
 propag = np.zeros(by.shape, dtype="complex64")
 
 # Create propag vector
-KZ2 = abs(W**2 - KX**2 - KY**2)  # XXX
+KZ2 = W**2 - KX**2 - KY**2
+byfft[KZ2 < 0] = 0.
 KZ2[KZ2 < 0] = 0.
 
-ns = pln_matrix(byfft)
+# ns = pln_matrix(byfft)
 print(".", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
-propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * ns / t.shape[0])
+dz = t[1] - t[0]
+propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * dz)
+propag[W > 1.2] = 0
 print(".", end="", flush=True)
 print("OK")
 
@@ -42,8 +45,8 @@ prog.set_description("Building XYZ matrix")
 frame = np.empty(byfft.shape)
 for i in prog:
     byfft *= propag
-    v = cpx.scipy.fftpack.ifftn(byfft,
-                                axes=(0,1,2))
+    v = cpx.scipy.fft.ifftn(byfft,
+                            axes=(0,1,2))
     frame[:,:,t.shape[0] - 1 - i] = cp.real(v)[:,:,0].get()
     del v
 

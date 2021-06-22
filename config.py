@@ -23,7 +23,7 @@ y_drop = 2
 dz = -0.1  # How much we move between two z
 
 # PROPAGATION T ONLY CONFIG
-z_length = 100
+z_length = 500
 
 # Storage
 STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
