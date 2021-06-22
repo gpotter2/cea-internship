@@ -20,10 +20,13 @@ if args.filter_lowpass or args.filter_highpass:
 
 # Load files
 print("Loading files...", end="", flush=True)
-by = np.load(get_path('By.npy', "npy_files"))
 x = np.load(get_path('x.npy', "npy_files"))
 y = np.load(get_path('y.npy', "npy_files"))
 t = np.load(get_path('t.npy', "npy_files"))
+if PROPAGATION_TYPE == "z":
+    by = np.load(get_path('By.npy', "npy_files"))
+elif PROPAGATION_TYPE == "t":
+    by = np.load(get_path('By_xyz.npy', "npy_files"))
 print("OK")
 
 KY, KX, W, byfft = build_fft(x, y, t, by)
@@ -55,14 +58,8 @@ if PROPAGATION_TYPE == "z":
     propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dz / W[Wi])
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
-    KZ2 = abs(W**2 - KX**2 - KY**2)  # XXX
-    KZ2[KZ2 < 0] = 0.
-    ns = np.zeros(byfft.shape)
-    dz = t.shape[0] / z_length
-    for i in range(0, t.shape[0]):
-        ns[:,:,i] = np.ones(byfft.shape[:2]) * i
-    print(".", end="", flush=True)
-    propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * ns / t.shape[0] * dz)
+    ns = pln_matrix(byfft)
+    propag = np.exp(-np.pi * 2j * W * ns / t.shape[0])
 print(".", end="", flush=True)
 print("OK")
 
@@ -77,7 +74,7 @@ if not os.path.exists(dirpath):
 
 if PROPAGATION_TYPE == "z":
     prog = tqdm(range(MAX_INSTANT))
-    prog.set_description("1/1 Propagating on z")
+    prog.set_description("Propagating on z")
     for i in prog:
         byfft *= propag
         v = cpx.scipy.fftpack.ifftn(byfft,
@@ -89,27 +86,19 @@ if PROPAGATION_TYPE == "z":
         del v
 elif PROPAGATION_TYPE == "t":
     # First propagate on z
-    prog = tqdm(range(z_length))
-    prog.set_description("1/2 Propagating on z")
+    prog = tqdm(range(MAX_INSTANT))
+    prog.set_description("Propagating on t")
     data = []
     for i in prog:
         byfft *= propag
         v = cpx.scipy.fftpack.ifftn(byfft,
                                     axes=(0,1,2))
-        data.append(cp.real(
-            v[::y_drop, ::x_drop, :]
-        ).transpose(1, 0, 2).get())
+        np.savez(
+            get_path("f%s.npz" % i, "frames"),
+            frame=cp.real(
+                v[::y_drop, ::x_drop, :z_length]
+            ).transpose(1, 0, 2).get()
+        )
         del v
-    # Then build the frames
-    frame = np.empty(data[0].shape[:2] + (z_length,))
-    timestamps = data[0].shape[2]
-    if MAX_INSTANT > 0:
-        timestamps = min(MAX_INSTANT, timestamps)
-    prog = tqdm(range(timestamps))
-    prog.set_description("2/2 Building frames")
-    for i in prog:
-        for z in range(z_length):
-            frame[:,:,z] = data[z_length - 1 - z][:,:,i]
-        np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
 
 print("done")

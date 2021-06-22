@@ -23,9 +23,8 @@ propag = np.zeros(by.shape, dtype="complex64")
 # Create propag vector
 KZ2 = abs(W**2 - KX**2 - KY**2)  # XXX
 KZ2[KZ2 < 0] = 0.
-ns = np.zeros(byfft.shape)
-for i in range(0, t.shape[0]):
-    ns[:,:,i] = np.ones(byfft.shape[:2]) * i
+
+ns = pln_matrix(byfft)
 print(".", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
 propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * ns / t.shape[0])

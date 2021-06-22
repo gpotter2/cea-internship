@@ -32,6 +32,15 @@ from config import (
 def get_path(x, folder=""):
     return os.path.abspath(os.path.join(STORAGE_FOLDER, folder, x))
 
+def pln_matrix(X):
+    """
+    Return the matrix used to make the propag vec for FDT
+    """
+    ns = np.zeros(X.shape)
+    for i in range(0, X.shape[2]):
+        ns[:,:,i] = np.ones(X.shape[:2]) * i
+    return ns
+
 def build_fft(x, y, t, by):
     # Apply discrete fourier transform
     
