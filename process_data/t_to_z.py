@@ -48,5 +48,5 @@ for i in prog:
     frame[:,:,t.shape[0] - 1 - i] = cp.real(v)[:,:,0].get()
     del v
 
-np.save(get_path("By_xyz.npy" % i, "npy_files"), frame)
+np.save(get_path("By_xyz.npy", "npy_files"), frame)
 
