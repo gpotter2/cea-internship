@@ -59,8 +59,7 @@ if PROPAGATION_TYPE == "z":
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
     ns = pln_matrix(byfft)
-    dz = t.shape[0] / z_length
-    propag = np.exp(-np.pi * 2j * W * ns * dz / t.shape[0])
+    propag = np.exp(-np.pi * 2j * W * ns / t.shape[0])
 print(".", end="", flush=True)
 print("OK")
 
