@@ -39,12 +39,14 @@ outInfo.Set(executive.WHOLE_EXTENT(),
     0, self.y.shape[0] - 1,
     0, self.third_axis_length - 1
 )
-dt = self.t[1] - self.t[0]
+dtr = self.t[1] - self.t[0]  # Real dt of the t axis
 outInfo.Set(vtk.vtkDataObject.SPACING(),
     # (dx, dy, dz)
     self.x[1] - self.x[0],
     self.y[1] - self.y[0],
-    dt if PROPAGATION_TYPE == "z" else (dt * z_drop * self.t.shape[0] / self.third_axis_length)
+    dtr if PROPAGATION_TYPE == "z" else (
+        dtr * z_drop * self.t.shape[0] / self.third_axis_length
+    )
 )
 
 MAX_INSTANT = builtins.min(self.nbframes, MAX_INSTANT)

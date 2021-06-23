@@ -23,6 +23,7 @@ y_drop = 4
 dz = -0.1  # How much we move between two z
 
 # PROPAGATION T ONLY CONFIG
+dt = 1  # How much we propagate between two instants
 z_length = None  # Set to None for all points
 z_drop = 1
 
