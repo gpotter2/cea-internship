@@ -7,7 +7,7 @@ import numpy as np
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
 
-MAX_INSTANT = 500  # How many instants we propagate
+MAX_INSTANT = 1000  # How many instants we propagate
 
 # How much we drop precision for the calculations
 x_subsampling = 2
