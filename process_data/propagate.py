@@ -48,8 +48,6 @@ if args.filter_highpass:
     Wni = Wni | (aW < fl)
 del aW
 
-data = []
-
 # Propagate
 
 print("Building propagation vector (slow).", end="", flush=True)
@@ -81,8 +79,8 @@ if PROPAGATION_TYPE == "z":
     prog.set_description("Propagating on z")
     for i in prog:
         byfft *= propag
-        v = cpx.scipy.fftpack.ifftn(byfft,
-                                    axes=(0,1,2))
+        v = cpx.scipy.fft.ifftn(byfft,
+                                axes=(0,1,2))
         frame = cp.real(
             v[::y_drop, ::x_drop, :t.shape[0]]
         ).transpose(1, 0, 2).get()
@@ -92,11 +90,10 @@ elif PROPAGATION_TYPE == "t":
     # First propagate on z
     prog = tqdm(range(MAX_INSTANT))
     prog.set_description("Propagating on t")
-    data = []
     for i in prog:
         byfft *= propag
-        v = cpx.scipy.fftpack.ifftn(byfft,
-                                    axes=(0,1,2))
+        v = cpx.scipy.fft.ifftn(byfft,
+                                axes=(0,1,2))
         np.savez(
             get_path("f%s.npz" % i, "frames"),
             frame=cp.real(
