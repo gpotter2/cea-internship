@@ -25,12 +25,13 @@ KZ2 = W**2 - KX**2 - KY**2
 byfft[KZ2 < 0] = 0.
 KZ2[KZ2 < 0] = 0.
 
-# ns = pln_matrix(byfft)
+KZ = np.sqrt(KZ2)
+
 print(".", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
 dz = t[1] - t[0]
-propag = np.exp(-np.pi * 2j * np.sqrt(KZ2) * dz)
-propag[W > 1.2] = 0
+propag = np.exp(-np.pi * 2j * KZ * dz)
+propag[W < 0] = 0.  # Get rid of negative frequencies
 print(".", end="", flush=True)
 print("OK")
 
