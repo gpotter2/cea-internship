@@ -24,7 +24,7 @@ self.t = np.load(get_path("t.npy", "npy_files"))
 if PROPAGATION_TYPE == "z":
     self.third_axis_length = self.t.shape[0]
 else:
-    self.third_axis_length = z_length
+    self.third_axis_length = z_length if z_length is not None else selt.t[::z_drop].shape[0]
 
 ## Define re-usable grid
 #X, Y, Z = np.meshgrid(self.x, self.y, self.z)
@@ -44,7 +44,7 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
     # (dx, dy, dz)
     self.x[1] - self.x[0],
     self.y[1] - self.y[0],
-    dt if PROPAGATION_TYPE == "z" else (dt * z_drop * self.t.shape[0] / z_length)
+    dt if PROPAGATION_TYPE == "z" else (dt * z_drop * self.t.shape[0] / this.third_axis_length)
 )
 
 MAX_INSTANT = builtins.min(self.nbframes, MAX_INSTANT)

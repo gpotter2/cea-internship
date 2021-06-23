@@ -27,7 +27,7 @@ if PROPAGATION_TYPE == "z":
     by = np.load(get_path('By.npy', "npy_files"))
 elif PROPAGATION_TYPE == "t":
     by = np.load(get_path('By_xyz.npy', "npy_files"))
-    if t.shape[0] // z_drop < z_length:
+    if z_length is not None and t.shape[0] // z_drop < z_length:
         print("Error: z_drop is too high compared to z_length")
         import sys
         sys.exit(1)
@@ -63,7 +63,8 @@ if PROPAGATION_TYPE == "z":
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
     dt = t[1] - t[0]
-    propag = np.exp(-np.pi * 2j * W * dt)
+    #propag = np.exp(-np.pi * 2j * W * dt)
+    propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dt / W[Wi])
     propag[Wni] = 0.
 print(".", end="", flush=True)
 print("OK")

@@ -23,7 +23,7 @@ y_drop = 4
 dz = -0.1  # How much we move between two z
 
 # PROPAGATION T ONLY CONFIG
-z_length = 1000
+z_length = None  # Set to None for all points
 z_drop = 1
 
 # Storage
