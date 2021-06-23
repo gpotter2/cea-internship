@@ -20,6 +20,7 @@ from config import (
     MAX_INSTANT,
     PROPAGATION_TYPE,
     STORAGE_FOLDER,
+    dt,
     dz,
     c,
     x_drop,
