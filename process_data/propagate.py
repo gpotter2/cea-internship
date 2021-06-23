@@ -62,7 +62,6 @@ if PROPAGATION_TYPE == "z":
     propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dz / W[Wi])
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
-    dt = 1 #(t[1] - t[0])
     propag[Wi] = np.exp(np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dt / W[Wi])
     propag[Wni] = 0.
 print(".", end="", flush=True)
