@@ -22,14 +22,14 @@ propag = np.zeros(by.shape, dtype="complex64")
 
 # Create propag vector
 KZ2 = W**2 - KX**2 - KY**2
-byfft[KZ2 < 0] = 0.
 KZ2[KZ2 < 0] = 0.
-
 KZ = np.sqrt(KZ2)
+
+Z_LENGTH = t.shape[0]
+dz = TOT_Z / Z_LENGTH
 
 print(".", end="", flush=True)
 # See PROPAGATION_DEMO.md for explanation of this formula
-dz = t[1] - t[0]
 propag = np.exp(-np.pi * 2j * KZ * dz)
 propag[W < 0] = 0.  # Get rid of negative frequencies
 print(".", end="", flush=True)
@@ -41,14 +41,14 @@ propag = cp.asarray(propag,
 print("OK")
 
 # First propagate on z
-prog = tqdm(range(t.shape[0]))
+prog = tqdm(range(Z_LENGTH))
 prog.set_description("Building XYZ matrix")
 frame = np.empty(byfft.shape)
 for i in prog:
     byfft *= propag
     v = cpx.scipy.fft.ifftn(byfft,
                             axes=(0,1,2))
-    frame[:,:,t.shape[0] - 1 - i] = cp.real(v)[:,:,0].get()
+    frame[:,:,i] = cp.real(v)[:,:,0].get()
     del v
 
 np.save(get_path("By_xyz.npy", "npy_files"), frame)

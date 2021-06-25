@@ -33,7 +33,10 @@ elif PROPAGATION_TYPE == "t":
         sys.exit(1)
 print("OK")
 
-KY, KX, W, byfft = build_fft(x, y, t, by)
+z = np.arange(TOT_Z, 0, abs(TOT_Z/t.shape[0]))
+KY, KX, KZ, byfft = build_fft(x, y, z, by)
+
+W = np.sqrt(KX**2 + KY**2 + KZ**2)
 
 aW = np.abs(W)
 Wi, Wni = (aW > 0.01), (aW <= 0.01)  # Do not try to divide by 0
@@ -60,8 +63,8 @@ if PROPAGATION_TYPE == "z":
     propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dz / W[Wi])
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
-    propag[Wi] = np.exp(np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dt / W[Wi])
-    propag[Wni] = 0.
+    propag = np.exp(-np.pi * 2j * W * dt)
+    propag[KZ < 0] = 0.
 print(".", end="", flush=True)
 print("OK")
 

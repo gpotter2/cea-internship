@@ -32,6 +32,13 @@ else:
 #                               Y.ravel(),
 #                               Z.ravel())
 
+dtr = self.t[1] - self.t[0]  # Real dt of the t axis
+if PROPAGATION_TYPE == "z":
+    dz = dtr
+    dt = abs(dz)
+else if PROPAGATION_TYPE == "t":
+    dz = dtr * z_drop * self.t.shape[0] / self.third_axis_length
+
 # Set boundaries
 outInfo.Set(executive.WHOLE_EXTENT(),
     # (xmin, xmax, ymin, ymax, zmin, zmax)
@@ -39,14 +46,11 @@ outInfo.Set(executive.WHOLE_EXTENT(),
     0, self.y.shape[0] - 1,
     0, self.third_axis_length - 1
 )
-dtr = self.t[1] - self.t[0]  # Real dt of the t axis
 outInfo.Set(vtk.vtkDataObject.SPACING(),
     # (dx, dy, dz)
     self.x[1] - self.x[0],
     self.y[1] - self.y[0],
-    dtr if PROPAGATION_TYPE == "z" else (
-        dtr * z_drop * self.t.shape[0] / self.third_axis_length
-    )
+    dz
 )
 
 MAX_INSTANT = builtins.min(self.nbframes, MAX_INSTANT)
@@ -54,9 +58,7 @@ MAX_INSTANT = builtins.min(self.nbframes, MAX_INSTANT)
 # Set time steps
 outInfo.Remove(executive.TIME_STEPS())
 for timestep in range(0, MAX_INSTANT):
-    outInfo.Append(executive.TIME_STEPS(), timestep * (
-        abs(dz) if PROPAGATION_TYPE == "z" else dt
-    ))
+    outInfo.Append(executive.TIME_STEPS(), timestep * dt)
 
 outInfo.Remove(executive.TIME_RANGE())
 outInfo.Append(executive.TIME_RANGE(), 0)

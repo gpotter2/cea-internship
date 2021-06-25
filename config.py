@@ -19,6 +19,9 @@ y_subsampling = 2
 x_drop = 4
 y_drop = 4
 
+# TIME TO XYZ ONLY CONFIG
+TOT_Z = -100  # The size of the frame
+
 # PROPAGATION Z ONLY CONFIG
 dz = -0.1  # How much we move between two z
 
