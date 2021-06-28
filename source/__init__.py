@@ -21,9 +21,10 @@ from config import (
     MAX_INSTANT,
     PROPAGATION_TYPE,
     STORAGE_FOLDER,
+    TOT_Z,
+    Z_LENGTH,
     dt,
     dz,
-    Z_LENGTH,
     x_drop,
     y_drop,
 )
@@ -39,9 +40,10 @@ def get_path(x, folder=""):
 
 MAX_INSTANT = %s
 PROPAGATION_TYPE = "%s"
+TOT_Z = %s
+Z_LENGTH = %s
 dt = %s
 dz = %s
-Z_LENGTH = %s
 x_drop = %s
 y_drop = %s
 
@@ -53,9 +55,10 @@ y_drop = %s
     #
     MAX_INSTANT,
     PROPAGATION_TYPE,
+    TOT_Z,
+    Z_LENGTH,
     dt,
     dz,
-    Z_LENGTH,
     x_drop,
     y_drop,
 )
