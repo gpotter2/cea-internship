@@ -49,6 +49,10 @@ propag = cp.asarray(propag,
                     dtype="complex64")
 print("OK")
 
+print("Apply offset...", end="", flush=True)
+byfft *= propag ** (Z_OFFSET / abs(dz))
+print("OK")
+
 # First propagate on z
 prog = tqdm(range(Z_LENGTH))
 prog.set_description("Building XYZ matrix")

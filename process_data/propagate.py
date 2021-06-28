@@ -37,6 +37,7 @@ y = np.load(get_path('y.npy', "npy_files"))
 t = np.load(get_path('t.npy', "npy_files"))
 if PROPAGATION_TYPE == "z":
     by = np.load(get_path('By.npy', "npy_files"))
+    Z_LENGTH = t.shape[0]
 elif PROPAGATION_TYPE == "t":
     by = np.load(get_path('By_xyz.npy', "npy_files"))
     #if Z_LENGTH is not None and t.shape[0] // z_drop < Z_LENGTH:
@@ -45,7 +46,7 @@ elif PROPAGATION_TYPE == "t":
     #    sys.exit(1)
 print("OK")
 
-z = np.arange(TOT_Z, 0, abs(TOT_Z/t.shape[0]))
+z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
 KY, KX, KZ, byfft = build_fft(x, y, z, by)
 
 W = np.sqrt(KX**2 + KY**2 + KZ**2)
