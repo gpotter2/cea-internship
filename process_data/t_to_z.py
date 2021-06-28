@@ -39,7 +39,6 @@ Z_LENGTH = Z_LENGTH or t.shape[0]
 dz = TOT_Z / Z_LENGTH
 
 print(".", end="", flush=True)
-# See PROPAGATION_DEMO.md for explanation of this formula
 propag = np.exp(-np.pi * 2j * KZ * dz)
 propag[W < 0] = 0.  # Get rid of negative frequencies
 print(".", end="", flush=True)
@@ -53,7 +52,7 @@ print("OK")
 # First propagate on z
 prog = tqdm(range(Z_LENGTH))
 prog.set_description("Building XYZ matrix")
-frame = np.empty(byfft.shape)
+frame = np.empty(byfft.shape[:2] + (Z_LENGTH,))
 for i in prog:
     byfft *= propag
     v = cpx.scipy.fft.ifftn(byfft,
