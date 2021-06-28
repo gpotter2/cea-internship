@@ -26,31 +26,37 @@ KY, KX, W, byfft = build_fft(x, y, t, by)
 
 # Propagate
 data = []
-print("Building propagation vector (slow).", end="", flush=True)
+print("Building KZ (slow).", end="", flush=True)
 
 propag = np.zeros(by.shape, dtype="complex64")
 
 # Create propag vector
 KZ2 = W**2 - KX**2 - KY**2
 KZ2[KZ2 < 0] = 0.
+print(".", end="", flush=True)
 KZ = np.sqrt(KZ2)
 
 Z_LENGTH = Z_LENGTH or t.shape[0]
 dz = TOT_Z / Z_LENGTH
+print("OK")
 
+print("Apply offset..", end="", flush=True)
+propag_offset = np.exp(-np.pi * 2j * KZ * Z_OFFSET)
+propag_offset[W < 0] = 0.  # Get rid of negative frequencies
 print(".", end="", flush=True)
+
+byfft *= cp.asarray(propag_offset, dtype="complex64")
+del propag_offset
+print("OK")
+
+print("Building propag vector...")
 propag = np.exp(-np.pi * 2j * KZ * dz)
 propag[W < 0] = 0.  # Get rid of negative frequencies
-print(".", end="", flush=True)
 print("OK")
 
 print("Copying propagation vector to GPU...", end="", flush=True)
 propag = cp.asarray(propag,
                     dtype="complex64")
-print("OK")
-
-print("Apply offset...", end="", flush=True)
-byfft *= propag ** (Z_OFFSET / abs(dz))
 print("OK")
 
 # First propagate on z

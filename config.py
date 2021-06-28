@@ -20,7 +20,7 @@ x_drop = 4
 y_drop = 4
 
 # TIME TO XYZ ONLY CONFIG
-Z_OFFSET = -20
+Z_OFFSET = 10
 TOT_Z = -60  # The size of the frame
 
 # PROPAGATION Z ONLY CONFIG
