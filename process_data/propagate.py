@@ -13,6 +13,18 @@ parser.add_argument('--filter-highpass', type=float, nargs=1,
                     help='Applies a low-pass filter to a frequence')
 args = parser.parse_args()
 
+print("""
+  _____                                   _   _
+ |  __ \                                 | | (_)
+ | |__) | __ ___  _ __   __ _  __ _  __ _| |_ _ _ __   __ _
+ |  ___/ '__/ _ \| '_ \ / _` |/ _` |/ _` | __| | '_ \ / _` |
+ | |   | | | (_) | |_) | (_| | (_| | (_| | |_| | | | | (_| |
+ |_|   |_|  \___/| .__/ \__,_|\__, |\__,_|\__|_|_| |_|\__, (_|_|_)
+                 | |           __/ |                   __/ |
+                 |_|          |___/                   |___/
+-------------------------------------------------------------------
+""")
+
 print("PROPAGATION TYPE: %s" % PROPAGATION_TYPE)
 if args.filter_lowpass or args.filter_highpass:
     print("FILTER: %s, fc=%s" % (args.filter_lowpass and "lowpass" or "highpass",
