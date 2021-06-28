@@ -28,8 +28,7 @@ from config import (
     x_subsampling,
     y_drop,
     y_subsampling,
-    z_drop,
-    z_length,
+    Z_LENGTH,
 )
 
 def get_path(x, folder=""):

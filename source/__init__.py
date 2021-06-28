@@ -23,10 +23,9 @@ from config import (
     STORAGE_FOLDER,
     dt,
     dz,
-    z_length,
+    Z_LENGTH,
     x_drop,
     y_drop,
-    z_drop,
 )
 
 HEADER = """
@@ -42,10 +41,9 @@ MAX_INSTANT = %s
 PROPAGATION_TYPE = "%s"
 dt = %s
 dz = %s
-z_length = %s
+Z_LENGTH = %s
 x_drop = %s
 y_drop = %s
-z_drop = %s
 
 ### END OF HEADER ###
 
@@ -57,10 +55,9 @@ z_drop = %s
     PROPAGATION_TYPE,
     dt,
     dz,
-    z_length,
+    Z_LENGTH,
     x_drop,
     y_drop,
-    z_drop,
 )
 
 def process(data):

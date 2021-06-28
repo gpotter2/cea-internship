@@ -27,8 +27,7 @@ dz = -0.1  # How much we move between two z
 
 # PROPAGATION T ONLY CONFIG
 dt = 1  # How much we propagate between two instants
-z_length = None  # Set to None for all points
-z_drop = 1
+Z_LENGTH = None  # Set to None for all points
 
 # Storage
 STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"

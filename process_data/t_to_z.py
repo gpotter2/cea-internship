@@ -25,7 +25,7 @@ KZ2 = W**2 - KX**2 - KY**2
 KZ2[KZ2 < 0] = 0.
 KZ = np.sqrt(KZ2)
 
-Z_LENGTH = t.shape[0]
+Z_LENGTH = Z_LENGTH or t.shape[0]
 dz = TOT_Z / Z_LENGTH
 
 print(".", end="", flush=True)
