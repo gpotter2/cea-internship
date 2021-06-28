@@ -22,13 +22,18 @@ y = np.load(get_path('y.npy', "npy_files"))
 t = np.load(get_path('t.npy', "npy_files"))
 print("OK")
 
-KY, KX, W, byfft = build_fft(x, y, t, by)
+infos(by)
+
+KY, KX, W = build_grid(x, y, t)
+byfft = build_fft(by)
 
 # Propagate
 data = []
 print("Building KZ (slow).", end="", flush=True)
 
 propag = np.zeros(by.shape, dtype="complex64")
+
+print(propag.nbytes)
 
 # Create propag vector
 KZ2 = W**2 - KX**2 - KY**2
@@ -62,7 +67,7 @@ print("OK")
 # First propagate on z
 prog = tqdm(range(Z_LENGTH))
 prog.set_description("Building XYZ matrix")
-frame = np.empty(byfft.shape[:2] + (Z_LENGTH,))
+frame = np.empty(byfft.shape[:2] + (Z_LENGTH,), dtype="float32")
 for i in prog:
     byfft *= propag
     v = cpx.scipy.fft.ifftn(byfft,

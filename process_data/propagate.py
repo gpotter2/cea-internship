@@ -46,10 +46,20 @@ elif PROPAGATION_TYPE == "t":
     #    sys.exit(1)
 print("OK")
 
-z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
-KY, KX, KZ, byfft = build_fft(x, y, z, by)
+infos(by)
 
-W = np.sqrt(KX**2 + KY**2 + KZ**2)
+# Perform calculations
+
+if PROPAGATION_TYPE == "z":
+    KY, KX, W = build_grid(x, y, t)
+elif PROPAGATION_TYPE == "t":
+    z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
+    KY, KX, KZ = build_grid(x, y, z)
+    print("Build W...", end="", flush=True)
+    W = np.sqrt(KX**2 + KY**2 + KZ**2)
+    print("OK")
+
+byfft = build_fft(by)
 
 aW = np.abs(W)
 Wi, Wni = (aW > 0.01), (aW <= 0.01)  # Do not try to divide by 0
@@ -91,6 +101,7 @@ if not os.path.exists(dirpath):
     os.mkdir(dirpath)
 
 if PROPAGATION_TYPE == "z":
+    # Propagate on z
     prog = tqdm(range(MAX_INSTANT))
     prog.set_description("Propagating on z")
     for i in prog:
@@ -103,7 +114,7 @@ if PROPAGATION_TYPE == "z":
         np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
         del v
 elif PROPAGATION_TYPE == "t":
-    # First propagate on z
+    # First propagate on t
     prog = tqdm(range(MAX_INSTANT))
     prog.set_description("Propagating on t")
     for i in prog:

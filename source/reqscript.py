@@ -37,7 +37,7 @@ if PROPAGATION_TYPE == "z":
     dz = dtr
     dt = abs(dz)
 elif PROPAGATION_TYPE == "t":
-    dz = dtr * self.t.shape[0] / self.third_axis_length
+    dz = abs(TOT_Z) / self.third_axis_length
 
 # Set boundaries
 outInfo.Set(executive.WHOLE_EXTENT(),
@@ -52,6 +52,8 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
     self.y[1] - self.y[0],
     dz
 )
+if PROPAGATION_TYPE == "t":
+    outInfo.Set(vtk.vtkDataObject.ORIGIN(), 0, 0, -TOT_Z)
 
 MAX_INSTANT = builtins.min(self.nbframes, MAX_INSTANT)
 
