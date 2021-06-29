@@ -27,13 +27,12 @@ infos(by)
 KY, KX, W = build_grid(x, y, t)
 byfft = build_fft(by)
 
-# Propagate
-data = []
-print("Building KZ (slow).", end="", flush=True)
-
-propag = np.zeros(by.shape, dtype="complex64")
+### Propagate
 
 # Create propag vector
+print("Building KZ (slow).", end="", flush=True)
+propag = np.zeros(by.shape, dtype="complex64")
+
 KZ2 = W**2 - KX**2 - KY**2
 KZ2[KZ2 < 0] = 0.
 print(".", end="", flush=True)
@@ -54,7 +53,7 @@ if Z_OFFSET:
     print("OK")
 
 print("Building propag vector...")
-propag = np.exp(-np.pi * 2j * KZ * dz)
+propag = np.exp(np.pi * 2j * KZ * dz)
 propag[W < 0] = 0.  # Get rid of negative frequencies
 print("OK")
 
