@@ -37,6 +37,7 @@ if PROPAGATION_TYPE == "z":
     dz = dtr
     dt = abs(dz)
 elif PROPAGATION_TYPE == "t":
+    TOT_Z = TOT_Z or (self.t[0] - self.t[-1])
     dz = abs(TOT_Z) / self.third_axis_length
 
 # Set boundaries

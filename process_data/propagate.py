@@ -53,6 +53,7 @@ infos(by)
 if PROPAGATION_TYPE == "z":
     KY, KX, W = build_grid(x, y, t)
 elif PROPAGATION_TYPE == "t":
+    TOT_Z = TOT_Z or (t[0] - t[-1])
     z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
     KY, KX, KZ = build_grid(x, y, z)
     print("Build W...", end="", flush=True)

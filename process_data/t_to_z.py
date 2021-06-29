@@ -41,18 +41,19 @@ KZ2[KZ2 < 0] = 0.
 print(".", end="", flush=True)
 KZ = np.sqrt(KZ2)
 
+TOT_Z = TOT_Z or (t[0] - t[-1])
 Z_LENGTH = Z_LENGTH or t.shape[0]
 dz = TOT_Z / Z_LENGTH
 print("OK")
 
-print("Apply offset..", end="", flush=True)
-propag_offset = np.exp(-np.pi * 2j * KZ * Z_OFFSET)
-propag_offset[W < 0] = 0.  # Get rid of negative frequencies
-print(".", end="", flush=True)
-
-byfft *= cp.asarray(propag_offset, dtype="complex64")
-del propag_offset
-print("OK")
+if Z_OFFSET:
+    print("Apply offset..", end="", flush=True)
+    propag_offset = np.exp(-np.pi * 2j * KZ * Z_OFFSET)
+    propag_offset[W < 0] = 0.  # Get rid of negative frequencies
+    print(".", end="", flush=True)
+    byfft *= cp.asarray(propag_offset, dtype="complex64")
+    del propag_offset
+    print("OK")
 
 print("Building propag vector...")
 propag = np.exp(-np.pi * 2j * KZ * dz)

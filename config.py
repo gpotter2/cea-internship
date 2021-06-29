@@ -20,8 +20,8 @@ x_drop = 4
 y_drop = 4
 
 # TIME TO XYZ ONLY CONFIG
-Z_OFFSET = 10
-TOT_Z = -60  # The size of the frame
+Z_OFFSET = 0
+TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 
 # PROPAGATION Z ONLY CONFIG
 dz = -0.1  # How much we move between two z
