@@ -33,8 +33,6 @@ print("Building KZ (slow).", end="", flush=True)
 
 propag = np.zeros(by.shape, dtype="complex64")
 
-print(propag.nbytes)
-
 # Create propag vector
 KZ2 = W**2 - KX**2 - KY**2
 KZ2[KZ2 < 0] = 0.
