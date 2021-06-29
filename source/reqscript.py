@@ -32,9 +32,8 @@ else:
 #                               Y.ravel(),
 #                               Z.ravel())
 
-dtr = self.t[1] - self.t[0]  # Real dt of the t axis
 if PROPAGATION_TYPE == "z":
-    dz = dtr
+    dz = self.t[1] - self.t[0]
     dt = abs(dz)
 elif PROPAGATION_TYPE == "t":
     TOT_Z = TOT_Z or (self.t[0] - self.t[-1])
