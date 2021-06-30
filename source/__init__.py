@@ -23,6 +23,8 @@ from config import (
     STORAGE_FOLDER,
     TOT_Z,
     Z_LENGTH,
+    cnob,
+    cnoe,
     dt,
     dz,
     x_drop,
@@ -38,11 +40,12 @@ exec(open(activate_this).read(), dict(__file__=activate_this))
 def get_path(x, folder=""):
     return os.path.abspath(os.path.join("%s", folder, x))
 
-# Build specific config
-
+# Build-specific config
 PROPAGATION_TYPE = "%s"
 TOT_Z = %s
 Z_LENGTH = %s
+cnob = %s
+cnoe = %s
 dt = %s
 dz = %s
 x_drop = %s
@@ -51,9 +54,12 @@ y_drop = %s
 """.strip() % (
     ACTIVATE_THIS_ENV,
     STORAGE_FOLDER,
+    #
     PROPAGATION_TYPE,
     TOT_Z,
     Z_LENGTH,
+    cnob,
+    cnoe,
     dt,
     dz,
     x_drop,
@@ -63,7 +69,6 @@ y_drop = %s
 CONFIG_HDR = """
 ###### CONFIG ######
 # User configurable
-
 self.MAX_INSTANT = %s
 self.CLIP_HALF = False
 """.strip() % (

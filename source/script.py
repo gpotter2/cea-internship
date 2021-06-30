@@ -33,6 +33,9 @@ fnpz = np.load(get_path("f%s.npz" % req_time, "frames"))
 data = fnpz['frame']
 fnpz.close()
 
+# Scale data
+data = data * cnob / cnoe
+
 # DEBUG: fill space with first plane
 # data = data[:,:,0]
 # data = np.broadcast_to(data[..., np.newaxis],

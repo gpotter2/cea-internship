@@ -17,8 +17,6 @@ except ImportError as ex:
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from config import (
-    cnob,
-    cnoe,
     x_subsampling,
     y_subsampling,
 )
@@ -32,7 +30,7 @@ args = parser.parse_args()
 
 with h5py.File(args.src[0]) as fd:
     print("Reading h5df file...")
-    by = np.asarray(fd['By']) * cnob / cnoe
+    by = np.asarray(fd['By'])
     x = np.asarray(fd['x'])/np.cos(np.pi/4)
     y = np.asarray(fd['y'])
     t = np.asarray(fd['t'])
