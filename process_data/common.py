@@ -61,7 +61,7 @@ def build_grid(x, y, t):
     return KY, KX, W
 
 def infos(by):
-    print("Grid size: %sx%sx%s (~%sGB)" % (by.shape + (by.nbytes / 1e9,)))
+    print("Input grid size: %sx%sx%s (~%sGB)" % (by.shape + (by.nbytes / 1e9,)))
     byfft_size = by.shape[0] * by.shape[1] * Z_LENGTH * 8
     estimated_gpu = byfft_size * 4
     print("Estimated max GPU usage: %.3gGB" % (estimated_gpu / 1e9))
