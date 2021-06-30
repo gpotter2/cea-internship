@@ -21,6 +21,9 @@ self.x = np.load(get_path("x.npy", "npy_files"))[::x_drop]
 self.y = np.load(get_path("y.npy", "npy_files"))[::y_drop]
 self.t = np.load(get_path("t.npy", "npy_files"))
 
+if self.CLIP_HALF:
+    self.y = self.y[self.y.shape[0] // 2:]
+
 if PROPAGATION_TYPE == "z":
     self.third_axis_length = self.t.shape[0]
 else:
@@ -55,13 +58,13 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
 if PROPAGATION_TYPE == "t":
     outInfo.Set(vtk.vtkDataObject.ORIGIN(), 0, 0, -TOT_Z)
 
-MAX_INSTANT = builtins.min(self.nbframes, MAX_INSTANT)
+self.MAX_INSTANT = builtins.min(self.nbframes, self.MAX_INSTANT)
 
 # Set time steps
 outInfo.Remove(executive.TIME_STEPS())
-for timestep in range(0, MAX_INSTANT):
+for timestep in range(0, self.MAX_INSTANT):
     outInfo.Append(executive.TIME_STEPS(), timestep * dt)
 
 outInfo.Remove(executive.TIME_RANGE())
 outInfo.Append(executive.TIME_RANGE(), 0)
-outInfo.Append(executive.TIME_RANGE(), MAX_INSTANT)
+outInfo.Append(executive.TIME_RANGE(), self.MAX_INSTANT)

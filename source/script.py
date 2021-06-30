@@ -43,6 +43,9 @@ fnpz.close()
 # pts = vtk.vtkPoints()
 # pts.SetData(dsa.numpyTovtkDataArray(self.points, "Points"))
 
+if self.CLIP_HALF:
+    data = data[:,:self.y.shape[0],:]
+
 output.PointData.append(data.ravel(order="F"), "By")
 output.PointData.SetActiveScalars("By")
 
