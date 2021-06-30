@@ -93,7 +93,10 @@ with open(os.path.join(__DIR__, 'reqscript.py')) as fd:
 ### CONFIGURE RENDER ###
 ########################
 
+# Trigger RequestInformation
 source.UpdatePipelineInformation()
 
-Show()
+rep = Show()
+rep.Representation = 'Volume'
+
 Render()
