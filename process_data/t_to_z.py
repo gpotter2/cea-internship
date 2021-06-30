@@ -52,7 +52,7 @@ if Z_OFFSET:
     del propag_offset
     print("OK")
 
-print("Building propag vector...")
+print("Building propag vector...", end="", flush=True)
 propag = np.exp(np.pi * 2j * KZ * dz)
 propag[W < 0] = 0.  # Get rid of negative frequencies
 print("OK")

@@ -7,15 +7,15 @@ import numpy as np
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
 
-MAX_INSTANT = 100  # How many instants we propagate
+MAX_INSTANT = 200  # How many instants we propagate
 
-# How much we drop precision for the calculations
+# How much we drop precision for the calculations. This is required
+# if the data doesn't fit the GPU..
 x_subsampling = 2
 y_subsampling = 2
 
 # How much we drop of precision for the visualisation.
-# Note that there is already a /2 for X and Y before the calculus to make
-# them fit on the GPU.
+# This is in addition of the precision drop for the calculations.
 x_drop = 4
 y_drop = 4
 
@@ -27,8 +27,8 @@ TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 dz = -0.1  # How much we move between two z
 
 # PROPAGATION T ONLY CONFIG
-dt = 1  # How much we propagate between two instants
-Z_LENGTH = 1000  # Set to None for all points
+dt = 0.5  # How much we propagate between two instants
+Z_LENGTH = 2000  # Set to None for all points
 
 # Storage
 STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
