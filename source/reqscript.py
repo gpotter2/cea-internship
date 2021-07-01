@@ -27,7 +27,7 @@ if self.CLIP_HALF:
 if PROPAGATION_TYPE == "z":
     self.third_axis_length = self.t.shape[0]
 else:
-    self.third_axis_length = Z_LENGTH if Z_LENGTH is not None else self.shape[0]
+    self.third_axis_length = ((Z_LENGTH if Z_LENGTH is not None else self.shape[0]) + z_drop - 1) // z_drop
 
 ## Define re-usable grid
 #X, Y, Z = np.meshgrid(self.x, self.y, self.z)

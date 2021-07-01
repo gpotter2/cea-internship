@@ -125,7 +125,7 @@ elif PROPAGATION_TYPE == "t":
         np.savez(
             get_path("f%s.npz" % i, "frames"),
             frame=cp.real(
-                v[::y_drop, ::x_drop, :Z_LENGTH]
+                v[::y_drop, ::x_drop, ::z_drop]
             ).transpose(1, 0, 2).get()
         )
         del v
