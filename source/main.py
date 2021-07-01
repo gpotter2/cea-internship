@@ -82,7 +82,7 @@ self.CLIP_HALF = False
 def process(data):
     return HEADER + data
 
-source = ProgrammableSource()
+source = ProgrammableSource(registrationName='AnimatedLaserBeam')
 source.OutputDataSetType = 'vtkImageData'
 with open(os.path.join(__DIR__, 'script.py')) as fd:
     source.Script = "\n".join([HEADER, fd.read()])
@@ -96,7 +96,40 @@ with open(os.path.join(__DIR__, 'reqscript.py')) as fd:
 # Trigger RequestInformation
 source.UpdatePipelineInformation()
 
-rep = Show()
-rep.Representation = 'Volume'
+Show()
+
+clim = 0.0004
+threshold = 7e-5
+
+# Color table
+byLUT = GetColorTransferFunction('By')
+byLUT.ApplyPreset("Cool to Warm (Extended)")
+byLUT.RescaleTransferFunction([-clim, clim])
+byLUT.AutomaticRescaleRangeMode = 'Never'
+
+# Opacity map
+byPWF = GetOpacityTransferFunction('By')
+byPWF.Points = [
+    # format: val, opacity, 0.5, 0.0 (last 2?!)
+    -clim,      1.0, 0.5, 0.0,
+    -threshold, 1.0, 0.5, 0.0,
+    -threshold, 0.0, 0.5, 0.0,
+    threshold,  0.0, 0.5, 0.0,
+    threshold,  1.0, 0.5, 0.0,
+    clim,       1.0, 0.5, 0.0,
+]
+byPWF.ScalarRangeInitialized = 1
+
+# Display properties
+displayProperties = GetDisplayProperties(source)
+displayProperties.Representation = 'Volume'
+
+# Color
+displayProperties.ColorArrayName = 'By'
+displayProperties.LookupTable = byLUT
+
+# Opacity
+displayProperties.OpacityArrayName = 'By'
+displayProperties.ScalarOpacityFunction = byPWF
 
 Render()
