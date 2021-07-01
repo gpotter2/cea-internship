@@ -75,6 +75,8 @@ CONFIG_HDR = """
 # User configurable
 self.MAX_INSTANT = %s
 self.CLIP_HALF = False
+self.LOG_SCALE = True
+self.LOG_THRESHOLD = 5e-5
 """.strip() % (
     MAX_INSTANT,
 )

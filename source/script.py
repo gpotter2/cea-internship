@@ -36,6 +36,14 @@ fnpz.close()
 # Scale data
 data = data * cnob / cnoe
 
+if self.LOG_SCALE:
+    low = data < -self.LOG_THRESHOLD
+    high = data > self.LOG_THRESHOLD
+    mid = (data >= -self.LOG_THRESHOLD) & (data <= self.LOG_THRESHOLD)
+    data[low] = -np.log10(-data[low])
+    data[high] = np.log10(data[high])
+    data[mid] = 0.
+
 # DEBUG: fill space with first plane
 # data = data[:,:,0]
 # data = np.broadcast_to(data[..., np.newaxis],
