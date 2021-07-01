@@ -16,19 +16,19 @@ y_subsampling = 2
 
 # How much we drop of precision for the visualisation.
 # This is in addition of the precision drop for the calculations.
-x_drop = 4
-y_drop = 4
+x_drop = 8
+y_drop = 8
 
 # TIME TO XYZ ONLY CONFIG
 Z_OFFSET = 0
 TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 
 # PROPAGATION Z ONLY CONFIG
-dz = -0.1  # How much we move between two z
+dz = -0.4  # How much we move between two z
 
 # PROPAGATION T ONLY CONFIG
 dt = 0.5  # How much we propagate between two instants
-Z_LENGTH = 2000  # Set to None for all points
+Z_LENGTH = 500  # Set to None for all points
 
 # Storage
 STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
