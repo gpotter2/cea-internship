@@ -103,8 +103,12 @@ source.UpdatePipelineInformation()
 
 Show()
 
-clim = 0.0004
-threshold = 7e-5
+# LOG
+clim = 5.
+threshold = 0.7
+# NOT LOG
+#clim = 0.0004
+#threshold = 7e-5
 
 # Color table
 byLUT = GetColorTransferFunction('By')
