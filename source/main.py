@@ -29,6 +29,7 @@ from config import (
     dz,
     x_drop,
     y_drop,
+    z_drop,
 )
 
 ##################################
@@ -54,6 +55,7 @@ dt = %s
 dz = %s
 x_drop = %s
 y_drop = %s
+z_drop = %s
 ### END OF HEADER ###
 """.strip() % (
     ACTIVATE_THIS_ENV,
@@ -68,6 +70,7 @@ y_drop = %s
     dz,
     x_drop,
     y_drop,
+    z_drop,
 )
 
 CONFIG_HDR = """
