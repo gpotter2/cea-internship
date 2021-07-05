@@ -31,7 +31,8 @@ from config import (
 )
 
 def getSource(CLIP_HALF=False,
-              CLIP_INV_QUATER=False,
+              CLIP_QUARTER=False,
+              CLIP_INV_QUARTER=False,
               LOG_SCALE=True,
               LOG_THRESHOLD=5e-5,
               SUFFIX=""):
@@ -40,8 +41,8 @@ def getSource(CLIP_HALF=False,
     ##################################
 
 
-    if CLIP_HALF and CLIP_INV_QUATER:
-        raise ValueError("CLIP_HALF and CLIP_INV_QUATER are not stackable !")
+    if len(list(x for x in [CLIP_HALF, CLIP_QUARTER, CLIP_INV_QUARTER] if x)) >= 2:
+        raise ValueError("Cannot stack CLIPs !")
 
     HEADER = """
 ### GENERATED HEADER ###
@@ -85,14 +86,16 @@ z_drop = %s
 # User configurable
 self.MAX_INSTANT = %s
 self.CLIP_HALF = %s
-self.CLIP_INV_QUATER = %s
+self.CLIP_QUARTER = %s
+self.CLIP_INV_QUARTER = %s
 self.LOG_SCALE = %s
 self.LOG_THRESHOLD = %s
-self.SUFFIX = %s
+self.SUFFIX = "%s"
     """.strip() % (
         MAX_INSTANT,
         CLIP_HALF,
-        CLIP_INV_QUATER,
+        CLIP_QUARTER,
+        CLIP_INV_QUARTER,
         LOG_SCALE,
         LOG_THRESHOLD,
         SUFFIX,

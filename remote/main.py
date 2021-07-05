@@ -25,7 +25,8 @@ from source import getSource
 
 CONFIG = {
     "CLIP_HALF": False,
-    "CLIP_INV_QUATER": False,
+    "CLIP_QUARTER": False,
+    "CLIP_INV_QUARTER": False,
     "LOG_SCALE": True,
     "LOG_THRESHOLD": 5e-5,
 }
@@ -49,7 +50,7 @@ def cli():
         cmd = input().lower()
         if cmd == "r":
             print("Reloading...", end="", flush=True)
-            ResetSession()
+            Delete()
             return 0
         elif cmd == "q":
             return -1

@@ -57,8 +57,12 @@ if self.LOG_SCALE:
 if self.CLIP_HALF:
     data = data[:,:self.y.shape[0],:]
 
-if self.CLIP_INV_QUATER:
-    data[self.y.shape[0]//2:,self.x.shape[0]//2:,:] = 0.
+if self.CLIP_INV_QUARTER:
+    data[self.x.shape[0]//2:,self.y.shape[0]//2:,:] = 0.
+
+if self.CLIP_QUARTER:
+    data[:self.x.shape[0]//2,:,:] = 0.
+    data[:,:self.y.shape[0]//2,:] = 0.
 
 output.PointData.append(data.ravel(order="F"), "By")
 output.PointData.SetActiveScalars("By")
