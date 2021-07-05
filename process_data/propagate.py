@@ -11,7 +11,7 @@ parser.add_argument('--filter-lowpass', type=float, nargs=1,
                     help='Applies a low-pass filter to a frequence')
 parser.add_argument('--filter-highpass', type=float, nargs=1,
                     help='Applies a low-pass filter to a frequence')
-parser.add_argument('--suffix', type=float, nargs=1,
+parser.add_argument('--suffix', type=str, nargs=1,
                     help='Add suffix to file names')
 args = parser.parse_args()
 
@@ -103,7 +103,7 @@ dirpath = get_path("", "frames")
 if not os.path.exists(dirpath):
     os.mkdir(dirpath)
 
-suffix = args.suffix or ""
+suffix = args.suffix and args.suffix[0] or ""
 
 if PROPAGATION_TYPE == "z":
     # Propagate on z
