@@ -8,4 +8,5 @@ sys.path.append(os.path.join(__DIR__))
 
 from source import getSource
 
-getSource()
+getSource(SUFFIX="low", OPACITY=0.01, LOG_THRESHOLD=2e-5, COLOR="GYPi")
+getSource(SUFFIX="high", OPACITY=0.2)

@@ -36,6 +36,7 @@ def getSource(CLIP_HALF=False,
               LOG_SCALE=True,
               LOG_THRESHOLD=5e-5,
               SUFFIX="",
+              COLOR="Cool to Warm (Extended)",
               OPACITY=1.0):
     ##################################
     ### CREATE PROGRAMMABLE SOURCE ###
@@ -119,7 +120,7 @@ self.SUFFIX = "%s"
     # Trigger RequestInformation
     source.UpdatePipelineInformation()
     
-    Show()
+    displayProperties = Show(source)
     
     # Without log
     # clim = 0.0004
@@ -130,13 +131,13 @@ self.SUFFIX = "%s"
     threshold = 0.7
     
     # Color table
-    byLUT = GetColorTransferFunction('By')
-    byLUT.ApplyPreset("Cool to Warm (Extended)")
+    byLUT = GetColorTransferFunction('By', displayProperties, separate=True)
+    byLUT.ApplyPreset(COLOR)
     byLUT.RescaleTransferFunction([-clim, clim])
     byLUT.AutomaticRescaleRangeMode = 'Never'
     
     # Opacity map
-    byPWF = GetOpacityTransferFunction('By')
+    byPWF = GetOpacityTransferFunction('By', displayProperties, separate=True)
     byPWF.Points = [
         # format: val, opacity, 0.5, 0.0 (last 2?!)
         -clim,      OPACITY, 0.5, 0.0,
@@ -149,7 +150,6 @@ self.SUFFIX = "%s"
     byPWF.ScalarRangeInitialized = 1
     
     # Display properties
-    displayProperties = GetDisplayProperties(source)
     displayProperties.Representation = 'Volume'
     
     # Color
@@ -159,5 +159,8 @@ self.SUFFIX = "%s"
     # Opacity
     displayProperties.OpacityArrayName = 'By'
     displayProperties.ScalarOpacityFunction = byPWF
+
+    # Separate color map
+    displayProperties.UseSeparateColorMap = True
 
     return source
