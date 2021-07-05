@@ -35,7 +35,8 @@ def getSource(CLIP_HALF=False,
               CLIP_INV_QUARTER=False,
               LOG_SCALE=True,
               LOG_THRESHOLD=5e-5,
-              SUFFIX=""):
+              SUFFIX="",
+              OPACITY=1.0):
     ##################################
     ### CREATE PROGRAMMABLE SOURCE ###
     ##################################
@@ -136,15 +137,14 @@ self.SUFFIX = "%s"
     
     # Opacity map
     byPWF = GetOpacityTransferFunction('By')
-    opacity = 0.01
     byPWF.Points = [
         # format: val, opacity, 0.5, 0.0 (last 2?!)
-        -clim,      opacity, 0.5, 0.0,
-        -threshold, opacity, 0.5, 0.0,
+        -clim,      OPACITY, 0.5, 0.0,
+        -threshold, OPACITY, 0.5, 0.0,
         -threshold, 0.0, 0.5, 0.0,
         threshold,  0.0, 0.5, 0.0,
-        threshold,  opacity, 0.5, 0.0,
-        clim,       opacity, 0.5, 0.0,
+        threshold,  OPACITY, 0.5, 0.0,
+        clim,       OPACITY, 0.5, 0.0,
     ]
     byPWF.ScalarRangeInitialized = 1
     
