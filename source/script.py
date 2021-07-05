@@ -29,7 +29,7 @@ exts = [executive.UPDATE_EXTENT().Get(outInfo, i) for i in range(6)]
 output.SetExtent(exts)
 
 # Get data at specific timeframe
-fnpz = np.load(get_path("f%s.npz" % req_time, "frames"))
+fnpz = np.load(get_path("f%s%s.npz" % (req_time, self.SUFFIX), "frames"))
 data = fnpz['frame']
 fnpz.close()
 
@@ -56,6 +56,9 @@ if self.LOG_SCALE:
 
 if self.CLIP_HALF:
     data = data[:,:self.y.shape[0],:]
+
+if self.CLIP_INV_QUATER:
+    data[self.y.shape[0]//2:,self.x.shape[0]//2:,:] = 0.
 
 output.PointData.append(data.ravel(order="F"), "By")
 output.PointData.SetActiveScalars("By")

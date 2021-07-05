@@ -11,6 +11,8 @@ parser.add_argument('--filter-lowpass', type=float, nargs=1,
                     help='Applies a low-pass filter to a frequence')
 parser.add_argument('--filter-highpass', type=float, nargs=1,
                     help='Applies a low-pass filter to a frequence')
+parser.add_argument('--suffix', type=float, nargs=1,
+                    help='Add suffix to file names')
 args = parser.parse_args()
 
 print("""
@@ -101,6 +103,8 @@ dirpath = get_path("", "frames")
 if not os.path.exists(dirpath):
     os.mkdir(dirpath)
 
+suffix = args.suffix or ""
+
 if PROPAGATION_TYPE == "z":
     # Propagate on z
     prog = tqdm(range(MAX_INSTANT))
@@ -112,7 +116,7 @@ if PROPAGATION_TYPE == "z":
         frame = cp.real(
             v[::y_drop, ::x_drop, :t.shape[0]]
         ).transpose(1, 0, 2).get()
-        np.savez(get_path("f%s.npz" % i, "frames"), frame=frame)
+        np.savez(get_path("f%s%s.npz" % (i, suffix), "frames"), frame=frame)
         del v
 elif PROPAGATION_TYPE == "t":
     # First propagate on t
@@ -123,7 +127,7 @@ elif PROPAGATION_TYPE == "t":
         v = cpx.scipy.fft.ifftn(byfft,
                                 axes=(0,1,2))
         np.savez(
-            get_path("f%s.npz" % i, "frames"),
+            get_path("f%s%s.npz" % (i, suffix), "frames"),
             frame=cp.real(
                 v[::y_drop, ::x_drop, ::z_drop]
             ).transpose(1, 0, 2).get()
