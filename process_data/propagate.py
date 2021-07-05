@@ -91,6 +91,7 @@ if PROPAGATION_TYPE == "z":
 elif PROPAGATION_TYPE == "t":
     propag = np.exp(-np.pi * 2j * (W - KZ) * dt)
     propag[KZ < 0] = 0.
+    propag[Wni] = 0.
 print(".", end="", flush=True)
 print("OK")
 
