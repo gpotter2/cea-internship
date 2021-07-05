@@ -55,8 +55,6 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
     self.y[1] - self.y[0],
     dz
 )
-if PROPAGATION_TYPE == "t":
-    outInfo.Set(vtk.vtkDataObject.ORIGIN(), 0, 0, -TOT_Z)
 
 self.MAX_INSTANT = builtins.min(self.nbframes, self.MAX_INSTANT)
 
