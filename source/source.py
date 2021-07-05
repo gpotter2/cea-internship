@@ -95,6 +95,7 @@ self.SUFFIX = %s
         CLIP_INV_QUATER,
         LOG_SCALE,
         LOG_THRESHOLD,
+        SUFFIX,
     )
     
     def process(data):
