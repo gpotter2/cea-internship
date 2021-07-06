@@ -33,9 +33,6 @@ fnpz = np.load(get_path("f%s%s.npz" % (req_time, self.SUFFIX), "frames"))
 data = fnpz['frame']
 fnpz.close()
 
-# Scale data
-data = data * cnob / cnoe
-
 if self.LOG_SCALE:
     low = data < -self.LOG_THRESHOLD
     high = data > self.LOG_THRESHOLD

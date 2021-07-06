@@ -26,8 +26,6 @@ from config import (
     Y_STEPS,
     Z_LENGTH,
     Z_STEPS,
-    cnob,
-    cnoe,
     dt,
     dz,
     x_drop,
@@ -69,8 +67,6 @@ X_STEPS = pickle.loads(%s)
 Y_STEPS = pickle.loads(%s)
 Z_LENGTH = %s
 Z_STEPS = pickle.loads(%s)
-cnob = %s
-cnoe = %s
 dt = %s
 dz = %s
 x_drop = %s
@@ -88,8 +84,6 @@ z_drop = %s
         pickle.dumps(Y_STEPS),
         Z_LENGTH,
         pickle.dumps(Z_STEPS),
-        cnob,
-        cnoe,
         dt,
         dz,
         x_drop,
