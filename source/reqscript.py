@@ -20,7 +20,9 @@ self.nbframes = builtins.sum(1 for _ in glob.iglob(get_path("*", "frames")))
 self.x = X_STEPS[::x_drop]
 self.y = Y_STEPS[::y_drop]
 if PROPAGATION_TYPE == "z":
-    self.t = T_STEPS[::z_drop]
+    self.t = T_STEPS
+else PROPAGATION_TYPE == "t":
+    self.z = Z_STEPS[::z_drop]
 
 if self.CLIP_HALF:
     self.y = self.y[self.y.shape[0] // 2:]
@@ -28,9 +30,7 @@ if self.CLIP_HALF:
 if PROPAGATION_TYPE == "z":
     self.third_axis_length = self.t.shape[0]
 elif PROPAGATION_TYPE == "t":
-    if Z_LENGTH is None:
-        Z_LENGTH = len(Z_STEPS)
-    self.third_axis_length = (Z_LENGTH + z_drop - 1) // z_drop
+    self.third_axis_length = self.z.shape[0]
 
 print(self.third_axis_length)
 
