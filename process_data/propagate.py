@@ -33,19 +33,11 @@ if args.filter_lowpass or args.filter_highpass:
                                 (args.filter_lowpass or args.filter_highpass)[0]))
 
 # Load files
-print("Loading files...", end="", flush=True)
-x = np.load(get_path('x.npy', "npy_files"))
-y = np.load(get_path('y.npy', "npy_files"))
-t = np.load(get_path('t.npy', "npy_files"))
+print("Loading field...", end="", flush=True)
 if PROPAGATION_TYPE == "z":
     by = np.load(get_path('By.npy', "npy_files"))
-    Z_LENGTH = t.shape[0]
 elif PROPAGATION_TYPE == "t":
     by = np.load(get_path('By_xyz.npy', "npy_files"))
-    #if Z_LENGTH is not None and t.shape[0] // z_drop < Z_LENGTH:
-    #    print("Error: z_drop is too high compared to Z_LENGTH")
-    #    import sys
-    #    sys.exit(1)
 print("OK")
 
 infos(by)
@@ -53,11 +45,11 @@ infos(by)
 # Perform calculations
 
 if PROPAGATION_TYPE == "z":
-    KY, KX, W = build_grid(x, y, t)
+    KY, KX, W = build_grid(X_STEPS, Y_STEPS, T_STEPS)
 elif PROPAGATION_TYPE == "t":
-    TOT_Z = TOT_Z or (t[0] - t[-1])
+    TOT_Z = TOT_Z or (Z_STEPS[0] - Z_STEPS[-1])
     z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
-    KY, KX, KZ = build_grid(x, y, z)
+    KY, KX, KZ = build_grid(X_STEPS, Y_STEPS, Z_STEPS)
     print("Build W...", end="", flush=True)
     W = np.sqrt(KX**2 + KY**2 + KZ**2)
     print("OK")

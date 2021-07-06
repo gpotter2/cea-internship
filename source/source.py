@@ -20,7 +20,11 @@ from config import (
     PROPAGATION_TYPE,
     STORAGE_FOLDER,
     TOT_Z,
+    T_STEPS,
+    X_STEPS,
+    Y_STEPS,
     Z_LENGTH,
+    Z_STEPS,
     cnob,
     cnoe,
     dt,
@@ -58,7 +62,11 @@ def get_path(x, folder=""):
 # Build-specific config
 PROPAGATION_TYPE = "%s"
 TOT_Z = %s
+T_STEPS = %s
+X_STEPS = %s
+Y_STEPS = %s
 Z_LENGTH = %s
+Z_STEPS = %s
 cnob = %s
 cnoe = %s
 dt = %s
@@ -73,7 +81,11 @@ z_drop = %s
         #
         PROPAGATION_TYPE,
         TOT_Z,
+        T_STEPS,
+        X_STEPS,
+        Y_STEPS,
         Z_LENGTH,
+        Z_STEPS,
         cnob,
         cnoe,
         dt,

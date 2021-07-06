@@ -2,12 +2,46 @@
 
 import numpy as np
 
-# Select mode
+# Storage
+# STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
+STORAGE_FOLDER = "/mnt/scratch/gpotter/bigfield3d"
+
+########
+# MODE #
+########
 
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
-
 MAX_INSTANT = 200  # How many instants we propagate
+
+##############################
+# INFORMATIONS ON INPUT DATA #
+##############################
+
+# Data config
+# 102.4 x 102.4 x 94.5231 points per wavelength (wavelength: 800nm)
+X_STEPS = np.linspace(0, 2072/102.4*8e-7, 2072)
+Y_STEPS = np.linspace(0, 1500/102.4*8e-7, 1500)
+T_STEPS = None
+Z_STEPS = np.linspace(0, 1450/94.5231*8e-7, 1450)
+
+#############################
+# PROPAGATION Z ONLY CONFIG #
+#############################
+
+dz = -0.1  # How much we move between two z
+
+#############################
+# PROPAGATION T ONLY CONFIG #
+#############################
+
+dt = 0.5  # How much we propagate between two instants
+TOT_Z = None  # The size of the frame. None for exactly the size of the wave
+Z_LENGTH = 2000  # Set to None for all points
+
+###############
+# SUBSAMPLING #
+###############
 
 # How much we drop precision for the calculations. This is required
 # if the data doesn't fit the GPU..
@@ -20,24 +54,12 @@ x_drop = 8
 y_drop = 8
 z_drop = 2
 
-# TIME TO XYZ ONLY CONFIG
+########
+# MISC #
+########
+
+# process_data/t_to_z.py
 Z_OFFSET = 0
-TOT_Z = None  # The size of the frame. None for exactly the size of the wave
-
-# PROPAGATION Z ONLY CONFIG
-dz = -0.1  # How much we move between two z
-
-# PROPAGATION T ONLY CONFIG
-dt = 0.5  # How much we propagate between two instants
-Z_LENGTH = 2000  # Set to None for all points
-
-# Storage
-STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
-
-# Constants (unused)
-foc_pos = 56
-antenna_from_foc = 10
-initial_dz = antenna_from_foc - foc_pos
 
 # Constants
 c = 299792458 
@@ -58,3 +80,13 @@ cnoe = 1 / (me * las_omega * c / e)  # normalisation E --> unites a0
 cnob = 1 / (me * las_omega / e)  # normalisation B --> unites a0
 
 # --- End of config --- #
+
+assert PROPAGATION_TYPE in ["t", "z"]
+
+assert X_STEPS
+assert Y_STEPS
+
+if PROPAGATION_TYPE == "t":
+    assert Z_STEPS
+else if PROPAGATION_TYPE == "z":
+    assert T_STEPS

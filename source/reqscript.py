@@ -17,17 +17,20 @@ outInfo = executive.GetOutputInformation(0)
 self.nbframes = builtins.sum(1 for _ in glob.iglob(get_path("*", "frames")))
 
 # Read axis
-self.x = np.load(get_path("x.npy", "npy_files"))[::x_drop]
-self.y = np.load(get_path("y.npy", "npy_files"))[::y_drop]
-self.t = np.load(get_path("t.npy", "npy_files"))
+self.x = X_STEPS[::x_drop]
+self.y = Y_STEPS[::y_drop]
+if PROPAGATION_TYPE == "z":
+    self.t = T_STEPS[::z_drop]
 
 if self.CLIP_HALF:
     self.y = self.y[self.y.shape[0] // 2:]
 
 if PROPAGATION_TYPE == "z":
     self.third_axis_length = self.t.shape[0]
-else:
-    self.third_axis_length = ((Z_LENGTH if Z_LENGTH is not None else self.shape[0]) + z_drop - 1) // z_drop
+else if PROPAGATION_TYPE == "t":
+    if Z_LENGTH is None:
+        Z_LENGTH = len(Z_STEPS)
+    self.third_axis_length = (Z_LENGTH + z_drop - 1) // z_drop
 
 ## Define re-usable grid
 #X, Y, Z = np.meshgrid(self.x, self.y, self.z)
@@ -39,7 +42,7 @@ if PROPAGATION_TYPE == "z":
     dz = self.t[1] - self.t[0]
     dt = abs(dz)
 elif PROPAGATION_TYPE == "t":
-    TOT_Z = TOT_Z or (self.t[0] - self.t[-1])
+    TOT_Z = TOT_Z or (Z_STEPS[0] - Z_STEPS[-1])
     dz = abs(TOT_Z) / self.third_axis_length
 
 # Set boundaries

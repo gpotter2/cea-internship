@@ -21,6 +21,12 @@ from config import (
     PROPAGATION_TYPE,
     STORAGE_FOLDER,
     TOT_Z,
+    T_STEPS,
+    X_STEPS,
+    Y_STEPS,
+    Z_LENGTH,
+    Z_OFFSET,
+    Z_STEPS,
     c,
     dt,
     dz,
@@ -29,8 +35,6 @@ from config import (
     y_drop,
     y_subsampling,
     z_drop,
-    Z_LENGTH,
-    Z_OFFSET,
 )
 
 def get_path(x, folder=""):
@@ -62,6 +66,18 @@ def build_grid(x, y, t):
     return KY, KX, W
 
 def infos(by):
+    if X_STEPS.shape[0] != by.shape[0]:
+        print("ERROR: X_STEPS dimension != By X dimension")
+        sys.exit(1)
+    if Y_STEPS.shape[0] != by.shape[1]:
+        print("ERROR: Y_STEPS dimension != By Y dimension")
+        sys.exit(1)
+    if PROPAGATION_TYPE == "z" and T_STEPS.shape[0] != by.shape[2]:
+        print("ERROR: T_STEPS dimension != By T dimension")
+        sys.exit(1)
+    else if PROPAGATION_TYPE == "t" and Z_STEPS.shape[0] != by.shape[2]:
+        print("ERROR: Z_STEPS dimension != By Z dimension")
+        sys.exit(1)
     print("Input grid size: %sx%sx%s (~%sGB)" % (by.shape + (by.nbytes / 1e9,)))
     byfft_size = by.shape[0] * by.shape[1] * Z_LENGTH * 8
     estimated_gpu = byfft_size * 4
