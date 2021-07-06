@@ -67,7 +67,6 @@ def build_grid(x, y, t):
     return KX, KY, W
 
 def infos(by):
-    print(by.shape)
     if X_STEPS.shape[0] != by.shape[0]:
         print("ERROR: X_STEPS dimension != By X dimension")
         sys.exit(1)
