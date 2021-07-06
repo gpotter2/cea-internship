@@ -54,9 +54,11 @@ infos(by)
 if PROPAGATION_TYPE == "z":
     KX, KY, W = build_grid(X_STEPS, Y_STEPS, T_STEPS)
 elif PROPAGATION_TYPE == "t":
+    # Re-build Z axis but with Z_LENGTH points over TOT_Z
     TOT_Z = TOT_Z or (Z_STEPS[0] - Z_STEPS[-1])
     Z_LENGTH = Z_LENGTH or Z_STEPS.shape[0]
     z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
+    # (we could technically use Z_STEPS instead of z)
     KX, KY, KZ = build_grid(X_STEPS, Y_STEPS, z)
     print("Build W...", end="", flush=True)
     W = np.sqrt(KX**2 + KY**2 + KZ**2)

@@ -37,7 +37,7 @@ dz = -0.1  # How much we move between two z
 # PROPAGATION T ONLY CONFIG #
 #############################
 
-dt = 0 #0.5  # How much we propagate between two instants
+dt = 0.5  # How much we propagate between two instants
 TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 Z_LENGTH = None  # Set to None for all points
 
