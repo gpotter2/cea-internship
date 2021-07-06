@@ -36,12 +36,13 @@ from config import (
 def getSource(CLIP_HALF=False,
               CLIP_QUARTER=False,
               CLIP_INV_QUARTER=False,
-              LOG_SCALE=True,
+              LOG_SCALE=False,
               LOG_THRESHOLD=5e-5,
               SUFFIX="",
               COLOR="Cool to Warm (Extended)",
               OPACITY=1.0,
-              CLIM=6.5):
+              CLIM=6.5,
+              THRESHOLD=0.7):
     ##################################
     ### CREATE PROGRAMMABLE SOURCE ###
     ##################################
@@ -130,13 +131,6 @@ self.SUFFIX = "%s"
     
     displayProperties = Show(source)
     
-    # Without log
-    # CLIM = 0.0004
-    # threshold = 7e-5
-    
-    # With log
-    threshold = 3
-    
     # Color table
     byLUT = GetColorTransferFunction('By', displayProperties, separate=True)
     byLUT.ApplyPreset(COLOR)
@@ -148,10 +142,10 @@ self.SUFFIX = "%s"
     byPWF.Points = [
         # format: val, opacity, 0.5, 0.0 (last 2?!)
         -CLIM,      OPACITY, 0.5, 0.,
-        -threshold, OPACITY, 0.5, 0.,
-        -threshold, 0.,      0.5, 0.,
-        threshold,  0.,      0.5, 0.,
-        threshold,  OPACITY, 0.5, 0.,
+        -THRESHOLD, OPACITY, 0.5, 0.,
+        -THRESHOLD, 0.,      0.5, 0.,
+        THRESHOLD,  0.,      0.5, 0.,
+        THRESHOLD,  OPACITY, 0.5, 0.,
         CLIM,       OPACITY, 0.5, 0.,
     ]
     byPWF.ScalarRangeInitialized = 1
