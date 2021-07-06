@@ -32,6 +32,8 @@ elif PROPAGATION_TYPE == "t":
         Z_LENGTH = len(Z_STEPS)
     self.third_axis_length = (Z_LENGTH + z_drop - 1) // z_drop
 
+print(self.third_axis_length)
+
 ## Define re-usable grid
 #X, Y, Z = np.meshgrid(self.x, self.y, self.z)
 #self.points = algs.make_vector(X.ravel(),

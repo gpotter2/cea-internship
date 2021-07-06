@@ -11,7 +11,8 @@ ACTIVATE_THIS_ENV = "/home/gpotter/.miniconda3/bin/activate_this.py"
 # https://docs.paraview.org/en/latest/ReferenceManual/pythonProgrammableFilter.html#programmable-filter
 
 from paraview.simple import *
-import sys, os
+
+import sys, os, pickle
 __DIR__ = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(__DIR__, ".."))
 
@@ -52,7 +53,7 @@ def getSource(CLIP_HALF=False,
 
     HEADER = """
 ### GENERATED HEADER ###
-import os
+import os, pickle
 activate_this="%s"
 exec(open(activate_this).read(), dict(__file__=activate_this))
 
@@ -63,10 +64,10 @@ def get_path(x, folder=""):
 PROPAGATION_TYPE = "%s"
 TOT_Z = %s
 T_STEPS = %s
-X_STEPS = %s
-Y_STEPS = %s
+X_STEPS = pickle.loads(%s)
+Y_STEPS = pickle.loads(%s)
 Z_LENGTH = %s
-Z_STEPS = %s
+Z_STEPS = pickle.loads(%s)
 cnob = %s
 cnoe = %s
 dt = %s
@@ -82,10 +83,10 @@ z_drop = %s
         PROPAGATION_TYPE,
         TOT_Z,
         T_STEPS,
-        X_STEPS,
-        Y_STEPS,
+        pickle.dumps(X_STEPS),
+        pickle.dumps(Y_STEPS),
         Z_LENGTH,
-        Z_STEPS,
+        pickle.dumps(Z_STEPS),
         cnob,
         cnoe,
         dt,
