@@ -125,12 +125,13 @@ self.SUFFIX = "%s"
     ########################
     ### CONFIGURE RENDER ###
     ########################
-    
+
     # Trigger RequestInformation
     source.UpdatePipelineInformation()
     
+    paraview.simple._DisableFirstRenderCameraReset()
     displayProperties = Show(source)
-    
+
     # Color table
     byLUT = GetColorTransferFunction('By', displayProperties, separate=True)
     byLUT.ApplyPreset(COLOR)
@@ -163,5 +164,11 @@ self.SUFFIX = "%s"
 
     # Separate color map
     displayProperties.UseSeparateColorMap = True
+
+    # Configure view
+    view = GetActiveView()
+    view.AxesGrid = 'GridAxes3DActor'
+    view.ResetCamera()
+    view.CenterOfRotation = GetActiveCamera().GetFocalPoint()
 
     return source
