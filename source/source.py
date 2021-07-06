@@ -153,12 +153,12 @@ self.SUFFIX = "%s"
     byPWF = GetOpacityTransferFunction('By', displayProperties, separate=True)
     byPWF.Points = [
         # format: val, opacity, 0.5, 0.0 (last 2?!)
-        -CLIM
-        -threshold, OPACITY, 0.5, 0.0,
-        -threshold, 0.0, 0.5, 0.0,
-        threshold,  0.0, 0.5, 0.0,
-        threshold,  OPACITY, 0.5, 0.0,
-        CLIM,       OPACITY, 0.5, 0.0,
+        -CLIM,      OPACITY, 0.5, 0.,
+        -threshold, OPACITY, 0.5, 0.,
+        -threshold, 0.,      0.5, 0.,
+        threshold,  0.,      0.5, 0.,
+        threshold,  OPACITY, 0.5, 0.,
+        CLIM,       OPACITY, 0.5, 0.,
     ]
     byPWF.ScalarRangeInitialized = 1
     

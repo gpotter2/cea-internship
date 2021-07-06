@@ -10,19 +10,19 @@ executive = self.GetExecutive()
 outInfo = executive.GetOutputInformation(0)
 
 # A util to get the current timestamp
-def GetUpdateTimestep():
+def GetTimestep():
     """
     Returns the requested time value, or None if not present
     """
-    return outInfo.Get(executive.UPDATE_TIME_STEP()) \
-              if outInfo.Has(executive.UPDATE_TIME_STEP()) else None
+    ts = outInfo.Get(executive.UPDATE_TIME_STEP()) \
+              if outInfo.Has(executive.UPDATE_TIME_STEP()) else 0
+    d = abs(dz) if PROPAGATION_TYPE == "z" else dt
+    if not d:
+        return 0
+    return ts / d
 
 # Build time index
-req_time = int((
-    (GetUpdateTimestep() or 0)) / (
-        abs(dz) if PROPAGATION_TYPE == "z" else dt
-    )
-)
+req_time = GetTimestep()
 
 # Configure output
 exts = [executive.UPDATE_EXTENT().Get(outInfo, i) for i in range(6)]
