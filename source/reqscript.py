@@ -21,7 +21,7 @@ self.x = X_STEPS[::x_drop]
 self.y = Y_STEPS[::y_drop]
 if PROPAGATION_TYPE == "z":
     self.t = T_STEPS
-else PROPAGATION_TYPE == "t":
+elif PROPAGATION_TYPE == "t":
     self.z = Z_STEPS[::z_drop]
 
 if self.CLIP_HALF:

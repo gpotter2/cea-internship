@@ -52,8 +52,8 @@ SUBSAMPLE_IN_PROPAGATE = True
 
 # How much we drop of precision for the visualisation.
 # This is in addition of the precision drop for the calculations.
-x_drop = 8
-y_drop = 8
+x_drop = 2
+y_drop = 2
 z_drop = 2
 
 ########
