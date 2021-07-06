@@ -19,7 +19,7 @@ def GetTimestep():
     d = abs(dz) if PROPAGATION_TYPE == "z" else dt
     if not d:
         return 0
-    return ts / d
+    return int(ts / d)
 
 # Build time index
 req_time = GetTimestep()
