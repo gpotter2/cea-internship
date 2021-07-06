@@ -45,8 +45,10 @@ Z_LENGTH = 2000  # Set to None for all points
 
 # How much we drop precision for the calculations. This is required
 # if the data doesn't fit the GPU..
-x_subsampling = 2
-y_subsampling = 2
+x_subsampling = 3
+y_subsampling = 3
+
+SUBSAMPLE_IN_PROPAGATE = True
 
 # How much we drop of precision for the visualisation.
 # This is in addition of the precision drop for the calculations.
@@ -90,3 +92,7 @@ if PROPAGATION_TYPE == "t":
     assert Z_STEPS is not None
 elif PROPAGATION_TYPE == "z":
     assert T_STEPS is not None
+
+if SUBSAMPLE_IN_PROPAGATE:
+    X_STEPS = X_STEPS[::x_subsampling]
+    Y_STEPS = Y_STEPS[::y_subsampling]

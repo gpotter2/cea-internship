@@ -20,6 +20,7 @@ from config import (
     MAX_INSTANT,
     PROPAGATION_TYPE,
     STORAGE_FOLDER,
+    SUBSAMPLE_IN_PROPAGATE,
     TOT_Z,
     T_STEPS,
     X_STEPS,

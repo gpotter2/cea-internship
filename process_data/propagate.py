@@ -40,16 +40,21 @@ elif PROPAGATION_TYPE == "t":
     by = np.load(get_path('By_xyz.npy', "npy_files"))
 print("OK")
 
+if SUBSAMPLE_IN_PROPAGATE:
+    print("Subsampling plane...", end="", flush=True)
+    by = by[::y_subsampling, ::x_subsampling, ::]
+    print("OK")
+
 infos(by)
 
 # Perform calculations
 
 if PROPAGATION_TYPE == "z":
-    KY, KX, W = build_grid(X_STEPS, Y_STEPS, T_STEPS)
+    KY, KX, W = build_grid(Y_STEPS, X_STEPS, T_STEPS)
 elif PROPAGATION_TYPE == "t":
     TOT_Z = TOT_Z or (Z_STEPS[0] - Z_STEPS[-1])
     z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
-    KY, KX, KZ = build_grid(X_STEPS, Y_STEPS, Z_STEPS)
+    KY, KX, KZ = build_grid(Y_STEPS, X_STEPS, Z_STEPS)
     print("Build W...", end="", flush=True)
     W = np.sqrt(KX**2 + KY**2 + KZ**2)
     print("OK")
@@ -84,6 +89,8 @@ elif PROPAGATION_TYPE == "t":
     propag = np.exp(-np.pi * 2j * (W - KZ) * dt)
     propag[KZ < 0] = 0.
     propag[Wni] = 0.
+del Wi
+del Wni
 print(".", end="", flush=True)
 print("OK")
 
