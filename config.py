@@ -37,7 +37,7 @@ dz = -0.1  # How much we move between two z
 # PROPAGATION T ONLY CONFIG #
 #############################
 
-dt = 0.5  # How much we propagate between two instants
+dt = 0.05  # How much we propagate between two instants
 TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 Z_LENGTH = None  # Set to None for all points
 
@@ -47,8 +47,8 @@ Z_LENGTH = None  # Set to None for all points
 
 # How much we drop precision for the calculations. This is required
 # if the data doesn't fit the GPU..
-x_subsampling = 3
-y_subsampling = 3
+x_subsampling = 2
+y_subsampling = 2
 
 SUBSAMPLE_IN_PROPAGATE = True
 
@@ -57,6 +57,20 @@ SUBSAMPLE_IN_PROPAGATE = True
 x_drop = 4
 y_drop = 4
 z_drop = 2
+
+############
+# CROPPING #
+############
+
+# Crop the space before propagating. You can use None to specify no cropping.
+# THOSE VALUES MUST MATCH THE AXIS
+x_min = 5
+x_max = 18
+y_min = 5
+y_max = 10
+z_min = 4
+z_max = 12
+
 
 ########
 # MISC #
@@ -67,6 +81,7 @@ Z_OFFSET = 0
 
 # --- End of config --- #
 
+# Various sanity checks
 assert PROPAGATION_TYPE in ["t", "z"]
 
 assert X_STEPS is not None
@@ -78,6 +93,28 @@ if PROPAGATION_TYPE == "t":
 elif PROPAGATION_TYPE == "z":
     assert T_STEPS is not None
     assert DATA_FORMAT == "XYT"
+    assert z_min is None
+    assert z_max is None
+
+# Re-scale cropping values
+if x_min is not None:
+    x_min = int(x_min / (X_STEPS[1] - X_STEPS[0]))
+if x_max is not None:
+    x_max = int(x_max / (X_STEPS[1] - X_STEPS[0]))
+if y_min is not None:
+    y_min = int(y_min / (Y_STEPS[1] - Y_STEPS[0]))
+if y_max is not None:
+    y_max = int(y_max / (Y_STEPS[1] - Y_STEPS[0]))
+if z_min is not None:
+    z_min = int(z_min / (Z_STEPS[1] - Z_STEPS[0]))
+if z_max is not None:
+    z_max = int(z_max / (Z_STEPS[1] - Z_STEPS[0]))
+
+# Crop axis
+X_STEPS = X_STEPS[x_min:x_max]
+Y_STEPS = Y_STEPS[y_min:y_max]
+if PROPAGATION_TYPE == "t":
+    Z_STEPS = Z_STEPS[z_min:z_max]
 
 if SUBSAMPLE_IN_PROPAGATE:
     X_STEPS = X_STEPS[::x_subsampling]

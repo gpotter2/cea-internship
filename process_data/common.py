@@ -16,27 +16,7 @@ from tqdm import tqdm
 # Read config
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from config import (
-    DATA_FORMAT,
-    MAX_INSTANT,
-    PROPAGATION_TYPE,
-    STORAGE_FOLDER,
-    SUBSAMPLE_IN_PROPAGATE,
-    TOT_Z,
-    T_STEPS,
-    X_STEPS,
-    Y_STEPS,
-    Z_LENGTH,
-    Z_OFFSET,
-    Z_STEPS,
-    dt,
-    dz,
-    x_drop,
-    x_subsampling,
-    y_drop,
-    y_subsampling,
-    z_drop,
-)
+from config import *
 
 def get_path(x, folder=""):
     return os.path.abspath(os.path.join(STORAGE_FOLDER, folder, x))
