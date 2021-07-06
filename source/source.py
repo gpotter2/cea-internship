@@ -41,8 +41,8 @@ def getSource(CLIP_HALF=False,
               SUFFIX="",
               COLOR="Cool to Warm (Extended)",
               OPACITY=1.0,
-              CLIM=6.5,
-              THRESHOLD=0.7):
+              CLIM=0.015,
+              THRESHOLD=0.002):
     ##################################
     ### CREATE PROGRAMMABLE SOURCE ###
     ##################################
