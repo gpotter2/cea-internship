@@ -83,10 +83,10 @@ cnob = 1 / (me * las_omega / e)  # normalisation B --> unites a0
 
 assert PROPAGATION_TYPE in ["t", "z"]
 
-assert X_STEPS
-assert Y_STEPS
+assert X_STEPS is not None
+assert Y_STEPS is not None
 
 if PROPAGATION_TYPE == "t":
-    assert Z_STEPS
-else if PROPAGATION_TYPE == "z":
-    assert T_STEPS
+    assert Z_STEPS is not None
+elif PROPAGATION_TYPE == "z":
+    assert T_STEPS is not None

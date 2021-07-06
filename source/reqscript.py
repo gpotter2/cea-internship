@@ -27,7 +27,7 @@ if self.CLIP_HALF:
 
 if PROPAGATION_TYPE == "z":
     self.third_axis_length = self.t.shape[0]
-else if PROPAGATION_TYPE == "t":
+elif PROPAGATION_TYPE == "t":
     if Z_LENGTH is None:
         Z_LENGTH = len(Z_STEPS)
     self.third_axis_length = (Z_LENGTH + z_drop - 1) // z_drop

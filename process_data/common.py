@@ -75,7 +75,7 @@ def infos(by):
     if PROPAGATION_TYPE == "z" and T_STEPS.shape[0] != by.shape[2]:
         print("ERROR: T_STEPS dimension != By T dimension")
         sys.exit(1)
-    else if PROPAGATION_TYPE == "t" and Z_STEPS.shape[0] != by.shape[2]:
+    elif PROPAGATION_TYPE == "t" and Z_STEPS.shape[0] != by.shape[2]:
         print("ERROR: Z_STEPS dimension != By Z dimension")
         sys.exit(1)
     print("Input grid size: %sx%sx%s (~%sGB)" % (by.shape + (by.nbytes / 1e9,)))
