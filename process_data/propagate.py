@@ -52,12 +52,15 @@ infos(by)
 if PROPAGATION_TYPE == "z":
     KY, KX, W = build_grid(Y_STEPS, X_STEPS, T_STEPS)
 elif PROPAGATION_TYPE == "t":
-    TOT_Z = TOT_Z or (Z_STEPS[0] - Z_STEPS[-1])
-    z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
+    #TOT_Z = TOT_Z or (Z_STEPS[0] - Z_STEPS[-1])
+    #Z_LENGTH = Z_LENGTH or Z_STEPS.shape[0]
+    #z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
     KY, KX, KZ = build_grid(Y_STEPS, X_STEPS, Z_STEPS)
     print("Build W...", end="", flush=True)
     W = np.sqrt(KX**2 + KY**2 + KZ**2)
     print("OK")
+
+#print(z)
 
 byfft = build_fft(by)
 

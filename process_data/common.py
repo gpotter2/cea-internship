@@ -80,7 +80,7 @@ def infos(by):
         print("ERROR: Z_STEPS dimension != By Z dimension")
         sys.exit(1)
     print("Input grid size: %sx%sx%s (~%sGB)" % (by.shape + (by.nbytes / 1e9,)))
-    byfft_size = by.shape[0] * by.shape[1] * Z_LENGTH * 8
+    byfft_size = by.shape[0] * by.shape[1] * (Z_LENGTH or by.shape[2]) * 8
     estimated_gpu = byfft_size * 4
     print("Estimated max GPU usage: %.3gGB" % (estimated_gpu / 1e9))
     if estimated_gpu > 32 * 1e9:

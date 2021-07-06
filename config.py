@@ -20,10 +20,10 @@ MAX_INSTANT = 200  # How many instants we propagate
 
 # Data config
 # 102.4 x 102.4 x 94.5231 points per wavelength (wavelength: 800nm)
-X_STEPS = np.linspace(0, 2072/102.4*8e-7, 2072)
-Y_STEPS = np.linspace(0, 1500/102.4*8e-7, 1500)
+X_STEPS = np.linspace(0, 2072/102.4, 2072)
+Y_STEPS = np.linspace(0, 1500/102.4, 1500)
 T_STEPS = None
-Z_STEPS = np.linspace(0, 1450/94.5231*8e-7, 1450)
+Z_STEPS = np.linspace(0, 1450/94.5231, 1450)
 
 #############################
 # PROPAGATION Z ONLY CONFIG #
@@ -37,7 +37,7 @@ dz = -0.1  # How much we move between two z
 
 dt = 0.5  # How much we propagate between two instants
 TOT_Z = None  # The size of the frame. None for exactly the size of the wave
-Z_LENGTH = 2000  # Set to None for all points
+Z_LENGTH = None  # Set to None for all points
 
 ###############
 # SUBSAMPLING #
@@ -52,8 +52,8 @@ SUBSAMPLE_IN_PROPAGATE = True
 
 # How much we drop of precision for the visualisation.
 # This is in addition of the precision drop for the calculations.
-x_drop = 2
-y_drop = 2
+x_drop = 4
+y_drop = 4
 z_drop = 2
 
 ########
