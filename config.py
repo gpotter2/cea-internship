@@ -64,6 +64,14 @@ z_drop = 2
 
 # Crop the space before propagating. You can use None to specify no cropping.
 # THOSE VALUES MUST MATCH THE AXIS
+
+# x_min = None
+# x_max = None
+# y_min = None
+# y_max = None
+# z_min = None
+# z_max = None
+
 x_min = 5
 x_max = 18
 y_min = 5

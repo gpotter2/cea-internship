@@ -60,6 +60,13 @@ outInfo.Set(vtk.vtkDataObject.SPACING(),
     self.y[1] - self.y[0],
     dz
 )
+if PROPAGATION_TYPE == "t":
+    outInfo.Set(vtk.vtkImageData.ORIGIN(),
+        # x, y, z
+        X_STEPS[0],
+        Y_STEPS[0],
+        Z_STEPS[0]
+    )
 
 self.MAX_INSTANT = builtins.min(self.nbframes, self.MAX_INSTANT)
 
