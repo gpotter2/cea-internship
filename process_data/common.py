@@ -29,7 +29,6 @@ from config import (
     Z_LENGTH,
     Z_OFFSET,
     Z_STEPS,
-    c,
     dt,
     dz,
     x_drop,
