@@ -17,6 +17,7 @@ from tqdm import tqdm
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from config import (
+    DATA_FORMAT,
     MAX_INSTANT,
     PROPAGATION_TYPE,
     STORAGE_FOLDER,
@@ -62,11 +63,12 @@ def build_grid(x, y, t):
     freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
     freqt = np.fft.fftfreq(t.size, d=t[1] - t[0])
 
-    KY, KX, W = np.meshgrid(freqy, freqx, freqt, indexing='ij')
+    KX, KY, W = np.meshgrid(freqx, freqy, freqt, indexing='ij')
     print("OK")
-    return KY, KX, W
+    return KX, KY, W
 
 def infos(by):
+    print(by.shape)
     if X_STEPS.shape[0] != by.shape[0]:
         print("ERROR: X_STEPS dimension != By X dimension")
         sys.exit(1)

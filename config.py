@@ -25,6 +25,8 @@ Y_STEPS = np.linspace(0, 1500/102.4, 1500)
 T_STEPS = None
 Z_STEPS = np.linspace(0, 1450/94.5231, 1450)
 
+DATA_FORMAT = "XYZ"  # XYZ, YXZ, XYT
+
 #############################
 # PROPAGATION Z ONLY CONFIG #
 #############################
@@ -35,7 +37,7 @@ dz = -0.1  # How much we move between two z
 # PROPAGATION T ONLY CONFIG #
 #############################
 
-dt = 0.5  # How much we propagate between two instants
+dt = 0 #0.5  # How much we propagate between two instants
 TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 Z_LENGTH = None  # Set to None for all points
 
@@ -90,8 +92,10 @@ assert Y_STEPS is not None
 
 if PROPAGATION_TYPE == "t":
     assert Z_STEPS is not None
+    assert DATA_FORMAT in ["XYZ", "YXZ"]
 elif PROPAGATION_TYPE == "z":
     assert T_STEPS is not None
+    assert DATA_FORMAT == "XYT"
 
 if SUBSAMPLE_IN_PROPAGATE:
     X_STEPS = X_STEPS[::x_subsampling]

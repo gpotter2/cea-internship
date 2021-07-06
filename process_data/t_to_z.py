@@ -24,7 +24,7 @@ print("OK")
 
 infos(by)
 
-KY, KX, W = build_grid(x, y, t)
+KX, KY, W = build_grid(x, y, t)
 byfft = build_fft(by)
 
 ### Propagate

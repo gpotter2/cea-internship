@@ -42,7 +42,8 @@ def getSource(CLIP_HALF=False,
               LOG_THRESHOLD=5e-5,
               SUFFIX="",
               COLOR="Cool to Warm (Extended)",
-              OPACITY=1.0):
+              OPACITY=1.0,
+              CLIM=6.5):
     ##################################
     ### CREATE PROGRAMMABLE SOURCE ###
     ##################################
@@ -136,29 +137,28 @@ self.SUFFIX = "%s"
     displayProperties = Show(source)
     
     # Without log
-    # clim = 0.0004
+    # CLIM = 0.0004
     # threshold = 7e-5
     
     # With log
-    clim = 4
-    threshold = 0.7
+    threshold = 3
     
     # Color table
     byLUT = GetColorTransferFunction('By', displayProperties, separate=True)
     byLUT.ApplyPreset(COLOR)
-    byLUT.RescaleTransferFunction([-clim, clim])
+    byLUT.RescaleTransferFunction([-CLIM, CLIM])
     byLUT.AutomaticRescaleRangeMode = 'Never'
     
     # Opacity map
     byPWF = GetOpacityTransferFunction('By', displayProperties, separate=True)
     byPWF.Points = [
         # format: val, opacity, 0.5, 0.0 (last 2?!)
-        -clim,      OPACITY, 0.5, 0.0,
+        -CLIM
         -threshold, OPACITY, 0.5, 0.0,
         -threshold, 0.0, 0.5, 0.0,
         threshold,  0.0, 0.5, 0.0,
         threshold,  OPACITY, 0.5, 0.0,
-        clim,       OPACITY, 0.5, 0.0,
+        CLIM,       OPACITY, 0.5, 0.0,
     ]
     byPWF.ScalarRangeInitialized = 1
     

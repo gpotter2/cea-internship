@@ -27,7 +27,7 @@ print("""
 -------------------------------------------------------------------
 """)
 
-print("PROPAGATION TYPE: %s" % PROPAGATION_TYPE)
+print("PROPAGATION TYPE: %s - DATA INPUT: %s" % (PROPAGATION_TYPE, DATA_FORMAT))
 if args.filter_lowpass or args.filter_highpass:
     print("FILTER: %s, fc=%s" % (args.filter_lowpass and "lowpass" or "highpass",
                                 (args.filter_lowpass or args.filter_highpass)[0]))
@@ -38,11 +38,13 @@ if PROPAGATION_TYPE == "z":
     by = np.load(get_path('By.npy', "npy_files"))
 elif PROPAGATION_TYPE == "t":
     by = np.load(get_path('By_xyz.npy', "npy_files"))
+    if DATA_FORMAT == "YXZ":
+        by = by.transpose(1, 0, 2)
 print("OK")
 
 if SUBSAMPLE_IN_PROPAGATE:
     print("Subsampling plane...", end="", flush=True)
-    by = by[::y_subsampling, ::x_subsampling, ::]
+    by = by[::x_subsampling, ::y_subsampling, ::]
     print("OK")
 
 infos(by)
@@ -50,17 +52,15 @@ infos(by)
 # Perform calculations
 
 if PROPAGATION_TYPE == "z":
-    KY, KX, W = build_grid(Y_STEPS, X_STEPS, T_STEPS)
+    KX, KY, W = build_grid(X_STEPS, Y_STEPS, T_STEPS)
 elif PROPAGATION_TYPE == "t":
-    #TOT_Z = TOT_Z or (Z_STEPS[0] - Z_STEPS[-1])
-    #Z_LENGTH = Z_LENGTH or Z_STEPS.shape[0]
-    #z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
-    KY, KX, KZ = build_grid(Y_STEPS, X_STEPS, Z_STEPS)
+    TOT_Z = TOT_Z or (Z_STEPS[0] - Z_STEPS[-1])
+    Z_LENGTH = Z_LENGTH or Z_STEPS.shape[0]
+    z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
+    KX, KY, KZ = build_grid(X_STEPS, Y_STEPS, z)
     print("Build W...", end="", flush=True)
     W = np.sqrt(KX**2 + KY**2 + KZ**2)
     print("OK")
-
-#print(z)
 
 byfft = build_fft(by)
 
@@ -117,8 +117,8 @@ if PROPAGATION_TYPE == "z":
         v = cpx.scipy.fft.ifftn(byfft,
                                 axes=(0,1,2))
         frame = cp.real(
-            v[::y_drop, ::x_drop, :t.shape[0]]
-        ).transpose(1, 0, 2).get()
+            v[::x_drop, ::y_drop, :t.shape[0]]
+        ).get()
         np.savez(get_path("f%s%s.npz" % (i, suffix), "frames"), frame=frame)
         del v
 elif PROPAGATION_TYPE == "t":
@@ -132,8 +132,8 @@ elif PROPAGATION_TYPE == "t":
         np.savez(
             get_path("f%s%s.npz" % (i, suffix), "frames"),
             frame=cp.real(
-                v[::y_drop, ::x_drop, ::z_drop]
-            ).transpose(1, 0, 2).get()
+                v[::x_drop, ::y_drop, ::z_drop]
+            ).get()
         )
         del v
 
