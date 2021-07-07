@@ -74,12 +74,12 @@ z_drop = 2
 # z_min = None
 # z_max = None
 
-x_min = 5
-x_max = 18
+x_min = 4
+x_max = 12
 y_min = 5
 y_max = 10
-z_min = 4
-z_max = 12
+z_min = 5
+z_max = 18
 
 ############
 # ROTATING #
