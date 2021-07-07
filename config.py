@@ -110,7 +110,7 @@ assert Y_STEPS is not None
 
 if PROPAGATION_TYPE == "t":
     assert Z_STEPS is not None
-    assert DATA_FORMAT in list(permutations("XYZ"))
+    assert DATA_FORMAT in list("".join(x) for x in permutations("XYZ"))
 elif PROPAGATION_TYPE == "z":
     assert T_STEPS is not None
     assert DATA_FORMAT == "XYT"
