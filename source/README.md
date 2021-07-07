@@ -1,7 +1,7 @@
 # Installation
 
 - make a conda environment, install `cupy`, `libgcc`
-- copy/paste `installation/activate_this.py` into `.../miniconda3/bin/`
+- copy/paste `internal/installation/activate_this.py` into `.../miniconda3/bin/`
 - add to your .bashrc:
 
 ```

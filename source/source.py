@@ -117,9 +117,9 @@ self.SUFFIX = "%s"
     
     source = ProgrammableSource(registrationName='AnimatedLaserBeam')
     source.OutputDataSetType = 'vtkImageData'
-    with open(os.path.join(__DIR__, 'script.py')) as fd:
+    with open(os.path.join(__DIR__, 'internal', 'script.py')) as fd:
         source.Script = "\n".join([HEADER, fd.read()])
-    with open(os.path.join(__DIR__, 'reqscript.py')) as fd:
+    with open(os.path.join(__DIR__, 'internal', 'reqscript.py')) as fd:
         source.ScriptRequestInformation = "\n".join([CONFIG_HDR, HEADER, fd.read()])
     
     ########################
