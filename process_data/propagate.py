@@ -38,8 +38,11 @@ if PROPAGATION_TYPE == "z":
     by = np.load(get_path('By.npy', "npy_files"))
 elif PROPAGATION_TYPE == "t":
     by = np.load(get_path('By_xyz.npy', "npy_files"))
-    if DATA_FORMAT == "YXZ":
-        by = by.transpose(1, 0, 2)
+    by = by.transpose(
+        DATA_FORMAT.index("X"),
+        DATA_FORMAT.index("Y"),
+        DATA_FORMAT.index("Z"),
+    )
 print("OK")
 
 # Crop

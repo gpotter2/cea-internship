@@ -1,5 +1,6 @@
 # Config
 
+from itertools import permutations
 import numpy as np
 
 # Storage
@@ -20,12 +21,13 @@ MAX_INSTANT = 200  # How many instants we propagate
 
 # Data config
 # 102.4 x 102.4 x 94.5231 points per wavelength (wavelength: 800nm)
-X_STEPS = np.linspace(0, 2072/102.4, 2072)
+Z_STEPS = np.linspace(0, 2072/102.4, 2072)
 Y_STEPS = np.linspace(0, 1500/102.4, 1500)
+X_STEPS = np.linspace(0, 1450/94.5231, 1450)
 T_STEPS = None
-Z_STEPS = np.linspace(0, 1450/94.5231, 1450)
 
-DATA_FORMAT = "XYZ"  # XYZ, YXZ, XYT
+# Data format: XYT for z propag, any permutation of XYZ for t propag
+DATA_FORMAT = "ZYX"
 
 #############################
 # PROPAGATION Z ONLY CONFIG #
@@ -108,7 +110,7 @@ assert Y_STEPS is not None
 
 if PROPAGATION_TYPE == "t":
     assert Z_STEPS is not None
-    assert DATA_FORMAT in ["XYZ", "YXZ"]
+    assert DATA_FORMAT in list(permutations("XYZ"))
 elif PROPAGATION_TYPE == "z":
     assert T_STEPS is not None
     assert DATA_FORMAT == "XYT"
