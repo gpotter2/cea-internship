@@ -25,13 +25,18 @@ print("OK")
 infos(by)
 
 KX, KY, W = build_grid(x, y, t)
-byfft = build_fft(by)
+print("Moving data to GPU...", end="", flush=True)
+byfft = cp.asarray(by, dtype="complex64")
+print("OK")
+del by
+
+build_fft_inplace(byfft)
 
 ### Propagate
 
 # Create propag vector
 print("Building KZ (slow).", end="", flush=True)
-propag = np.zeros(by.shape, dtype="complex64")
+propag = np.zeros(byfft.shape, dtype="complex64")
 
 KZ2 = W**2 - KX**2 - KY**2
 KZ2[KZ2 < 0] = 0.

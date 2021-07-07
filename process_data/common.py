@@ -21,19 +21,14 @@ from config import *
 def get_path(x, folder=""):
     return os.path.abspath(os.path.join(STORAGE_FOLDER, folder, x))
 
-def build_fft(by):
+def build_fft_inplace(by):
     # Apply discrete fourier transform
-    print("Moving data to GPU. Allocating array %sx%sx%s..." % by.shape, end="", flush=True)
-    byfft = cp.asarray(by, dtype="complex64")
-    print("OK")
-    # FW
     print("Applying discrete fast fourier transform...", end="", flush=True)
-    cpx.scipy.fft.fftn(byfft,
+    cpx.scipy.fft.fftn(by,
                        axes=(0,1,2),
                        norm="forward",
                        overwrite_x=True)
     print("OK")
-    return byfft
 
 def build_grid(x, y, t):
     print("Building freq grid...", end="", flush=True)

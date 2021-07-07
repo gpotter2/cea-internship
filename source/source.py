@@ -16,6 +16,10 @@ import sys, os, pickle
 __DIR__ = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(__DIR__, ".."))
 
+import config
+from importlib import reload
+reload(config)
+
 from config import (
     MAX_INSTANT,
     PROPAGATION_TYPE,

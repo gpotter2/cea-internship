@@ -42,6 +42,10 @@ elif PROPAGATION_TYPE == "t":
         by = by.transpose(1, 0, 2)
 print("OK")
 
+print("Moving data to GPU...", end="", flush=True)
+by = cp.asarray(by, dtype="complex64")
+print("OK")
+
 # Crop
 if any(x for x in [x_min, x_max, y_min, y_max, z_min, z_max] if x is not None):
     print("Crop field...", end="", flush=True)
@@ -52,6 +56,16 @@ if any(x for x in [x_min, x_max, y_min, y_max, z_min, z_max] if x is not None):
 if SUBSAMPLE_IN_PROPAGATE:
     print("Subsampling plane...", end="", flush=True)
     by = by[::x_subsampling, ::y_subsampling, ::]
+    print("OK")
+
+if ROTATION_ANGLE:
+    print("Rotating by %s°...", end="", flush=True)
+    cpx.scipy.ndimage.rotate(by,
+                             ROTATION_ANGLE,
+                             reshape=False,
+                             output=by,
+                             mode="constant",
+                             cval=0.0)
     print("OK")
 
 infos(by)
@@ -71,20 +85,24 @@ elif PROPAGATION_TYPE == "t":
     W = np.sqrt(KX**2 + KY**2 + KZ**2)
     print("OK")
 
-byfft = build_fft(by)
+byfft = by
+build_fft_inplace(byfft)
+del by
 
 aW = np.abs(W)
-Wi, Wni = (aW > 0.01), (aW <= 0.01)  # Do not try to divide by 0
+Wni = (aW <= 0.01)  # Do not try to divide by 0
 # Check for filter
 if args.filter_lowpass:
     fl = args.filter_lowpass[0]
-    Wi = Wi & (aW <= fl)
     Wni = Wni | (aW > fl)
 if args.filter_highpass:
     fl = args.filter_highpass[0]
-    Wi = Wi & (aW >= fl)
     Wni = Wni | (aW < fl)
+
+if FILTER_OUT_LOW_FREQ:
+    Wni = Wni | (aW < FILTER_OUT_LOW_FREQ)
 del aW
+
 
 # Propagate
 
@@ -92,16 +110,16 @@ print("Building propagation vector (slow).", end="", flush=True)
 
 # See PROPAGATION_DEMO.md for explanation of this formula
 
-propag = np.zeros(by.shape, dtype="complex64")
+propag = np.zeros(byfft.shape, dtype="complex64")
 # Create propag vector
 if PROPAGATION_TYPE == "z":
+    Wi = np.asarray(1 - Wni, dtype="bool")
     propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dz / W[Wi])
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
     propag = np.exp(-np.pi * 2j * (W - KZ) * dt)
     propag[KZ < 0] = 0.
     propag[Wni] = 0.
-del Wi
 del Wni
 print(".", end="", flush=True)
 print("OK")

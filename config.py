@@ -79,6 +79,17 @@ y_max = 10
 z_min = 4
 z_max = 12
 
+############
+# ROTATING #
+############
+
+ROTATION_ANGLE = None
+
+#############
+# FILTERING #
+#############
+
+FILTER_OUT_LOW_FREQ = 0.5
 
 ########
 # MISC #
