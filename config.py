@@ -13,7 +13,7 @@ STORAGE_FOLDER = "/mnt/scratch/gpotter/bigfield3d"
 
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
-MAX_INSTANT = 200  # How many instants we propagate
+MAX_INSTANT = 250  # How many instants we propagate
 
 ##############################
 # INFORMATIONS ON INPUT DATA #
@@ -39,7 +39,7 @@ dz = -0.1  # How much we move between two z
 # PROPAGATION T ONLY CONFIG #
 #############################
 
-dt = 0.05  # How much we propagate between two instants
+dt = 0.1  # How much we propagate between two instants
 TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 Z_LENGTH = None  # Set to None for all points
 
