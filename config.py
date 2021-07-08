@@ -49,8 +49,8 @@ Z_LENGTH = None  # Set to None for all points
 
 # How much we drop precision for the calculations. This is required
 # if the data doesn't fit the GPU..
-x_subsampling = 2
-y_subsampling = 2
+x_subsampling = 1
+y_subsampling = 1
 
 SUBSAMPLE_IN_PROPAGATE = True
 
