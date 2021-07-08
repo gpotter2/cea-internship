@@ -49,8 +49,8 @@ Z_LENGTH = None  # Set to None for all points
 
 # How much we drop precision for the calculations. This is required
 # if the data doesn't fit the GPU..
-x_subsampling = 3
-y_subsampling = 3
+x_subsampling = 2
+y_subsampling = 2
 
 SUBSAMPLE_IN_PROPAGATE = True
 
@@ -76,12 +76,12 @@ z_min = None
 z_max = None
 
 # Crop
-# x_min = 3
-# x_max = 13
-# y_min = 4
-# y_max = 11
-# z_min = 5
-# z_max = 18
+x_min = 2
+x_max = 15
+y_min = 2
+y_max = 13
+z_min = 5
+z_max = 18
 
 ############
 # ROTATING #
