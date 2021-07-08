@@ -49,8 +49,8 @@ Z_LENGTH = None  # Set to None for all points
 
 # How much we drop precision for the calculations. This is required
 # if the data doesn't fit the GPU..
-x_subsampling = 1
-y_subsampling = 1
+x_subsampling = 2
+y_subsampling = 2
 
 SUBSAMPLE_IN_PROPAGATE = True
 
@@ -117,6 +117,11 @@ elif PROPAGATION_TYPE == "z":
     assert z_min is None
     assert z_max is None
 
+# Apply subsampling
+if SUBSAMPLE_IN_PROPAGATE:
+    X_STEPS = X_STEPS[::x_subsampling]
+    Y_STEPS = Y_STEPS[::y_subsampling]
+
 # Re-scale cropping values
 if x_min is not None:
     x_min = int(x_min / (X_STEPS[1] - X_STEPS[0]))
@@ -137,6 +142,3 @@ Y_STEPS = Y_STEPS[y_min:y_max]
 if PROPAGATION_TYPE == "t":
     Z_STEPS = Z_STEPS[z_min:z_max]
 
-if SUBSAMPLE_IN_PROPAGATE:
-    X_STEPS = X_STEPS[::x_subsampling]
-    Y_STEPS = Y_STEPS[::y_subsampling]

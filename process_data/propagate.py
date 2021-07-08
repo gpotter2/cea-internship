@@ -45,16 +45,15 @@ elif PROPAGATION_TYPE == "t":
     )
 print("OK")
 
+if SUBSAMPLE_IN_PROPAGATE:
+    print("Subsampling plane...", end="", flush=True)
+    by = by[::x_subsampling, ::y_subsampling, ::]
+    print("OK")
+
 # Crop
 if any(x for x in [x_min, x_max, y_min, y_max, z_min, z_max] if x is not None):
     print("Crop field...", end="", flush=True)
     by = by[x_min:x_max,y_min:y_max,z_min:z_max]
-    print("OK")
-
-
-if SUBSAMPLE_IN_PROPAGATE:
-    print("Subsampling plane...", end="", flush=True)
-    by = by[::x_subsampling, ::y_subsampling, ::]
     print("OK")
 
 infos(by)
