@@ -12,5 +12,5 @@ reload(source)
 
 from source import getSource
 
-getSource(SUFFIX="low", THRESHOLD=0.002, OPACITY=0.01, COLOR="GYPi")
-getSource(SUFFIX="high", THRESHOLD=0.002, OPACITY=0.2)
+getSource(SUFFIX="low",  LOG_SCALE=True, LOG_THRESHOLD=8e-05, THRESHOLD=3., OPACITY=0.01, COLOR="GYPi")
+getSource(SUFFIX="high", LOG_SCALE=True, LOG_THRESHOLD=8e-05, THRESHOLD=3., OPACITY=0.2)
