@@ -74,10 +74,10 @@ z_drop = 2
 # z_min = None
 # z_max = None
 
-x_min = 4
-x_max = 12
-y_min = 5
-y_max = 10
+x_min = 3
+x_max = 13
+y_min = 4
+y_max = 11
 z_min = 5
 z_max = 18
 
