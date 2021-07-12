@@ -11,7 +11,7 @@ STORAGE_FOLDER = "/mnt/scratch/gpotter/bigfield3d"
 # MODE #
 ########
 
-DEBUG_WITH_GAUSSIAN_BEAM = False
+DEBUG_WITH_GAUSSIAN_BEAM = True
 
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
@@ -133,6 +133,10 @@ assert X_STEPS is not None
 assert Y_STEPS is not None
 
 assert not DEBUG_WITH_GAUSSIAN_BEAM or PROPAGATION_TYPE == "t"
+if DEBUG_WITH_GAUSSIAN_BEAM:
+    print("### DEBUG WITH GAUSSIAN BEAM ###")
+    SUBSAMPLE_IN_PROPAGATE = False
+    DATA_FORMAT = "XYZ"
 
 if PROPAGATION_TYPE == "t":
     assert Z_STEPS is not None
@@ -145,7 +149,7 @@ elif PROPAGATION_TYPE == "z":
     assert T_OFFSET == 0.
 
 # Apply subsampling
-if SUBSAMPLE_IN_PROPAGATE:
+if SUBSAMPLE_IN_PROPAGATE or DEBUG_WITH_GAUSSIAN_BEAM:
     X_STEPS = X_STEPS[::x_subsampling]
     Y_STEPS = Y_STEPS[::y_subsampling]
 

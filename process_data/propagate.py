@@ -39,7 +39,10 @@ print("Loading field...", end="", flush=True)
 if PROPAGATION_TYPE == "z":
     by = np.load(get_path('By.npy', "npy_files"))
 elif PROPAGATION_TYPE == "t":
-    by = np.load(get_path('By_xyz.npy', "npy_files"))
+    if DEBUG_WITH_GAUSSIAN_BEAM:
+        by = np.load(get_path('GaussianBy.npy', "npy_files"))
+    else:
+        by = np.load(get_path('By_xyz.npy', "npy_files"))
     by = by.transpose(
         DATA_FORMAT.index("X"),
         DATA_FORMAT.index("Y"),
@@ -53,11 +56,11 @@ if SUBSAMPLE_IN_PROPAGATE:
     print("OK")
 
 # Crop
-if any(x for x in [x_min, x_max, y_min, y_max, z_min, z_max] if x is not None):
+if any(x for x in [x_min, x_max, y_min, y_max, z_min, z_max] if x is not None) and not DEBUG_WITH_GAUSSIAN_BEAM:
     print("Crop field...", end="", flush=True)
     by = by[x_min:x_max,y_min:y_max,z_min:z_max]
     print("OK")
-if any(x for x in [x_uc_min, x_uc_max, y_uc_min, y_uc_max, z_uc_min, z_uc_max] if x is not None):
+if any(x for x in [x_uc_min, x_uc_max, y_uc_min, y_uc_max, z_uc_min, z_uc_max] if x is not None) and not DEBUG_WITH_GAUSSIAN_BEAM:
     print("Crop usable field...", end="", flush=True)
     if x_uc_min:
         by[:x_uc_min] = 0.
