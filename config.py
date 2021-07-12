@@ -67,23 +67,41 @@ z_drop = 2
 ############
 
 # Crop the space before propagating. You can use None to specify no cropping.
-# THOSE VALUES MUST MATCH THE AXIS
+# THOSE VALUES MUST MATCH THE AXIS.
+
+# CROP        = the size of the box.
+# USABLE-CROP = the data that is used within the first frame. What isn't in the
+#               USABLE CROP box will be set to 0.
 
 # Default
-x_min = None
-x_max = None
-y_min = None
-y_max = None
-z_min = None
-z_max = None
+# x_min = None
+# x_max = None
+# y_min = None
+# y_max = None
+# z_min = None
+# z_max = None
+
+# x_uc_min = None
+# x_uc_max = None
+# y_uc_min = None
+# y_uc_max = None
+z_uc_min = None
+z_uc_max = None
 
 # Crop
-x_min = 2
+x_min = 1
 x_max = 15
-y_min = 2
-y_max = 13
+y_min = 1
+y_max = 14
 z_min = 5
 z_max = 18
+
+# Usable-crop
+# Crop
+x_uc_min = 2
+x_uc_max = 15
+y_uc_min = 2
+y_uc_max = 13
 
 ############
 # ROTATING #
@@ -140,6 +158,25 @@ if z_min is not None:
     z_min = int(z_min / (Z_STEPS[1] - Z_STEPS[0]))
 if z_max is not None:
     z_max = int(z_max / (Z_STEPS[1] - Z_STEPS[0]))
+
+if x_uc_min is not None:
+    x_uc_min = int(x_uc_min / (X_STEPS[1] - X_STEPS[0]))
+    assert x_uc_min >= x_min
+if x_uc_max is not None:
+    x_uc_max = int(x_uc_max / (X_STEPS[1] - X_STEPS[0]))
+    assert x_uc_max <= x_max
+if y_uc_min is not None:
+    y_uc_min = int(y_uc_min / (Y_STEPS[1] - Y_STEPS[0]))
+    assert y_uc_min >= y_min
+if y_uc_max is not None:
+    y_uc_max = int(y_uc_max / (Y_STEPS[1] - Y_STEPS[0]))
+    assert y_uc_max <= y_max
+if z_uc_min is not None:
+    z_uc_min = int(z_uc_min / (Z_STEPS[1] - Z_STEPS[0]))
+    assert z_uc_min >= z_min
+if z_uc_max is not None:
+    z_uc_max = int(z_uc_max / (Z_STEPS[1] - Z_STEPS[0]))
+    assert z_uc_max <= z_max
 
 # Crop axis
 X_STEPS = X_STEPS[x_min:x_max]

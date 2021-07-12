@@ -55,6 +55,15 @@ if any(x for x in [x_min, x_max, y_min, y_max, z_min, z_max] if x is not None):
     print("Crop field...", end="", flush=True)
     by = by[x_min:x_max,y_min:y_max,z_min:z_max]
     print("OK")
+if any(x for x in [x_uc_min, x_uc_max, y_uc_min, y_uc_max, z_uc_min, z_uc_max] if x is not None):
+    print("Crop usable field...", end="", flush=True)
+    by[:x_uc_min] = 0.
+    by[x_uc_max:] = 0.
+    by[:y_uc_min] = 0.
+    by[y_uc_max:] = 0.
+    by[:z_uc_min] = 0.
+    by[z_uc_max:] = 0.
+    print("OK")
 
 infos(by)
 
