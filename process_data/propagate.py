@@ -4,6 +4,8 @@ Propagate the data
 
 from common import *
 
+from tqdm import tqdm
+
 # Check args
 
 parser = argparse.ArgumentParser(description='Process numpy files to create frames')

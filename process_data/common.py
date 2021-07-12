@@ -11,8 +11,6 @@ import numpy as np
 import cupy as cp
 import cupyx as cpx
 
-from tqdm import tqdm
-
 # Read config
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))

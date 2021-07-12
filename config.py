@@ -11,6 +11,8 @@ STORAGE_FOLDER = "/mnt/scratch/gpotter/bigfield3d"
 # MODE #
 ########
 
+DEBUG_WITH_GAUSSIAN_BEAM = False
+
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
 MAX_INSTANT = 250  # How many instants we propagate
@@ -129,6 +131,8 @@ assert PROPAGATION_TYPE in ["t", "z"]
 
 assert X_STEPS is not None
 assert Y_STEPS is not None
+
+assert not DEBUG_WITH_GAUSSIAN_BEAM or PROPAGATION_TYPE == "t"
 
 if PROPAGATION_TYPE == "t":
     assert Z_STEPS is not None
