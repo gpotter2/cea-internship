@@ -135,12 +135,12 @@ assert Y_STEPS is not None
 assert not DEBUG_WITH_GAUSSIAN_BEAM or PROPAGATION_TYPE == "t"
 if DEBUG_WITH_GAUSSIAN_BEAM:
     print("### DEBUG WITH GAUSSIAN BEAM ###")
-    XMAX = 200
-    YMAX = 200
-    ZMAX = 400
-    X_STEPS = np.linspace(-XMAX, XMAX, len(X_STEPS), dtype="float64")
-    Y_STEPS = np.linspace(-YMAX, YMAX, len(Y_STEPS), dtype="float64")
-    Z_STEPS = np.linspace(-ZMAX, ZMAX, len(Z_STEPS), dtype="float64")
+    XMAX = 200; XLENGTH = 200
+    YMAX = 200; YLENGTH = 200
+    ZMAX = 400; ZLENGTH = 800
+    X_STEPS = np.linspace(-XMAX, XMAX, XLENGTH, dtype="float64")
+    Y_STEPS = np.linspace(-YMAX, YMAX, YLENGTH, dtype="float64")
+    Z_STEPS = np.linspace(-ZMAX, ZMAX, ZLENGTH, dtype="float64")
     SUBSAMPLE_IN_PROPAGATE = False
     DATA_FORMAT = "XYZ"
 
