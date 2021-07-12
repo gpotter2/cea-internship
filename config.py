@@ -135,6 +135,12 @@ assert Y_STEPS is not None
 assert not DEBUG_WITH_GAUSSIAN_BEAM or PROPAGATION_TYPE == "t"
 if DEBUG_WITH_GAUSSIAN_BEAM:
     print("### DEBUG WITH GAUSSIAN BEAM ###")
+    XMAX = 200
+    YMAX = 200
+    ZMAX = 400
+    X_STEPS = np.linspace(-XMAX, XMAX, len(X_STEPS), dtype="float64")
+    Y_STEPS = np.linspace(-YMAX, YMAX, len(Y_STEPS), dtype="float64")
+    Z_STEPS = np.linspace(-ZMAX, ZMAX, len(Z_STEPS), dtype="float64")
     SUBSAMPLE_IN_PROPAGATE = False
     DATA_FORMAT = "XYZ"
 
@@ -187,8 +193,9 @@ if z_uc_max is not None:
     assert z_uc_max <= z_max
 
 # Crop axis
-X_STEPS = X_STEPS[x_min:x_max]
-Y_STEPS = Y_STEPS[y_min:y_max]
-if PROPAGATION_TYPE == "t":
-    Z_STEPS = Z_STEPS[z_min:z_max]
-
+if not DEBUG_WITH_GAUSSIAN_BEAM:
+    X_STEPS = X_STEPS[x_min:x_max]
+    Y_STEPS = Y_STEPS[y_min:y_max]
+    if PROPAGATION_TYPE == "t":
+        Z_STEPS = Z_STEPS[z_min:z_max]
+    
