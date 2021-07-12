@@ -39,7 +39,9 @@ dz = -0.1  # How much we move between two z
 # PROPAGATION T ONLY CONFIG #
 #############################
 
-dt = 0.1  # How much we propagate between two instants
+dt = -0.1  # How much we propagate between two instants
+T_OFFSET = 10  # Begin with a time offset of T_OFFSET
+
 TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 Z_LENGTH = None  # Set to None for all points
 
@@ -49,15 +51,15 @@ Z_LENGTH = None  # Set to None for all points
 
 # How much we drop precision for the calculations. This is required
 # if the data doesn't fit the GPU..
-x_subsampling = 2
-y_subsampling = 2
+x_subsampling = 3
+y_subsampling = 3
 
 SUBSAMPLE_IN_PROPAGATE = True
 
 # How much we drop of precision for the visualisation.
 # This is in addition of the precision drop for the calculations.
-x_drop = 6
-y_drop = 6
+x_drop = 4
+y_drop = 4
 z_drop = 2
 
 ############
@@ -118,6 +120,7 @@ elif PROPAGATION_TYPE == "z":
     assert DATA_FORMAT == "XYT"
     assert z_min is None
     assert z_max is None
+    assert T_OFFSET == 0.
 
 # Apply subsampling
 if SUBSAMPLE_IN_PROPAGATE:

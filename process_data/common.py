@@ -30,16 +30,16 @@ def build_fft_inplace(by):
                        overwrite_x=True)
     print("OK")
 
-def build_grid(x, y, t):
+def build_grid(x, y, z):
     print("Building freq grid...", end="", flush=True)
     # Build frequences grid
     freqx = np.fft.fftfreq(x.size, d=x[1] - x[0])
     freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
-    freqt = np.fft.fftfreq(t.size, d=t[1] - t[0])
+    freqz = np.fft.fftfreq(z.size, d=z[1] - z[0])
 
-    KX, KY, W = np.meshgrid(freqx, freqy, freqt, indexing='ij')
+    KX, KY, KZ = np.meshgrid(freqx, freqy, freqz, indexing='ij')
     print("OK")
-    return KX, KY, W
+    return KX, KY, KZ
 
 def infos(by):
     if X_STEPS.shape[0] != by.shape[0]:

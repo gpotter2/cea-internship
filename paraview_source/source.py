@@ -20,22 +20,7 @@ import config
 from importlib import reload
 reload(config)
 
-from config import (
-    MAX_INSTANT,
-    PROPAGATION_TYPE,
-    STORAGE_FOLDER,
-    TOT_Z,
-    T_STEPS,
-    X_STEPS,
-    Y_STEPS,
-    Z_LENGTH,
-    Z_STEPS,
-    dt,
-    dz,
-    x_drop,
-    y_drop,
-    z_drop,
-)
+from config import *
 
 def getSource(CLIP_HALF=False,
               CLIP_QUARTER=False,
@@ -70,8 +55,8 @@ TOT_Z = %s
 T_STEPS = %s
 X_STEPS = pickle.loads(%s)
 Y_STEPS = pickle.loads(%s)
-Z_LENGTH = %s
 Z_STEPS = pickle.loads(%s)
+Z_LENGTH = %s
 dt = %s
 dz = %s
 x_drop = %s
@@ -87,8 +72,8 @@ z_drop = %s
         T_STEPS,
         pickle.dumps(X_STEPS),
         pickle.dumps(Y_STEPS),
-        Z_LENGTH,
         pickle.dumps(Z_STEPS),
+        Z_LENGTH,
         dt,
         dz,
         x_drop,

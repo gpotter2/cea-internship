@@ -16,7 +16,7 @@ def GetTimestep():
     """
     ts = outInfo.Get(executive.UPDATE_TIME_STEP()) \
               if outInfo.Has(executive.UPDATE_TIME_STEP()) else 0
-    d = abs(dz) if PROPAGATION_TYPE == "z" else dt
+    d = abs(dz) if PROPAGATION_TYPE == "z" else abs(dt)
     if not d:
         return 0
     return int(ts / d)

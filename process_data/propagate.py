@@ -108,6 +108,17 @@ del aW
 
 # Propagate
 
+if T_OFFSET:
+    print("Apply offset..", end="", flush=True)
+    propag_offset = np.exp(np.pi * 2j * (W - KZ) * T_OFFSET)
+    print(".", end="", flush=True)
+    propag_offset[KZ < 0] = 0.  # Get rid of negative KZ
+    propag_offset[Wni] = 0.
+    print(".", end="", flush=True)
+    byfft *= cp.asarray(propag_offset, dtype="complex64")
+    del propag_offset
+    print("OK")
+
 print("Building propagation vector (slow).", end="", flush=True)
 
 # See PROPAGATION_DEMO.md for explanation of this formula
@@ -119,7 +130,7 @@ if PROPAGATION_TYPE == "z":
     propag[Wi] = np.exp(-np.pi * 1j * (KX[Wi]**2 + KY[Wi]**2) * dz / W[Wi])
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
-    propag = np.exp(-np.pi * 2j * (W - KZ) * dt)
+    propag = np.exp(np.pi * 2j * (W - KZ) * dt)
     propag[KZ < 0] = 0.
     propag[Wni] = 0.
 del Wni
@@ -148,21 +159,28 @@ if PROPAGATION_TYPE == "z":
         frame = cp.real(
             v[::x_drop, ::y_drop, :t.shape[0]]
         ).get()
-        np.savez(get_path("f%s%s.npz" % (i, suffix), "frames"), frame=frame)
+        np.savez(
+            get_path("f%s%s.npz" % (i, suffix), "frames"),
+            frame=frame
+        )
         del v
 elif PROPAGATION_TYPE == "t":
     # First propagate on t
     prog = tqdm(range(MAX_INSTANT))
-    prog.set_description("Propagating on t")
+    prog.set_description("Propagating on t (GPU)")
     for i in prog:
         byfft *= propag
+        prog.set_description("Propagating on t (GPU)")
         v = cpx.scipy.fft.ifftn(byfft,
                                 axes=(0,1,2))
+        prog.set_description("Propagating on t (CPU)")
+        frame = cp.real(
+            v[::x_drop, ::y_drop, ::z_drop]
+        ).get()
+        prog.set_description("Propagating on t (HDD)")
         np.savez(
             get_path("f%s%s.npz" % (i, suffix), "frames"),
-            frame=cp.real(
-                v[::x_drop, ::y_drop, ::z_drop]
-            ).get()
+            frame=frame
         )
         del v
 

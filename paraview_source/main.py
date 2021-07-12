@@ -13,12 +13,12 @@ reload(source)
 from source import getSource
 
 getSource(SUFFIX="low",
-          LOG_SCALE=True, LOG_THRESHOLD=8e-05,
+          LOG_SCALE=True, LOG_THRESHOLD=1e-04,
           THRESHOLD=3.,
           CLIM=4,
           OPACITY=0.01, COLOR="GYPi")
 getSource(SUFFIX="high",
-          LOG_SCALE=True, LOG_THRESHOLD=8e-05,
+          LOG_SCALE=True, LOG_THRESHOLD=4e-04,
           THRESHOLD=3.,
           CLIM=4,
           OPACITY=0.2)

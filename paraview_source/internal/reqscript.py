@@ -42,6 +42,7 @@ if PROPAGATION_TYPE == "z":
     dz = self.t[1] - self.t[0]
     dt = abs(dz)
 elif PROPAGATION_TYPE == "t":
+    dt = abs(dt)
     TOT_Z = TOT_Z or (Z_STEPS[0] - Z_STEPS[-1])
     dz = abs(TOT_Z) / self.third_axis_length
 
