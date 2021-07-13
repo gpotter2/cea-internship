@@ -53,15 +53,15 @@ Z_LENGTH = None  # Set to None for all points
 
 # How much we drop precision for the calculations. This is required
 # if the data doesn't fit the GPU..
-x_subsampling = 4
-y_subsampling = 4
+x_subsampling = 3
+y_subsampling = 3
 
 SUBSAMPLE_IN_PROPAGATE = True
 
 # How much we drop of precision for the visualisation.
 # This is in addition of the precision drop for the calculations.
-x_drop = 3
-y_drop = 3
+x_drop = 4
+y_drop = 4
 z_drop = 2
 
 ############
@@ -144,6 +144,9 @@ if DEBUG_WITH_GAUSSIAN_BEAM:
     SUBSAMPLE_IN_PROPAGATE = False
     T_OFFSET = 0
     DATA_FORMAT = "XYZ"
+    x_drop = None
+    y_drop = None
+    z_drop = None
 
 if PROPAGATION_TYPE == "t":
     assert Z_STEPS is not None
