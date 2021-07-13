@@ -30,7 +30,12 @@ byfft = cp.asarray(by, dtype="complex64")
 print("OK")
 del by
 
-build_fft_inplace(byfft)
+print("Performing fourier transform...", end="", flush=True)
+byfft = cpx.scipy.fft.fftn(byfft,
+                           axes=(0,1,2),
+                           norm="forward",
+                           overwrite_x=True)
+print("OK")
 
 ### Propagate
 

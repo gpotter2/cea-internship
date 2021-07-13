@@ -21,11 +21,6 @@ def get_path(x, folder=""):
 
 def build_fft_inplace(by):
     # Apply discrete fourier transform
-    print("Applying discrete fast fourier transform...", end="", flush=True)
-    cpx.scipy.fft.fftn(by,
-                       axes=(0,1,2),
-                       norm="forward",
-                       overwrite_x=True)
     print("OK")
 
 def build_grid(x, y, z):

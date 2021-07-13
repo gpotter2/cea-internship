@@ -15,7 +15,7 @@ DEBUG_WITH_GAUSSIAN_BEAM = True
 
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
-MAX_INSTANT = 2  # How many instants we propagate
+MAX_INSTANT = 250  # How many instants we propagate
 
 ##############################
 # INFORMATIONS ON INPUT DATA #
@@ -42,7 +42,7 @@ dz = -0.1  # How much we move between two z
 #############################
 
 dt = -0.1  # How much we propagate between two instants
-T_OFFSET = 0  # Begin with a time offset of T_OFFSET
+T_OFFSET = 10  # Begin with a time offset of T_OFFSET
 
 TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 Z_LENGTH = None  # Set to None for all points
@@ -142,6 +142,7 @@ if DEBUG_WITH_GAUSSIAN_BEAM:
     Y_STEPS = np.linspace(-YMAX, YMAX, YLENGTH, dtype="float64")
     Z_STEPS = np.linspace(-ZMAX, ZMAX, ZLENGTH, dtype="float64")
     SUBSAMPLE_IN_PROPAGATE = False
+    T_OFFSET = 0
     DATA_FORMAT = "XYZ"
 
 if PROPAGATION_TYPE == "t":

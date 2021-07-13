@@ -107,9 +107,12 @@ elif PROPAGATION_TYPE == "t":
     W = np.sqrt(KX**2 + KY**2 + KZ**2)
     print("OK")
 
-byfft = by
-build_fft_inplace(byfft)
-del by
+print("Applying discrete fast fourier transform...", end="", flush=True)
+byfft = cpx.scipy.fft.fftn(by,
+                           axes=(0,1,2),
+                           norm="forward",
+                           overwrite_x=True)
+print("OK")
 
 aW = np.abs(W)
 Wni = (aW <= 0.01)  # Do not try to divide by 0
@@ -175,6 +178,7 @@ if PROPAGATION_TYPE == "z":
     for i in prog:
         byfft *= propag
         v = cpx.scipy.fft.ifftn(byfft,
+                                norm="forward",
                                 axes=(0,1,2))
         frame = cp.real(
             v[::x_drop, ::y_drop, :t.shape[0]]
@@ -192,6 +196,7 @@ elif PROPAGATION_TYPE == "t":
         byfft *= propag
         prog.set_description("Propagating on t (GPU)")
         v = cpx.scipy.fft.ifftn(byfft,
+                                norm="forward",
                                 axes=(0,1,2))
         prog.set_description("Propagating on t (CPU)")
         frame = cp.real(
