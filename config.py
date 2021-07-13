@@ -15,7 +15,7 @@ DEBUG_WITH_GAUSSIAN_BEAM = True
 
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
-MAX_INSTANT = 250  # How many instants we propagate
+MAX_INSTANT = 2  # How many instants we propagate
 
 ##############################
 # INFORMATIONS ON INPUT DATA #
@@ -42,7 +42,7 @@ dz = -0.1  # How much we move between two z
 #############################
 
 dt = -0.1  # How much we propagate between two instants
-T_OFFSET = 10  # Begin with a time offset of T_OFFSET
+T_OFFSET = 0  # Begin with a time offset of T_OFFSET
 
 TOT_Z = None  # The size of the frame. None for exactly the size of the wave
 Z_LENGTH = None  # Set to None for all points
@@ -53,15 +53,15 @@ Z_LENGTH = None  # Set to None for all points
 
 # How much we drop precision for the calculations. This is required
 # if the data doesn't fit the GPU..
-x_subsampling = 3
-y_subsampling = 3
+x_subsampling = 4
+y_subsampling = 4
 
 SUBSAMPLE_IN_PROPAGATE = True
 
 # How much we drop of precision for the visualisation.
 # This is in addition of the precision drop for the calculations.
-x_drop = 4
-y_drop = 4
+x_drop = 3
+y_drop = 3
 z_drop = 2
 
 ############
@@ -155,7 +155,7 @@ elif PROPAGATION_TYPE == "z":
     assert T_OFFSET == 0.
 
 # Apply subsampling
-if SUBSAMPLE_IN_PROPAGATE or DEBUG_WITH_GAUSSIAN_BEAM:
+if SUBSAMPLE_IN_PROPAGATE:
     X_STEPS = X_STEPS[::x_subsampling]
     Y_STEPS = Y_STEPS[::y_subsampling]
 

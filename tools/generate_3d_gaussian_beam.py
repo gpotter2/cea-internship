@@ -19,9 +19,10 @@ X, Y, Z = np.meshgrid(X_STEPS,
                       indexing="ij")
 
 # Parameters
-lmb = 3*1e8 * 1e-8
+lmb = 3*1e8 * 1e-7
 E0 = 1
 w0 = 20
+n = 1.2
 print("W0/lmb: %s" % (w0 / lmb))
 
 print("Generating beam.", end="", flush=True)
@@ -33,8 +34,8 @@ print(".", end="", flush=True)
 # See https://en.wikipedia.org/wiki/Gaussian_beam#Mathematical_form
 
 Z[Z==0.] = 0.01
-ZR = np.pi * w0**2 / lmb
-k = 2 * np.pi / lmb
+ZR = np.pi * w0**2 * n / lmb
+k = 2 * np.pi * n / lmb
 wz = w0 * np.sqrt(1 + (Z / ZR) ** 2)
 print(".", end="", flush=True)
 Rz = Z*( 1 + (ZR / Z)**2 )
