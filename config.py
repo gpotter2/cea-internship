@@ -142,11 +142,13 @@ if DEBUG_WITH_GAUSSIAN_BEAM:
     Y_STEPS = np.linspace(-YMAX, YMAX, YLENGTH, dtype="float64")
     Z_STEPS = np.linspace(-ZMAX, ZMAX, ZLENGTH, dtype="float64")
     SUBSAMPLE_IN_PROPAGATE = False
-    T_OFFSET = 0
+    T_OFFSET = 10
+    dt = -0.5
     DATA_FORMAT = "XYZ"
     x_drop = None
     y_drop = None
     z_drop = None
+    FILTER_OUT_LOW_FREQ = None
 
 if PROPAGATION_TYPE == "t":
     assert Z_STEPS is not None

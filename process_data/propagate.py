@@ -115,7 +115,7 @@ byfft = cpx.scipy.fft.fftn(by,
 print("OK")
 
 aW = np.abs(W)
-Wni = (aW <= 0.01)  # Do not try to divide by 0
+Wni = (aW <= 1e-4)  # Do not try to divide by 0
 # Check for filter
 if args.filter_lowpass:
     fl = args.filter_lowpass[0]
