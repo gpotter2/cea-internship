@@ -114,20 +114,49 @@ byfft = cpx.scipy.fft.fftn(by,
                            overwrite_x=True)
 print("OK")
 
+print("Building filter:")
+print("- Removing frequencies around 0...", end="", flush=True)
 aW = np.abs(W)
 Wni = (aW <= 1e-4)  # Do not try to divide by 0
+print("OK")
 # Check for filter
 if args.filter_lowpass:
     fl = args.filter_lowpass[0]
+    print("  - Removing frequencies above %s..." % fl, end="", flush=True)
     Wni = Wni | (aW > fl)
+    print("OK")
 if args.filter_highpass:
     fl = args.filter_highpass[0]
+    print("  - Removing low frequencies below %s..." % fl, end="", flush=True)
     Wni = Wni | (aW < fl)
+    print("OK")
 
 if FILTER_OUT_LOW_FREQ:
+    print("  - Removing very low frequencies (noise)...", end="", flush=True)
     Wni = Wni | (aW < FILTER_OUT_LOW_FREQ)
+    print("OK")
 del aW
 
+if PROPAGATION_TYPE == "t":
+    print("  - Removing negative spacial frequencies...", end="", flush=True)
+    if dt < 0:
+        Wni = Wni | (KZ < 0)  # Get rid of negative KZ
+    elif dt > 0:
+        Wni = Wni | (KZ > 0)
+    print("OK")
+
+if cone_angle is not None:
+    print("  - Applying frequency cone...", end="", flush=True)
+    R_cone = np.abs(np.arange(-W.shape[2], W.shape[2])) * np.tan(
+        cone_angle * 2 * np.pi / 360
+    )
+    X_mtrx = np.abs(np.arange(-W.shape[0], W.shape[0]))
+    Wni = Wni | (X_mtrx > R_cone)
+    del X_mtrx
+    Y_mtrx = np.abs(np.arange(-W.shape[1], W.shape[1]))
+    Wni = Wni | (Y_mtrx > R_cone)
+    del Y_mtrx
+    print("OK")
 
 # Propagate
 
@@ -135,7 +164,6 @@ if T_OFFSET:
     print("Apply offset..", end="", flush=True)
     propag_offset = np.exp(np.pi * 2j * (W - KZ) * T_OFFSET)
     print(".", end="", flush=True)
-    propag_offset[KZ < 0] = 0.  # Get rid of negative KZ
     propag_offset[Wni] = 0.
     print(".", end="", flush=True)
     byfft *= cp.asarray(propag_offset, dtype="complex64")
@@ -154,7 +182,6 @@ if PROPAGATION_TYPE == "z":
     propag[Wni] = 0.
 elif PROPAGATION_TYPE == "t":
     propag = np.exp(np.pi * 2j * (W - KZ) * dt)
-    propag[KZ < 0] = 0.
     propag[Wni] = 0.
 del Wni
 print(".", end="", flush=True)

@@ -117,6 +117,10 @@ ROTATION_ANGLE = None
 
 FILTER_OUT_LOW_FREQ = 0.5
 
+# Cone freq filtering. Set None to disable
+cone_angle = 40  # In degrees.
+# cone_angle = None
+
 ########
 # MISC #
 ########
@@ -148,6 +152,7 @@ if DEBUG_WITH_GAUSSIAN_BEAM:
     x_drop = None
     y_drop = None
     z_drop = None
+    cone_angle = None
     FILTER_OUT_LOW_FREQ = None
 
 if PROPAGATION_TYPE == "t":
