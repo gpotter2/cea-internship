@@ -15,7 +15,7 @@ Make sure you are running this script using `pvpython` instead of `python` !
 # Path
 import os, sys
 __DIR__ = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.join(__DIR__, "..", "source"))
+sys.path.append(os.path.join(__DIR__, "..", "paraview_source"))
 
 # Connect
 from connect import connect

@@ -12,7 +12,7 @@ from paraview.simple import *
 class connect:
     def __init__(self):
         # Config
-        self.INSTALL_PATH = "/home/gpotter/ParaView-5.9.1-egl-MPI-Linux-Python3.9-64bit"
+        self.INSTALL_PATH = "/home/gpotter/ParaView-5.9.1-egl-MPI-Linux-Python3.8-64bit"
         self.USER = "gpotter"
         self.HOST = "iram-na-002657.extra.cea.fr"
         self.PORT = 11111
