@@ -11,7 +11,7 @@ STORAGE_FOLDER = "/mnt/scratch/gpotter/bigfield3d"
 # MODE #
 ########
 
-DEBUG_WITH_GAUSSIAN_BEAM = True
+DEBUG_WITH_GAUSSIAN_BEAM = False
 
 # PROPAGATION_TYPE = "z"
 PROPAGATION_TYPE = "t"
