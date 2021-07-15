@@ -115,7 +115,7 @@ byfft = cpx.scipy.fft.fftn(by,
 print("OK")
 
 print("Building filter:")
-print("- Removing frequencies around 0...", end="", flush=True)
+print("  - Removing frequencies around 0...", end="", flush=True)
 aW = np.abs(W)
 Wni = (aW <= 1e-4)  # Do not try to divide by 0
 print("OK")
@@ -147,15 +147,24 @@ if PROPAGATION_TYPE == "t":
 
 if cone_angle is not None:
     print("  - Applying frequency cone...", end="", flush=True)
-    R_cone = np.abs(np.arange(-W.shape[2], W.shape[2])) * np.tan(
+    Z_lin = np.arange(-W.shape[2]//2, W.shape[2]//2)
+    X_lin = np.abs(np.arange(-W.shape[0]//2, W.shape[0]//2))
+    Y_lin = np.abs(np.arange(-W.shape[1]//2, W.shape[1]//2))
+    X_mtrx, Y_mtrx, _ = np.meshgrid(X_lin, Y_lin, Z_lin, indexing='ij')
+    X_cone_lin = np.abs(np.linspace(-W.shape[2]//2, W.shape[2]//2, X_lin.shape[0])) * np.tan(
         cone_angle * 2 * np.pi / 360
     )
-    X_mtrx = np.abs(np.arange(-W.shape[0], W.shape[0]))
-    Wni = Wni | (X_mtrx > R_cone)
-    del X_mtrx
-    Y_mtrx = np.abs(np.arange(-W.shape[1], W.shape[1]))
-    Wni = Wni | (Y_mtrx > R_cone)
-    del Y_mtrx
+    del X_lin
+    Y_cone_lin = np.abs(np.linspace(-W.shape[2]//2, W.shape[2]//2, Y_lin.shape[0])) * np.tan(
+        cone_angle * 2 * np.pi / 360
+    )
+    del Y_lin
+    X_cone_mtrx, Y_cone_mtrx, _ = np.meshgrid(X_cone_lin, Y_cone_lin, Z_lin, indexing='ij')
+    del X_cone_lin, Y_cone_lin, Z_lin
+    Wni = Wni | (X_mtrx > X_cone_mtrx)
+    del X_mtrx, X_cone_mtrx
+    Wni = Wni | (Y_mtrx > Y_cone_mtrx)
+    del Y_mtrx, Y_cone_mtrx
     print("OK")
 
 # Propagate
