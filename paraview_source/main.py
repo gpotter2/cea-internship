@@ -14,11 +14,11 @@ from source import getSource
 
 getSource(SUFFIX="low",
           LOG_SCALE=True, LOG_THRESHOLD=1e-04,
-          THRESHOLD=1.,
+          THRESHOLD=3.3,
           CLIM=6,
           OPACITY=0.01, COLOR="GYPi")
 getSource(SUFFIX="high",
           LOG_SCALE=True, LOG_THRESHOLD=4e-04,
-          THRESHOLD=3.,
+          THRESHOLD=4.2,
           CLIM=6,
           OPACITY=0.2)
