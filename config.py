@@ -119,7 +119,7 @@ FILTER_OUT_LOW_FREQ = 0.5
 
 # Cone freq filtering. Set None to disable
 # cone_angle = 40  # In degrees.
-cone_angle = None
+cone_angle = 60
 
 ########
 # MISC #
