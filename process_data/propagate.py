@@ -35,7 +35,7 @@ if args.filter_lowpass or args.filter_highpass:
                                 (args.filter_lowpass or args.filter_highpass)[0]))
 
 # Load files
-print("Loading field...", end="", flush=True)
+print("- Loading field...", end="", flush=True)
 if PROPAGATION_TYPE == "z":
     by = np.load(get_path('By.npy', "npy_files"))
 elif PROPAGATION_TYPE == "t":
@@ -50,18 +50,20 @@ elif PROPAGATION_TYPE == "t":
     )
 print("OK")
 
+print("- Pre-processing:")
+
 if SUBSAMPLE_IN_PROPAGATE:
-    print("Subsampling plane...", end="", flush=True)
+    print("  - Subsampling plane...", end="", flush=True)
     by = by[::x_subsampling, ::y_subsampling, ::]
     print("OK")
 
 # Crop
 if any(x for x in [x_min, x_max, y_min, y_max, z_min, z_max] if x is not None) and not DEBUG_WITH_GAUSSIAN_BEAM:
-    print("Crop field...", end="", flush=True)
+    print("  - Crop field...", end="", flush=True)
     by = by[x_min:x_max,y_min:y_max,z_min:z_max]
     print("OK")
 if any(x for x in [x_uc_min, x_uc_max, y_uc_min, y_uc_max, z_uc_min, z_uc_max] if x is not None) and not DEBUG_WITH_GAUSSIAN_BEAM:
-    print("Crop usable field...", end="", flush=True)
+    print("  - Crop usable field...", end="", flush=True)
     if x_uc_min:
         by[:x_uc_min] = 0.
     if x_uc_max:
@@ -78,12 +80,12 @@ if any(x for x in [x_uc_min, x_uc_max, y_uc_min, y_uc_max, z_uc_min, z_uc_max] i
 
 infos(by)
 
-print("Moving data to GPU...", end="", flush=True)
+print("  - Moving data to GPU...", end="", flush=True)
 by = cp.asarray(by, dtype="complex64")
 print("OK")
 
 if ROTATION_ANGLE:
-    print("Rotating by %s°...", end="", flush=True)
+    print("  - Rotating by %s°...", end="", flush=True)
     cpx.scipy.ndimage.rotate(by,
                              ROTATION_ANGLE,
                              reshape=False,
@@ -94,6 +96,8 @@ if ROTATION_ANGLE:
 
 # Perform calculations
 
+print("Preparing for propagation:")
+
 if PROPAGATION_TYPE == "z":
     KX, KY, W = build_grid(X_STEPS, Y_STEPS, T_STEPS)
 elif PROPAGATION_TYPE == "t":
@@ -103,11 +107,11 @@ elif PROPAGATION_TYPE == "t":
     z = np.arange(TOT_Z, 0, abs(TOT_Z / Z_LENGTH))
     # (we could technically use Z_STEPS instead of z)
     KX, KY, KZ = build_grid(X_STEPS, Y_STEPS, z)
-    print("Build W...", end="", flush=True)
+    print("  - Build W...", end="", flush=True)
     W = np.sqrt(KX**2 + KY**2 + KZ**2)
     print("OK")
 
-print("Applying discrete fast fourier transform...", end="", flush=True)
+print("  - Applying discrete fast fourier transform...", end="", flush=True)
 byfft = cpx.scipy.fft.fftn(by,
                            axes=(0,1,2),
                            norm="forward",
@@ -166,8 +170,10 @@ if cone_angle is not None:
 
 # Propagate
 
+print("Propagate:")
+
 if T_OFFSET:
-    print("Apply offset..", end="", flush=True)
+    print("  - Apply offset..", end="", flush=True)
     propag_offset = np.exp(np.pi * 2j * (W - KZ) * T_OFFSET)
     print(".", end="", flush=True)
     propag_offset[Wni] = 0.
@@ -176,7 +182,7 @@ if T_OFFSET:
     del propag_offset
     print("OK")
 
-print("Building propagation vector (slow).", end="", flush=True)
+print("  - Building propagation vector (slow).", end="", flush=True)
 
 # See PROPAGATION_DEMO.md for explanation of this formula
 
@@ -193,7 +199,7 @@ del Wni
 print(".", end="", flush=True)
 print("OK")
 
-print("Copying propagation vector to GPU...", end="", flush=True)
+print("  - Copying propagation vector to GPU...", end="", flush=True)
 propag = cp.asarray(propag,
                     dtype="complex64")
 print("OK")
@@ -242,4 +248,4 @@ elif PROPAGATION_TYPE == "t":
         )
         del v
 
-print("done")
+print("Done. Closing..")
