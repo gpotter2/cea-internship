@@ -151,7 +151,7 @@ if PROPAGATION_TYPE == "t":
 
 if cone_angle is not None:
     print("  - Applying frequency cone...", end="", flush=True)
-    Z_lin = np.arange(0, W.shape[2])
+    Z_lin = np.abs(np.arange(-W.shape[2]//2, W.shape[2]//2))
     X_lin = np.abs(np.arange(-W.shape[0]//2, W.shape[0]//2))
     Y_lin = np.abs(np.arange(-W.shape[1]//2, W.shape[1]//2))
     X_mtrx, Y_mtrx, _ = np.meshgrid(X_lin, Y_lin, Z_lin,
