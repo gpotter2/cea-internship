@@ -147,24 +147,21 @@ if PROPAGATION_TYPE == "t":
 
 if cone_angle is not None:
     print("  - Applying frequency cone...", end="", flush=True)
-    Z_lin = np.arange(-W.shape[2]//2, W.shape[2]//2)
+    Z_lin = np.arange(0, W.shape[2])
     X_lin = np.abs(np.arange(-W.shape[0]//2, W.shape[0]//2))
     Y_lin = np.abs(np.arange(-W.shape[1]//2, W.shape[1]//2))
-    X_mtrx, Y_mtrx, _ = np.meshgrid(X_lin, Y_lin, Z_lin, indexing='ij')
-    X_cone_lin = np.abs(np.linspace(-W.shape[2]//2, W.shape[2]//2, X_lin.shape[0])) * np.tan(
+    X_mtrx, Y_mtrx, _ = np.meshgrid(X_lin, Y_lin, Z_lin,
+                                    indexing='ij')
+    R = X_mtrx**2 + Y_mtrx**2
+    del X_mtrx, Y_mtrx
+    scaling = np.sqrt(W.shape[0]**2 + W.shape[1]**2) / W.shape[2]
+    R_cone = (Z_lin * scaling * np.tan(
         cone_angle * 2 * np.pi / 360
-    )
-    del X_lin
-    Y_cone_lin = np.abs(np.linspace(-W.shape[2]//2, W.shape[2]//2, Y_lin.shape[0])) * np.tan(
-        cone_angle * 2 * np.pi / 360
-    )
-    del Y_lin
-    X_cone_mtrx, Y_cone_mtrx, _ = np.meshgrid(X_cone_lin, Y_cone_lin, Z_lin, indexing='ij')
-    del X_cone_lin, Y_cone_lin, Z_lin
-    Wni = Wni | (X_mtrx > X_cone_mtrx)
-    del X_mtrx, X_cone_mtrx
-    Wni = Wni | (Y_mtrx > Y_cone_mtrx)
-    del Y_mtrx, Y_cone_mtrx
+    ))**2
+    del X_lin, Y_lin, Z_lin
+    # np.save("cone.npy", R <= R_cone)
+    Wni = Wni | (R > R_cone)
+    del R_cone, R
     print("OK")
 
 # Propagate
