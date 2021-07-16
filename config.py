@@ -76,10 +76,10 @@ z_drop = 2
 #               USABLE CROP box will be set to 0.
 
 # Default
-# x_min = None
-# x_max = None
-# y_min = None
-# y_max = None
+x_min = None
+x_max = None
+y_min = None
+y_max = None
 # z_min = None
 # z_max = None
 
@@ -91,10 +91,10 @@ z_uc_min = None
 z_uc_max = None
 
 # Crop
-x_min = 1
-x_max = 15
-y_min = 1
-y_max = 14
+# x_min = 1
+# x_max = 15
+# y_min = 1
+# y_max = 14
 z_min = 5
 z_max = 18
 
@@ -186,22 +186,22 @@ if z_max is not None:
 
 if x_uc_min is not None:
     x_uc_min = int(x_uc_min / (X_STEPS[1] - X_STEPS[0]))
-    assert x_uc_min >= x_min
+    assert x_uc_min >= (x_min or 0)
 if x_uc_max is not None:
     x_uc_max = int(x_uc_max / (X_STEPS[1] - X_STEPS[0]))
-    assert x_uc_max <= x_max
+    assert x_uc_max <= (x_max or float("inf"))
 if y_uc_min is not None:
     y_uc_min = int(y_uc_min / (Y_STEPS[1] - Y_STEPS[0]))
-    assert y_uc_min >= y_min
+    assert y_uc_min >= (y_min or 0)
 if y_uc_max is not None:
     y_uc_max = int(y_uc_max / (Y_STEPS[1] - Y_STEPS[0]))
-    assert y_uc_max <= y_max
+    assert y_uc_max <= (y_max or float("inf"))
 if z_uc_min is not None:
     z_uc_min = int(z_uc_min / (Z_STEPS[1] - Z_STEPS[0]))
-    assert z_uc_min >= z_min
+    assert z_uc_min >= (z_min or 0)
 if z_uc_max is not None:
     z_uc_max = int(z_uc_max / (Z_STEPS[1] - Z_STEPS[0]))
-    assert z_uc_max <= z_max
+    assert z_uc_max <= (z_max or float("inf"))
 
 # Crop axis
 if not DEBUG_WITH_GAUSSIAN_BEAM:
