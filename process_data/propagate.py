@@ -163,10 +163,11 @@ if cone_angle is not None:
         cone_angle * 2 * np.pi / 360
     ))**2
     del X_lin, Y_lin, Z_lin
-    # np.save("cone.npy", R <= R_cone)
     Wni = Wni | (R > R_cone)
     del R_cone, R
     print("OK")
+
+# np.save("Wni.npy", Wni)
 
 # Propagate
 
