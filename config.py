@@ -1,7 +1,10 @@
 # Config
 
+import os
 from itertools import permutations
 import numpy as np
+
+PROFILE = os.environ.get('PROPAGATE_PROFILE', 'default')
 
 # Storage
 # STORAGE_FOLDER = "/mnt/scratch/gpotter/field3d"
@@ -88,7 +91,7 @@ y_max = None
 # y_uc_min = None
 # y_uc_max = None
 z_uc_min = None
-z_uc_max = None
+# z_uc_max = None
 
 # Crop
 # x_min = 1
@@ -104,6 +107,13 @@ x_uc_min = 2
 x_uc_max = 15
 y_uc_min = 2
 y_uc_max = 13
+z_uc_max = 17
+if PROFILE == "high":
+    x_uc_max = 11
+
+# Extra crop
+def EXTRA_CROP(x):
+    pass
 
 ############
 # ROTATING #
@@ -117,9 +127,9 @@ ROTATION_ANGLE = None
 
 FILTER_OUT_LOW_FREQ = 0.5
 
-# Cone freq filtering. Set None to disable
-# cone_angle = 40  # In degrees.
+# Cone freq filtering. In degrees. Set None to disable
 cone_angle = 60
+# cone_angle = None
 
 ########
 # MISC #
