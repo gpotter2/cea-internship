@@ -14,7 +14,7 @@ from source import getSource
 
 getSource(SUFFIX="low",
           LOG_SCALE=True, LOG_THRESHOLD=1e-04,
-          THRESHOLD=3.8,
+          THRESHOLD=4,
           CLIM=5.7,
           OPACITY=0.01, COLOR="GYPi")
 getSource(SUFFIX="high",
