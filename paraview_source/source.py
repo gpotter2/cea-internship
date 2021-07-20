@@ -154,6 +154,10 @@ self.SUFFIX = "%s"
     # Separate color map
     displayProperties.UseSeparateColorMap = True
 
+    # Setup animation scene
+    animationScene = GetAnimationScene()
+    animationScene.PlayMode = 'Snap To TimeSteps'
+
     # Configure view
     view = GetActiveView()
     view.ViewSize = [945, 880]

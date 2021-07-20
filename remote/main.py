@@ -55,7 +55,6 @@ def cli():
         elif cmd == "a":
             print("Animating now !")
             animationScene = GetAnimationScene()
-            animationScene.PlayMode = 'Snap To TimeSteps'
             animationScene.GoToFirst()
             SaveAnimation("animation.ogv", FrameRate=24, Quality=2)
         elif cmd == "q":
