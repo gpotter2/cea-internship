@@ -136,7 +136,7 @@ if args.filter_highpass:
     print("OK")
 
 if FILTER_OUT_LOW_FREQ:
-    print("  - Removing very low frequencies (noise)...", end="", flush=True)
+    print("  - Removing low frequencies (FILTER_OUT_LOW_FREQ)...", end="", flush=True)
     Wni = Wni | (aW < FILTER_OUT_LOW_FREQ)
     print("OK")
 del aW
