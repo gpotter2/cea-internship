@@ -52,6 +52,12 @@ def cli():
             print("Reloading...", end="", flush=True)
             Delete()
             return 0
+        elif cmd == "a":
+            print("Animating now !")
+            animationScene = GetAnimationScene()
+            animationScene.PlayMode = 'Snap To TimeSteps'
+            animationScene.GoToFirst()
+            SaveAnimation("animation.ogv", FrameRate=24, Quality=2)
         elif cmd == "q":
             return -1
         elif cmd == "c":
@@ -79,6 +85,7 @@ def cli():
         elif cmd in ["?", "h", "help"]:
             print("Commands:")
             print("- r\tReload")
+            print("- a\tAnimate")
             print("- c\tConfig")
             print("- sc\tSet config")
             print("- q\tQuit")

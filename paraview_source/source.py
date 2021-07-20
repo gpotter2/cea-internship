@@ -156,8 +156,11 @@ self.SUFFIX = "%s"
 
     # Configure view
     view = GetActiveView()
+    view.ViewSize = [945, 880]
     view.AxesGrid = 'GridAxes3DActor'
     view.ResetCamera()
     view.CenterOfRotation = GetActiveCamera().GetFocalPoint()
-
+    view.CameraPosition = [-23., 12.85, 21.3]
+    view.CameraFocalPoint = [7.67, 7.29, 11.4]
+    view.CameraViewUp = [0.17, 0.98, -0.01]
     return source
