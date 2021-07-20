@@ -24,18 +24,32 @@ from connect import connect
 from source import getSource
 
 CONFIG = {
-    "CLIP_HALF": False,
-    "CLIP_QUARTER": False,
-    "CLIP_INV_QUARTER": False,
-    "LOG_SCALE": True,
-    "LOG_THRESHOLD": 5e-5,
+    "low": {
+        "SUFFIX": "low",
+        "LOG_SCALE": True,
+        "LOG_THRESHOLD": 1e-4,
+        "THRESHOLD": 4,
+        "CLIM": 5.7,
+        "OPACITY": 0.01,
+        "COLOR": "GYPi",
+    },
+    "high": {
+        "SUFFIX": "high",
+        "LOG_SCALE": True,
+        "LOG_THRESHOLD": 1e-4,
+        "THRESHOLD": 4.5,
+        "CLIM": 6,
+        "OPACITY": 0.3
+    }
 }
+
 
 def main(cmd):
     """
     The main rendering pipeline
     """
-    source = getSource(**CONFIG)
+    for cfg in CONFIG.values():
+        getSource(**cfg)
     Render()
 
     if cmd == 0:
@@ -61,26 +75,34 @@ def cli():
             return -1
         elif cmd == "c":
             print("Config:")
-            for c in CONFIG.items():
-                print("- %s: %s" % c)
+            for name, cfg in CONFIG.items():
+                print("- %s" % name)
+                for c in cfg.items():
+                    print("  - %s: %s" % c)
         elif cmd == "sc":
+            print("Available configs: %s" % list(CONFIG.keys()))
+            name = input("What config to use: ")
+            if name not in CONFIG:
+                print("Unknown config name !")
+                continue
+            cfg = CONFIG[name]
             k = input("What config key to change: ").upper()
-            if k not in CONFIG:
+            if k not in cfg:
                 print("Unknown config key")
                 continue
-            if isinstance(CONFIG[k], bool):
-                CONFIG[k] = not CONFIG[k]
-            elif isinstance(CONFIG[k], (int, float)):
+            if isinstance(cfg[k], bool):
+                cfg[k] = not cfg[k]
+            elif isinstance(cfg[k], (int, float)):
                 v = input("Value: ")
                 try:
-                    v = type(CONFIG[k])(v)
-                    CONFIG[k] = v
+                    v = type(cfg[k])(v)
+                    cfg[k] = v
                 except ValueError:
                     print("Invalid value")
                     continue
             else:
                 print("Cannot change this config value !")
-            print("%s set to %s" % (k, CONFIG[k]))
+            print("%s set to %s" % (k, cfg[k]))
         elif cmd in ["?", "h", "help"]:
             print("Commands:")
             print("- r\tReload")
