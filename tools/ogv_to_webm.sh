@@ -6,10 +6,6 @@ if [ "$#" -ne 2 ]; then
 fi
 
 ffmpeg -i $1 \
-       -c:v libx264 -preset veryslow -crf 22 \
-       $2
-
-ffmpeg -i $1 \
        -c:v libvpx -g 52 -b:v 4000k \
        -maxrate 4000k -bufsize 8000k -force_key_frames 00:00:00.000 \
        -f webm $2
