@@ -4,7 +4,6 @@ Script generating an animation from source files using remote server
 
 import select
 import subprocess
-import sys
 import time
 
 from paraview.simple import *
@@ -16,6 +15,7 @@ class connect:
         self.USER = "gpotter"
         self.HOST = "iram-na-002657.extra.cea.fr"
         self.PORT = 11111
+        self.PROCESSES = 10
 
     def __enter__(self):
         print("Launching paraview server remotely...")
@@ -25,7 +25,7 @@ class connect:
             "-l",
             self.USER,
             self.HOST,
-            "%s/bin/mpiexec -np 8 %s/bin/pvserver" % ((self.INSTALL_PATH, ) * 2)
+            "%s/bin/mpiexec -np %s %s/bin/pvserver" % (self.INSTALL_PATH, self.PROCESSES, self.INSTALL_PATH)
         ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE, encoding="utf-8")
         print("Waiting for it to start...")
         try:
