@@ -1,6 +1,7 @@
 *.pyc
 *.pyo
 dist/
+.vscode
 build/
 MANIFEST
 *.egg-info/
