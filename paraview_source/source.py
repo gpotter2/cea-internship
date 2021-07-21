@@ -101,9 +101,6 @@ self.SUFFIX = "%s"
         SUFFIX,
     )
     
-    def process(data):
-        return HEADER + data
-    
     source = ProgrammableSource(registrationName='AnimatedLaserBeam')
     source.OutputDataSetType = 'vtkImageData'
     with open(os.path.join(__DIR__, 'internal', 'script.py')) as fd:
@@ -162,7 +159,7 @@ self.SUFFIX = "%s"
     view = GetActiveView()
     view.ViewSize = [945, 880]
     view.AxesGrid = 'GridAxes3DActor'
-    view.ResetCamera()
+
     view.CenterOfRotation = GetActiveCamera().GetFocalPoint()
     view.CameraPosition = [-23., 12.85, 21.3]
     view.CameraFocalPoint = [7.67, 7.29, 11.4]

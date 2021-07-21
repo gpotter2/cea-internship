@@ -84,7 +84,6 @@ class CLI:
         """
         for cfg in CONFIG.values():
             getSource(**cfg)
-        self.view = GetActiveView()
 
     def cli(self):
         """
@@ -99,13 +98,18 @@ class CLI:
                 ResetSession()
                 self.loadSources()
             elif cmd == "s":
-                Interact(self.view)
+                Interact(GetActiveView())
             elif cmd == "a":
                 print("Animating now !")
                 animationScene = GetAnimationScene()
-                animationScene.GoToFirst()
+                animationScene.PlayMode = 'Snap To TimeSteps'
                 with ProgressBar("SceneImageWriterMovie"):
                     SaveAnimation("animation.ogv", FrameRate=24, Quality=2)
+            elif cmd == "p":
+                animationScene = GetAnimationScene()
+                animationScene.PlayMode = 'Real Time'
+                animationScene.GoToFirst()
+                animationScene.Play()
             elif cmd == "q":
                 return
             elif cmd == "c":
