@@ -6,11 +6,11 @@ import sys, os
 __DIR__ = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(__DIR__))
 
-import source
+import utils
 from importlib import reload
-reload(source)
+reload(utils)
 
-from source import getSource
+from utils import getSource
 
 getSource(SUFFIX="low",
           LOG_SCALE=True, LOG_THRESHOLD=1e-04,

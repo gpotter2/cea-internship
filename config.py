@@ -1,6 +1,6 @@
 # Config
 
-import os
+import os, sys
 from itertools import permutations
 import numpy as np
 
