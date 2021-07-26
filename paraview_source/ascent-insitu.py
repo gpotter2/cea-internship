@@ -50,23 +50,9 @@ if count == 0:
 
     # Setup source
     ascentSource = AscentSource()
-    sel = SelectCells("vtkGhostType < 1", proxy=ascentSource)
-    ExtractSelection(Selection=sel)
-    # CellDatatoPointData()
 
-    #rep = Show()
-    #ColorBy(rep, ("CELLS", "By"))
-    #transferFunction = GetColorTransferFunction('By')
-    #transferFunction.RescaleTransferFunction(1, 5.5)
-    #renderView1 = GetActiveView()
-    #scalarBar = GetScalarBar(transferFunction, renderView1)
-    #scalarBar.Title = 'By'
-    #scalarBar.ComponentTitle = ''
-    #scalarBar.Visibility = 1
-    #rep.SetScalarBarVisibility(renderView1, True)
-    #cam = GetActiveCamera()
-    #cam.Elevation(30)
-    #cam.Azimuth(-30)
+    #sel = SelectCells("vtkGhostType < 1", proxy=ascentSource)
+    #ExtractSelection(Selection=sel)
 
     # Configure View
     from utils import getView
@@ -85,12 +71,11 @@ if (rank == 0):
             GetProperty(ascentSource, "Cycle"),
             GetProperty(ascentSource, "Time")))
 
-#print(ascentSource.CellData["By"].GetClassName())
-print(ascentSource.CellData["By"])
-write_vtk("img", {"state/domain_id": "0", "state/cycle": cycle }, ascentSource.CellData["By"])
-
-# Save data
+#dataName = "paraviewdata_{0:04d}.pvd".format(int(cycle))
 imageName = "image_{0:04d}.png".format(int(cycle))
+
 Render()
 ResetCamera()
+
+#SaveData(dataName, ascentSource)
 SaveScreenshot(imageName, ImageResolution=(1024, 1024))

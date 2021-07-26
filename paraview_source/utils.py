@@ -17,8 +17,8 @@ from config import *
 def getView(source,
             COLOR="Cool to Warm (Extended)",
             OPACITY=1.0,
-            CLIM=0.015,
-            THRESHOLD=0.0015,
+            CLIM=1,
+            THRESHOLD=0.2,
             animated=False):
     """
     Configure and return a ParaView view
@@ -31,8 +31,8 @@ def getView(source,
     # Color table
     byLUT = GetColorTransferFunction('By', displayProperties, separate=True)
     byLUT.ApplyPreset(COLOR)
-    #byLUT.RescaleTransferFunction([-CLIM, CLIM])
-    #byLUT.AutomaticRescaleRangeMode = 'Never'
+    byLUT.RescaleTransferFunction([-CLIM, CLIM])
+    byLUT.AutomaticRescaleRangeMode = 'Never'
 
     # Opacity map
     byPWF = GetOpacityTransferFunction('By', displayProperties, separate=True)
@@ -48,7 +48,7 @@ def getView(source,
     byPWF.ScalarRangeInitialized = 1
     
     # Display properties
-    #displayProperties.Representation = 'Volume'
+    displayProperties.Representation = 'Volume'
     
     # Color
     displayProperties.ColorArrayName = 'By'

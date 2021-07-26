@@ -94,7 +94,6 @@ def ascent_to_vtk(node, topology=None, extent=None):
         topology = topology_names(node)[0]
     data = None
     coords = node["topologies/" + topology + "/coordset"]
-    # print(repr(node))
     if (node["topologies/" + topology + "/type"] == "uniform"):
         # tested with noise
         data = vtkImageData()
@@ -170,9 +169,9 @@ def ascent_to_vtk(node, topology=None, extent=None):
             elif (shape == "quad"):
                 npoints = 4
                 cellType = vtkConstants.VTK_QUAD
-            #elif (shape == "point"):
-            #    npoints = 1
-            #    cellType = vtkConstants.VTK_PIXEL
+            elif (shape == "point"):
+                npoints = 1
+                cellType = vtkConstants.VTK_PIXEL
             else:
                 print("Error: Shape '%s' not implemented" % shape)
                 return None
@@ -243,7 +242,7 @@ def write_vtk(prefix, node, data):
         writer = vtkXMLUnstructuredGridWriter()
         extension = "vtu"
     else:
-        print("Error: Unknown datatype.")
+        print("Error: Unknown datatype: '%s'" % data.GetClassName())
         return
     fileNoExt = get_filenoext(prefix, node)
     writer.SetFileName(fileNoExt + "." + extension)
@@ -338,7 +337,6 @@ class AscentSource(VTKPythonAlgorithmBase):
         #          unless you have the same import in paraview-vis.py
         from mpi4py import MPI
         self._node = ascent_extract.ascent_data().child(0)
-        print(repr(self._node))
         self._timeStep = -1
         self._cycle = self._node["state/cycle"]
         self._time = self._node["state/time"]
