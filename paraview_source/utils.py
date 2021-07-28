@@ -14,28 +14,28 @@ reload(config)
 
 from config import *
 
-def getView(source,
-            COLOR="Cool to Warm (Extended)",
-            OPACITY=1.0,
-            CLIM=1,
-            THRESHOLD=0.2,
-            animated=False):
+def showField(source,
+              field="By",
+              COLOR="Cool to Warm (Extended)",
+              OPACITY=1.0,
+              CLIM=1,
+              THRESHOLD=0.2):
     """
     Configure and return a ParaView view
     """
-    view = CreateRenderView()
-    displayProperties = Show(source, view=view)
+    view = GetActiveView()
+    displayProperties = Show(source, view)
 
-    ColorBy(displayProperties, ("CELLS", "By"))
+    ColorBy(displayProperties, ("CELLS", field))
 
     # Color table
-    byLUT = GetColorTransferFunction('By', displayProperties, separate=True)
+    byLUT = GetColorTransferFunction(field, displayProperties, separate=True)
     byLUT.ApplyPreset(COLOR)
     byLUT.RescaleTransferFunction([-CLIM, CLIM])
     byLUT.AutomaticRescaleRangeMode = 'Never'
 
     # Opacity map
-    byPWF = GetOpacityTransferFunction('By', displayProperties, separate=True)
+    byPWF = GetOpacityTransferFunction(field, displayProperties, separate=True)
     byPWF.Points = [
         # format: val, opacity, 0.5, 0.0 (last 2?!)
         -CLIM,      OPACITY, 0.5, 0.,
@@ -51,21 +51,38 @@ def getView(source,
     displayProperties.Representation = 'Volume'
     
     # Color
-    displayProperties.ColorArrayName = 'By'
+    displayProperties.ColorArrayName = field
     displayProperties.LookupTable = byLUT
     
     # Opacity
-    displayProperties.OpacityArrayName = 'By'
+    displayProperties.OpacityArrayName = field
     displayProperties.ScalarOpacityFunction = byPWF
 
     # Separate color map
     displayProperties.UseSeparateColorMap = True
 
     scalarBar = GetScalarBar(byLUT, view)
-    scalarBar.Title = 'By'
+    scalarBar.Title = field
     scalarBar.ComponentTitle = ''
     scalarBar.Visibility = 1
     displayProperties.SetScalarBarVisibility(view, True)
+
+
+def showPoints(source, field="particle_electrons_cpu"):
+    view = GetActiveView()
+    glyph = Glyph(
+        source,
+        GlyphType = "Sphere",
+        ScaleFactor = 5.753235726125357e-06
+    )
+    glyph.GlyphType.Radius = 0.05
+
+    displayProperties = Show(glyph, view)
+    ColorBy(displayProperties, ("CELLS", field))
+
+
+def setupView(animated=False):
+    view = GetActiveView()
 
     if animated:
         # Setup animation scene
@@ -81,7 +98,6 @@ def getView(source,
     #view.CameraPosition = [38.508498092504716, 6.2875904189648475, 22.242265004619007]
     #view.CameraFocalPoint = [7.670000000000014, 7.290000000000007, 11.399999999999999]
     #view.CameraViewUp = [-0.014939444962305284, -0.9986456446556182, -0.04983662703858452]
-    return view
 
 
 def getSource(CLIP_HALF=False,
@@ -168,6 +184,8 @@ self.SUFFIX = "%s"
     source.UpdatePipelineInformation()
     
     paraview.simple._DisableFirstRenderCameraReset()
-    getView(source, animated=True, *kwargs)
+
+    setupView(animated=kwargs.pop("animated", None))
+    showField(source, animated=True, *kwargs)
 
     return source

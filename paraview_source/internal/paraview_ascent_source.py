@@ -341,11 +341,8 @@ class AscentSource(VTKPythonAlgorithmBase):
         self._cycle = self._node["state/cycle"]
         self._time = self._node["state/time"]
         self._domain_id = self._node["state/domain_id"]
-        # topology and coords are set only if there is only one topology,
-        # otherwise they are none.
-        self._topology = None
-        self._coords = None
-        self._outputType = None
+        self._coords = {}
+        self._outputTypes = {}
         self._extension = None
         self._comm = MPI.Comm.f2py(ascent_extract.ascent_mpi_comm_id())
         self._mpi_rank = self._comm.Get_rank()
@@ -436,39 +433,41 @@ class AscentSource(VTKPythonAlgorithmBase):
     def RequestInformation(self, request, inVector, outVector):
         for outputPort in range(self.GetNumberOfOutputPorts()):
             oi = outVector.GetInformationObject(outputPort)
-            if (self._outputType != vtkConstants.VTK_UNSTRUCTURED_GRID):
+            _topology = self._topologies[outputPort]
+            _coords = self._coords[outputPort]
+            if (self._outputTypes[outputPort] != vtkConstants.VTK_UNSTRUCTURED_GRID):
                 dims = (0, 0, 0)
-                if (self._outputType == vtkConstants.VTK_IMAGE_DATA):
+                if (self._outputTypes[outputPort] == vtkConstants.VTK_IMAGE_DATA):
                     dims = (
-                        self._node["coordsets/" + self._coords + "/dims/i"],
-                        self._node["coordsets/" + self._coords + "/dims/j"],
-                        self._node["coordsets/" + self._coords + "/dims/k"])
+                        self._node["coordsets/" + _coords + "/dims/i"],
+                        self._node["coordsets/" + _coords + "/dims/j"],
+                        self._node["coordsets/" + _coords + "/dims/k"])
                     origin = (
-                        self._node["coordsets/" + self._coords + "/origin/x"],
-                        self._node["coordsets/" + self._coords + "/origin/y"],
-                        self._node["coordsets/" + self._coords + "/origin/z"])
+                        self._node["coordsets/" + _coords + "/origin/x"],
+                        self._node["coordsets/" + _coords + "/origin/y"],
+                        self._node["coordsets/" + _coords + "/origin/z"])
                     spacing = (
                         self._node["coordsets/" +
-                                   self._coords + "/spacing/dx"],
+                                   _coords + "/spacing/dx"],
                         self._node["coordsets/" +
-                                   self._coords + "/spacing/dy"],
+                                   _coords + "/spacing/dy"],
                         self._node["coordsets/" +
-                                   self._coords + "/spacing/dz"])
+                                   _coords + "/spacing/dz"])
                     oi.Set(vtkDataObject.ORIGIN(), origin, 3)
                     oi.Set(vtkDataObject.SPACING(), spacing, 3)
                     (self._whole_extent, self._extent) = extents_uniform(
                         self._node, self._comm, self._mpi_size, self._mpi_rank,
-                        self._topology)
-                elif (self._outputType == vtkConstants.VTK_RECTILINEAR_GRID):
+                        _topology)
+                elif (self._outputTypes[outputPort] == vtkConstants.VTK_RECTILINEAR_GRID):
                     (self._whole_extent, self._extent) = extents_rectilinear(
                         self._node, self._comm, self._mpi_size, self._mpi_rank,
-                        self._topology)
-                elif (self._outputType == vtkConstants.VTK_STRUCTURED_GRID):
-                    dims = (self._node["topologies/" + self._topology +
+                        _topology)
+                elif (self._outputTypes[outputPort] == vtkConstants.VTK_STRUCTURED_GRID):
+                    dims = (self._node["topologies/" + _topology +
                                        "/elements/dims/i"] + 1,
-                            self._node["topologies/" + self._topology +
+                            self._node["topologies/" + _topology +
                                        "/elements/dims/j"] + 1,
-                            self._node["topologies/" + self._topology +
+                            self._node["topologies/" + _topology +
                                        "/elements/dims/k"] + 1)
                     self._extent = (
                         0, dims[0] - 1, 0, dims[1] - 1, 0, dims[2] - 1)
@@ -479,25 +478,25 @@ class AscentSource(VTKPythonAlgorithmBase):
         return 1
 
     def FillOutputPortInformation(self, port, info):
-        self._outputType = None
-        self._topology = self._topologies[port]
-        self._coords = self._node["topologies/" + self._topology +
-                                  "/coordset"]
-        topologyType = self._node["topologies/" + self._topology + "/type"]
+        self._outputTypes[port] = None
+        _topology = self._topologies[port]
+        self._coords[port] = self._node["topologies/" + _topology +
+                                        "/coordset"]
+        topologyType = self._node["topologies/" + _topology + "/type"]
         if topologyType == "uniform":
-            self._outputType = vtkConstants.VTK_IMAGE_DATA
+            self._outputTypes[port] = vtkConstants.VTK_IMAGE_DATA
             self._extension = "vti"
             outputTypeName = "vtkImageData"
         elif topologyType == "rectilinear":
-            self._outputType = vtkConstants.VTK_RECTILINEAR_GRID
+            self._outputTypes[port] = vtkConstants.VTK_RECTILINEAR_GRID
             self._extension = "vtr"
             outputTypeName = "vtkRectilinearGrid"
         elif topologyType == "structured":
-            self._outputType = vtkConstants.VTK_STRUCTURED_GRID
+            self._outputTypes[port] = vtkConstants.VTK_STRUCTURED_GRID
             self._extension = "vts"
             outputTypeName = "vtkStructuredGrid"
         elif topologyType == "unstructured":
-            self._outputType = vtkConstants.VTK_UNSTRUCTURED_GRID
+            self._outputTypes[port] = vtkConstants.VTK_UNSTRUCTURED_GRID
             self._extension = "vtu"
             outputTypeName = "vtkUnstructuredGrid"
         else:

@@ -35,28 +35,19 @@ if count == 0:
     paraview.options.batch = True
     paraview.options.symmetric = True
     from paraview.simple import *
-    from paraview_ascent_source import write_vtk
-    #from paraview.simple import (
-    #    ExtractSelection,
-    #    GetProperty,
-    #    LoadPlugin,
-    #    Render,
-    #    SaveScreenshot,
-    #    SelectCells,
-    #    Show,
-    #    GetActiveCamera,
-    #)
+
     LoadPlugin(PLUGIN_PATH, remote=True, ns=globals())
 
     # Setup source
     ascentSource = AscentSource()
-
-    #sel = SelectCells("vtkGhostType < 1", proxy=ascentSource)
-    #ExtractSelection(Selection=sel)
+    CreateRenderView()
 
     # Configure View
-    from utils import getView
-    getView(ascentSource, THRESHOLD=0.5)
+    from utils import showField, showPoints, setupView
+    setupView()
+
+    showField(OutputPort(ascentSource, 0), THRESHOLD=0.8, field="By")
+    showPoints(OutputPort(ascentSource, 1), field="By")
 
 # Update data
 ascentSource.UpdateAscentData()
@@ -71,11 +62,13 @@ if (rank == 0):
             GetProperty(ascentSource, "Cycle"),
             GetProperty(ascentSource, "Time")))
 
-#dataName = "paraviewdata_{0:04d}.pvd".format(int(cycle))
+dataFieldName = "fields_{0:04d}.pvd".format(int(cycle))
+dataPartName = "parts_{0:04d}.pvd".format(int(cycle))
 imageName = "image_{0:04d}.png".format(int(cycle))
 
 Render()
 ResetCamera()
 
-#SaveData(dataName, ascentSource)
+#SaveData(dataFieldName, OutputPort(ascentSource, 0))
+SaveData(dataPartName, OutputPort(ascentSource, 1))
 SaveScreenshot(imageName, ImageResolution=(1024, 1024))
