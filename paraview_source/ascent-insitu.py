@@ -46,7 +46,13 @@ if count == 0:
     from utils import showField, showPoints, setupView
     setupView()
 
-    showField(OutputPort(ascentSource, 0), THRESHOLD=0.8, field="By")
+    cam = GetActiveCamera()
+    cam.Azimuth(-90)
+
+    showField(OutputPort(ascentSource, 0),
+              THRESHOLD=1e2,
+              CLIM=2e4,
+              field="By")
     showPoints(OutputPort(ascentSource, 1), field="By")
 
 # Update data

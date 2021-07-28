@@ -31,7 +31,7 @@ def showField(source,
     # Color table
     byLUT = GetColorTransferFunction(field, displayProperties, separate=True)
     byLUT.ApplyPreset(COLOR)
-    byLUT.RescaleTransferFunction([-CLIM, CLIM])
+    byLUT.RescaleTransferFunction([-CLIM, CLIM], True)
     byLUT.AutomaticRescaleRangeMode = 'Never'
 
     # Opacity map
