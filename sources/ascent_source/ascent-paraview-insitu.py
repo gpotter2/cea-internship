@@ -7,16 +7,16 @@ Entry point for Ascent Insitu
 ########################
 
 # __file__ does not work with ascent so add it manually
-__file__ = "/home/gpotter/pv_work/paraview_source/ascent-insitu.py"
+__file__ = "/home/gpotter/pv_work/sources/ascent_source/ascent-paraview-insitu.py"
 # The path to the paraview python module. This must have been compiled with the SAME python version
 # as everything else ! watch out
-PARAVIEW_SITE_PACKAGES = "/home/gpotter/git/paraview-catalyst-build/lib/python3.9/site-packages"
+PARAVIEW_SITE_PACKAGES = "/home/gpotter/spack/opt/spack/linux-rhel7-skylake_avx512/gcc-9.4.0/paraview-5.9.1-gmpub3sql6hkvibxxtxexixkuv3agmao/lib64/python3.8/site-packages"
 
 import sys, os
-__DIR__ = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(__DIR__)
+__DIR__ = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "paraview_source"))
 PLUGIN_PATH = os.path.join(__DIR__, "internal", "paraview_ascent_source.py")
 
+sys.path.append(__DIR__)
 sys.path.append(os.path.join(__DIR__, "internal"))
 sys.path.append(PARAVIEW_SITE_PACKAGES)
 
@@ -25,11 +25,11 @@ sys.path.append(PARAVIEW_SITE_PACKAGES)
 # Same Python interpreter for all time steps
 # We use count for one time initializations
 try:
-    count = count + 1
+    count2 = count2 + 1
 except NameError:
-    count = 0
+    count2 = 0
 
-if count == 0:
+if count2 == 0:
     # Initialization
     import paraview
     paraview.options.batch = True
@@ -40,6 +40,8 @@ if count == 0:
 
     # Setup source
     ascentSource = AscentSource()
+
+    # Setup View
     CreateRenderView()
 
     # Configure View
@@ -50,10 +52,16 @@ if count == 0:
     cam.Azimuth(-90)
 
     showField(OutputPort(ascentSource, 0),
-              THRESHOLD=1e2,
+              THRESHOLD=1,
               CLIM=2e4,
-              field="By")
-    showPoints(OutputPort(ascentSource, 1), field="By")
+              field="By_l",
+              OPACITY=0.01, COLOR="GYPi")
+    showField(OutputPort(ascentSource, 0),
+              THRESHOLD=1,
+              CLIM=2e4,
+              field="By_h",
+              OPACITY=0.3)
+    showPoints(OutputPort(ascentSource, 1), field="particle_electrons_ux")
 
 # Update data
 ascentSource.UpdateAscentData()
@@ -76,5 +84,5 @@ Render()
 ResetCamera()
 
 #SaveData(dataFieldName, OutputPort(ascentSource, 0))
-SaveData(dataPartName, OutputPort(ascentSource, 1))
+#SaveData(dataPartName, OutputPort(ascentSource, 1))
 SaveScreenshot(imageName, ImageResolution=(1024, 1024))

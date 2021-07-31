@@ -19,20 +19,27 @@ from config import *
 def get_path(x, folder=""):
     return os.path.abspath(os.path.join(STORAGE_FOLDER, folder, x))
 
-def build_fft_inplace(by):
-    # Apply discrete fourier transform
-    print("OK")
-
-def build_grid(x, y, z):
+def build_grid_params(xsize, xpad,
+                      ysize, ypad,
+                      zsize, zpad):
     print("Building freq grid...", end="", flush=True)
     # Build frequences grid
-    freqx = np.fft.fftfreq(x.size, d=x[1] - x[0])
-    freqy = np.fft.fftfreq(y.size, d=y[1] - y[0])
-    freqz = np.fft.fftfreq(z.size, d=z[1] - z[0])
+    freqx = np.fft.fftfreq(xsize, d=xpad)
+    freqy = np.fft.fftfreq(ysize, d=ypad)
+    freqz = np.fft.fftfreq(zsize, d=zpad)
 
     KX, KY, KZ = np.meshgrid(freqx, freqy, freqz, indexing='ij')
     print("OK")
     return KX, KY, KZ
+
+
+def build_grid(x, y, z):
+    return build_grid_params(
+        x.size, x[1] - x[0],
+        y.size, y[1] - y[0],
+        z.size, z[1] - z[0],
+    )
+
 
 def infos(by):
     if X_STEPS.shape[0] != by.shape[0]:

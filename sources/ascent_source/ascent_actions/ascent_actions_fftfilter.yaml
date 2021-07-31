@@ -4,4 +4,4 @@
     e1:
       type: "python"
       params:
-        file: "/home/gpotter/pv_work/paraview_source/ascent-insitu.py"
+        file: "/home/gpotter/pv_work/sources/ascent_source/ascent-fft-filter.py"
