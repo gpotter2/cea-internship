@@ -106,7 +106,7 @@ def getSource(CLIP_HALF=False,
               LOG_SCALE=False,
               LOG_THRESHOLD=5e-5,
               SUFFIX="",
-              *kwargs):
+              **kwargs):
     """
     Returns a programmable source that automatically imports image files.
     """
@@ -186,6 +186,6 @@ self.SUFFIX = "%s"
     paraview.simple._DisableFirstRenderCameraReset()
 
     setupView(animated=kwargs.pop("animated", None))
-    showField(source, animated=True, *kwargs)
+    showField(source, **kwargs)
 
     return source
