@@ -114,7 +114,6 @@ elif PROPAGATION_TYPE == "t":
 print("  - Applying discrete fast fourier transform...", end="", flush=True)
 byfft = cpx.scipy.fft.fftn(by,
                            axes=(0,1,2),
-                           norm="forward",
                            overwrite_x=True)
 print("OK")
 
@@ -218,7 +217,6 @@ if PROPAGATION_TYPE == "z":
     for i in prog:
         byfft *= propag
         v = cpx.scipy.fft.ifftn(byfft,
-                                norm="forward",
                                 axes=(0,1,2))
         frame = cp.real(
             v[::x_drop, ::y_drop, :t.shape[0]]
@@ -236,7 +234,6 @@ elif PROPAGATION_TYPE == "t":
         byfft *= propag
         prog.set_description("Propagating on t (GPU)")
         v = cpx.scipy.fft.ifftn(byfft,
-                                norm="forward",
                                 axes=(0,1,2))
         prog.set_description("Propagating on t (CPU)")
         frame = cp.real(

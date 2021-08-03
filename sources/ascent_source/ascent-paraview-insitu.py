@@ -49,19 +49,25 @@ if count2 == 0:
     setupView()
 
     cam = GetActiveCamera()
-    cam.Azimuth(-90)
+    cam.Azimuth(-100)
 
     showField(OutputPort(ascentSource, 0),
-              THRESHOLD=1,
-              CLIM=2e4,
-              field="By_l",
-              OPACITY=0.01, COLOR="GYPi")
-    showField(OutputPort(ascentSource, 0),
-              THRESHOLD=1,
-              CLIM=2e4,
+              THRESHOLD=0.25,
+              CLIM=2,
               field="By_h",
-              OPACITY=0.3)
-    showPoints(OutputPort(ascentSource, 1), field="particle_electrons_ux")
+              OPACITY=0.9
+              )
+    # See https://discourse.paraview.org/t/view-multiple-data-arrays-at-once-from-a-single-file/2770 on why we need PassArrays
+    # to shallow copy the data.
+    passArray = PassArrays(Input=OutputPort(ascentSource, 0))
+    passArray.CellDataArrays = ['By_l']
+    showField(passArray,
+              THRESHOLD=0.3,
+              CLIM=2,
+              field="By_l",
+              OPACITY=1.0,
+              COLOR="GYPi")
+    showPoints(OutputPort(ascentSource, 1), field="particle_electrons_w")
 
 # Update data
 ascentSource.UpdateAscentData()
@@ -69,12 +75,6 @@ ascentSource.UpdatePropertyInformation()
 
 cycle = GetProperty(ascentSource, "Cycle").GetElement(0)
 rank = GetProperty(ascentSource, "Rank").GetElement(0)
-if (rank == 0):
-    print(
-        "=======================================Called: {} {} {}".format(
-            GetProperty(ascentSource, "TimeStep"),
-            GetProperty(ascentSource, "Cycle"),
-            GetProperty(ascentSource, "Time")))
 
 dataFieldName = "fields_{0:04d}.pvd".format(int(cycle))
 dataPartName = "parts_{0:04d}.pvd".format(int(cycle))

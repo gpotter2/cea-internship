@@ -1,7 +1,10 @@
 import conduit
 import ascent.mpi
-import cupy as cp
-import cupyx as cpx
+try:
+    import cupy as cp
+    import cupyx as cpx
+except ImportError:
+    raise ImportError("Please install ``cupy`` !")
 import numpy as np
 
 try:
@@ -22,20 +25,30 @@ ascent_opts["actions_file"] = ""
 a = ascent.mpi.Ascent()
 a.open(ascent_opts)
 
+#print(repr(n_mesh))
+
+def build_grid_params(xsize, xpad,
+                      ysize, ypad,
+                      zsize, zpad):
+    print("Building freq grid...", end="", flush=True)
+    # Build frequences grid
+    freqx = np.fft.fftfreq(xsize, d=xpad)
+    freqy = np.fft.fftfreq(ysize, d=ypad)
+    freqz = np.fft.fftfreq(zsize, d=zpad)
+
+    KX, KY, KZ = np.meshgrid(freqx, freqy, freqz, indexing='ij')
+    print("OK")
+    return KX, KY, KZ
+
+# TODO: replace the FFT/IFFT that run on CPU with builtin WarpX when it's ready.
+
 # Process data
 if count == 0:
-    __DIR__ = "/home/gpotter/pv_work/sources/ascent_source/"
-    
-    import sys, os
-    sys.path.append(os.path.join(__DIR__, "..", "..", "process_data"))
-
-    #print(repr(n_mesh))
     field = "By"
     topo = n_mesh["fields/%s/topology" % field]
     coordset_name = n_mesh["topologies/%s/coordset" % topo]
     coordset = n_mesh["coordsets/%s" % coordset_name]
 
-    from common import build_grid_params
     KX, KY, KZ = build_grid_params(
         coordset["dims/i"] - 1, coordset["spacing/dx"],
         coordset["dims/j"] - 1, coordset["spacing/dy"],
@@ -44,23 +57,22 @@ if count == 0:
     W = np.sqrt(KX**2 + KY**2 + KZ**2)
     print("Building propag...", end="", flush=True)
     L = np.max(W)
-    propag_high = (W < 3*L//4).ravel()
+    propag_high = (W < L//2).ravel()
     propag_low = (W > L//4).ravel()
     print("OK")
 
 by = cp.asarray(n_mesh["fields/%s/values" % field],
                 dtype="float64")
-print(by)
-print("  - Applying discrete fast fourier transform...", end="", flush=True)
+print("FFT...", end="", flush=True)
 byfft_high = cpx.scipy.fft.fftn(by,
                                 axes=(0,1,2),
                                 overwrite_x=True)
-del by
+del by  # free
 print("OK")
 byfft_low = cp.copy(byfft_high)
 byfft_low[propag_low] = 0.
 byfft_high[propag_high] = 0.
-print("  - IFFT...", end="", flush=True)
+print("IFFT...", end="", flush=True)
 byfft_high = cp.real(cpx.scipy.fft.ifftn(byfft_high,
                                          axes=(0,1,2),
                                          overwrite_x=True)).get()
@@ -68,9 +80,6 @@ byfft_low = cp.real(cpx.scipy.fft.ifftn(byfft_low,
                                         axes=(0,1,2),
                                         overwrite_x=True)).get()
 print("OK")
-
-print(np.max(byfft_low))
-print(np.max(byfft_high))
 
 def apply_log_scale(data, threshold):
     low = data < -threshold
@@ -80,17 +89,15 @@ def apply_log_scale(data, threshold):
     data[high] = np.log10(data[high])
     data[mid] = 0.
 
-apply_log_scale(byfft_high, 1)
-apply_log_scale(byfft_low, 1)
+apply_log_scale(byfft_high, 0.5)
+apply_log_scale(byfft_low, 0.5)
 
 n_mesh["fields/By_h/association"] = "element"
 n_mesh["fields/By_h/topology"] = topo
 n_mesh["fields/By_h/values"].set_external(byfft_high)
-del byfft_high
 n_mesh["fields/By_l/association"] = "element"
 n_mesh["fields/By_l/topology"] = topo
 n_mesh["fields/By_l/values"].set_external(byfft_low)
-del byfft_low
 
 # Publish data
 a.publish(n_mesh)
@@ -107,29 +114,52 @@ extract["action"] = "add_extracts"
 extract["extracts/e1/type"] = "python"
 extract["extracts/e1/params/file"] = "/home/gpotter/pv_work/sources/ascent_source/ascent-paraview-insitu.py"
 
-## Pipelines
+## Ascent Pipelines
 #pipelines = conduit.Node()
-#pipelines['pl1/f1/type'] = 'contour'
-#pipelines['pl1/f1/params/field'] = 'By'
-#pipelines['pl1/f1/params/levels'] = 5
+#
+## Would be cool if the log filter supported positive-negative log.
+## It doesn't so we build it ourselves above
+#
+##pipelines['pl1/f1/type'] = 'log'
+##pipelines['pl1/f1/params/field'] = 'By_h'
+##pipelines['pl1/f1/params/clamp_min_value'] = 0.1
+##pipelines['pl1/f1/params/output_name'] = 'By_h_log'
+#
+#pipelines['pl1/f2/type'] = 'contour'
+#pipelines['pl1/f2/params/field'] = 'By_h'  # 'By_h_log'
+#pipelines['pl1/f2/params/iso_values'] = 0.25
+##
+##pipelines['pl2/f1/type'] = 'log'
+##pipelines['pl2/f1/params/field'] = 'By_l'
+##pipelines['pl2/f1/params/clamp_min_value'] = 0.1
+##pipelines['pl2/f1/params/output_name'] = 'By_l_log'
+#
+#pipelines['pl2/f2/type'] = 'contour'
+#pipelines['pl2/f2/params/field'] = 'By_l'  # 'By_l_log'
+#pipelines['pl2/f2/params/iso_values'] = 0.3
 #
 ## Scenes
 #scenes  = conduit.Node()
-#scenes['s1/plots/p1/type'] = 'volume'
+#scenes['s1/plots/p1/type'] = 'pseudocolor'
 #scenes['s1/plots/p1/pipeline'] = 'pl1'
-#scenes['s1/plots/p1/field'] = 'By'
-#scenes['s1/plots/p1/min_value'] = -2e4
-#scenes['s1/plots/p1/max_value'] = 2e4
-###
-##scenes['s1/plots/p2/type'] = 'pseudocolor'
-##scenes['s1/plots/p2/field'] = 'particle_electrons_ux'
-##scenes['s1/plots/p2/points/radius'] = 0.0000005
-##scenes['s1/plots/p2/min_value'] = 1e8
-##scenes['s1/plots/p2/max_value'] = 1e8
+#scenes['s1/plots/p1/field'] = 'By_h'  # By_h_log
+#scenes['s1/plots/p1/min_value'] = -4
+#scenes['s1/plots/p1/max_value'] = 4
+##
+#scenes['s1/plots/p2/type'] = 'pseudocolor'
+#scenes['s1/plots/p2/pipeline'] = 'pl2'
+#scenes['s1/plots/p2/field'] = 'By_l'  # By_l_log
+#scenes["s1/plots/p2/color_table/name"] = "Blue to Orange"
+#scenes['s1/plots/p2/min_value'] = -4
+#scenes['s1/plots/p2/max_value'] = 4
+##
+#scenes['s1/plots/p3/type'] = 'pseudocolor'
+#scenes['s1/plots/p3/field'] = 'particle_electrons_ux'
+#scenes['s1/plots/p3/points/radius'] = 0.0000005
 #
-#scenes['s1/renders/r1/image_width'] = 512
-#scenes['s1/renders/r1/image_height'] = 512
-#scenes['s1/renders/r1/image_prefix'] = 'out_render_3d_%06d'
+#scenes['s1/renders/r1/image_width'] = 1024 # 512
+#scenes['s1/renders/r1/image_height'] = 1024 # 512
+#scenes['s1/renders/r1/image_prefix'] = 'outimg_%05d'
 #scenes['s1/renders/r1/camera/azimuth'] = 100
 #scenes['s1/renders/r1/camera/elevation'] = 10
 #
@@ -140,8 +170,8 @@ extract["extracts/e1/params/file"] = "/home/gpotter/pv_work/sources/ascent_sourc
 #add_act = actions.append()
 #add_act['action'] = 'add_scenes'
 #add_act['scenes'] = scenes
-#
-#actions.append()['action'] = 'execute'
+
+actions.append()['action'] = 'execute'
 
 a.execute(actions)
 a.close()

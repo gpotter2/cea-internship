@@ -6,7 +6,7 @@ from paraview.simple import *
 
 import sys, os, pickle
 __DIR__ = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.join(__DIR__, ".."))
+sys.path.append(os.path.join(__DIR__, "..", ".."))
 
 import config
 from importlib import reload
@@ -25,13 +25,16 @@ def showField(source,
     """
     view = GetActiveView()
     displayProperties = Show(source, view)
+    
+    # Display properties
+    displayProperties.Representation = 'Volume'
 
-    ColorBy(displayProperties, ("CELLS", field))
+    ColorBy(displayProperties, ("CELLS", field), separate=True)
 
     # Color table
     byLUT = GetColorTransferFunction(field, displayProperties, separate=True)
     byLUT.ApplyPreset(COLOR)
-    byLUT.RescaleTransferFunction([-CLIM, CLIM], True)
+    byLUT.RescaleTransferFunction(-CLIM, CLIM, True)
     byLUT.AutomaticRescaleRangeMode = 'Never'
 
     # Opacity map
@@ -47,9 +50,6 @@ def showField(source,
     ]
     byPWF.ScalarRangeInitialized = 1
     
-    # Display properties
-    displayProperties.Representation = 'Volume'
-    
     # Color
     displayProperties.ColorArrayName = field
     displayProperties.LookupTable = byLUT
@@ -59,11 +59,11 @@ def showField(source,
     displayProperties.ScalarOpacityFunction = byPWF
 
     # Separate color map
-    displayProperties.UseSeparateColorMap = True
+    # displayProperties.UseSeparateColorMap = True
 
     scalarBar = GetScalarBar(byLUT, view)
     scalarBar.Title = field
-    scalarBar.ComponentTitle = ''
+    scalarBar.ComponentTitle = field
     scalarBar.Visibility = 1
     displayProperties.SetScalarBarVisibility(view, True)
 
