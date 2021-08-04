@@ -45,21 +45,27 @@ if count2 == 0:
     CreateRenderView()
 
     # Configure View
-    from utils import showField, showPoints, setupView
+    from utils import showField, showPoints, setupView, getFFTFilter
     setupView()
 
     cam = GetActiveCamera()
     cam.Azimuth(-100)
 
-    showField(OutputPort(ascentSource, 0),
+    Filtered = getFFTFilter(OutputPort(ascentSource, 0), "By")
+
+    # If nothing appears, it could be that the opacity is glitched.
+    # Try setting it to 1.0. If that's the issue, check your paraview
+    # and google "paraview opacity not working". Make sure you're using
+    # the correct build (cuda...)
+    showField(Filtered,
               THRESHOLD=0.25,
               CLIM=2,
               field="By_h",
-              OPACITY=0.9
+              OPACITY=1.0
               )
     # See https://discourse.paraview.org/t/view-multiple-data-arrays-at-once-from-a-single-file/2770 on why we need PassArrays
     # to shallow copy the data.
-    passArray = PassArrays(Input=OutputPort(ascentSource, 0))
+    passArray = PassArrays(Input=Filtered)
     passArray.CellDataArrays = ['By_l']
     showField(passArray,
               THRESHOLD=0.3,
@@ -67,7 +73,8 @@ if count2 == 0:
               field="By_l",
               OPACITY=1.0,
               COLOR="GYPi")
-    showPoints(OutputPort(ascentSource, 1), field="particle_electrons_w")
+    showPoints(OutputPort(ascentSource, 1),
+               field="particle_electrons_w")
 
 # Update data
 ascentSource.UpdateAscentData()

@@ -100,13 +100,13 @@ def setupView(animated=False):
     #view.CameraViewUp = [-0.014939444962305284, -0.9986456446556182, -0.04983662703858452]
 
 
-def getSource(CLIP_HALF=False,
-              CLIP_QUARTER=False,
-              CLIP_INV_QUARTER=False,
-              LOG_SCALE=False,
-              LOG_THRESHOLD=5e-5,
-              SUFFIX="",
-              **kwargs):
+def getSourceRead(CLIP_HALF=False,
+                  CLIP_QUARTER=False,
+                  CLIP_INV_QUARTER=False,
+                  LOG_SCALE=False,
+                  LOG_THRESHOLD=5e-5,
+                  SUFFIX="",
+                  **kwargs):
     """
     Returns a programmable source that automatically imports image files.
     """
@@ -175,9 +175,9 @@ self.SUFFIX = "%s"
     
     source = ProgrammableSource(registrationName='AnimatedLaserBeam')
     source.OutputDataSetType = 'vtkImageData'
-    with open(os.path.join(__DIR__, 'internal', 'script.py')) as fd:
+    with open(os.path.join(__DIR__, 'internal', 'script_read.py')) as fd:
         source.Script = "\n".join([HEADER, fd.read()])
-    with open(os.path.join(__DIR__, 'internal', 'reqscript.py')) as fd:
+    with open(os.path.join(__DIR__, 'internal', 'reqscript_read.py')) as fd:
         source.ScriptRequestInformation = "\n".join([CONFIG_HDR, HEADER, fd.read()])
 
     # Trigger RequestInformation
@@ -188,4 +188,25 @@ self.SUFFIX = "%s"
     setupView(animated=kwargs.pop("animated", None))
     showField(source, **kwargs)
 
+    return source
+
+def getFFTFilter(Input, inField):
+    source = ProgrammableFilter(Input=Input, registrationName='AnimatedLaserBeam')
+    source.OutputDataSetType = 'Same as Input'
+    HEADER = """
+self.inField = %s
+self.outFieldHigh = %s
+self.outFieldLow = %s
+    """.strip() % (
+        inField,
+        inField + "_h",
+        inField + "_l",
+    )
+    with open(os.path.join(__DIR__, 'internal', 'script_filter.py')) as fd:
+        source.Script = "\n".join([HEADER, fd.read()])
+    with open(os.path.join(__DIR__, 'internal', 'reqscript_filter.py')) as fd:
+        source.ScriptRequestInformation = fd.read()
+
+    # Trigger RequestInformation
+    source.UpdatePipelineInformation()
     return source

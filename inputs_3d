@@ -5,6 +5,7 @@ max_step = 1000
 amr.n_cell =  64  64  512
 amr.max_grid_size = 64   # maximum size of each AMReX box, used to decompose the domain
 amr.blocking_factor = 32 # minimum size of each AMReX box, used to decompose the domain
+# warpx.numprocs = 1 1 1
 geometry.coord_sys   = 0                  # 0: Cartesian
 geometry.prob_lo     = -30.e-6   -30.e-6   -56.e-6    # physical domain
 geometry.prob_hi     =  30.e-6    30.e-6    12.e-6
@@ -67,13 +68,14 @@ laser1.profile_focal_distance = 100.e-6  # Focal distance from the antenna (in m
 laser1.wavelength = 0.8e-6               # The wavelength of the laser (in m)
 
 # Diagnostics
-diagnostics.diags_names = diag1
-diag1.intervals = 10
-diag1.diag_type = Full
-diag1.fields_to_plot = Ex Ey Ez Bx By Bz jx jy jz rho
+diagnostics.diags_names = diag
+diag.intervals = 10
+diag.diag_type = Full
+diag.fields_to_plot = Ex Ey Ez Bx By Bz jx jy jz rho
 
-diag1.format = ascent
-#diag1.write_species = 0
+# diag.format = plotfile
+diag.format = ascent
+#diag.write_species = 0
 
 #warpx.reduced_diags_names = diag_field_max
 #diag_field_max.type = "FieldMaximum"

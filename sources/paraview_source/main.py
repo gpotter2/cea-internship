@@ -12,13 +12,13 @@ reload(utils)
 
 from utils import getSource
 
-getSource(SUFFIX="low",
-          LOG_SCALE=True, LOG_THRESHOLD=1e-04,
-          THRESHOLD=4,
-          CLIM=6,
-          OPACITY=0.01, COLOR="GYPi")
-getSource(SUFFIX="high",
-          LOG_SCALE=True, LOG_THRESHOLD=4e-04,
-          THRESHOLD=4.9,
-          CLIM=7,
-          OPACITY=0.3)
+getSourceRead(SUFFIX="low",
+              LOG_SCALE=True, LOG_THRESHOLD=1e-04,
+              THRESHOLD=4,
+              CLIM=6,
+              OPACITY=0.01, COLOR="GYPi")
+getSourceRead(SUFFIX="high",
+              LOG_SCALE=True, LOG_THRESHOLD=4e-04,
+              THRESHOLD=4.9,
+              CLIM=7,
+              OPACITY=0.3)

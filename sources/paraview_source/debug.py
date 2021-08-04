@@ -16,6 +16,6 @@ if not DEBUG_WITH_GAUSSIAN_BEAM:
     print("Debug mode is not enabled ! Arborting")
 else:
     from source import getSource
-    getSource(LOG_SCALE=True, LOG_THRESHOLD=4e-04,
-              THRESHOLD=0.1,
-              CLIM=4.3)
+    getSourceRead(LOG_SCALE=True, LOG_THRESHOLD=4e-04,
+                  THRESHOLD=0.1,
+                  CLIM=4.3)
