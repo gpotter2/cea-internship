@@ -49,7 +49,7 @@ if count2 == 0:
     setupView()
 
     cam = GetActiveCamera()
-    cam.Azimuth(-40)
+    cam.Azimuth(-70)
 
     Filtered = getFFTFilter(OutputPort(ascentSource, 0), "By")
 
@@ -58,7 +58,7 @@ if count2 == 0:
     # and google "paraview opacity not working". Make sure you're using
     # the correct build (cuda...)
     showField(Filtered,
-              THRESHOLD=0.25,
+              THRESHOLD=0.2,
               CLIM=2,
               field="By_h",
               OPACITY=1.0
@@ -68,7 +68,7 @@ if count2 == 0:
     passArray = PassArrays(Input=Filtered)
     passArray.CellDataArrays = ['By_l']
     showField(passArray,
-              THRESHOLD=0.3,
+              THRESHOLD=0.1,
               CLIM=2,
               field="By_l",
               OPACITY=1.0,

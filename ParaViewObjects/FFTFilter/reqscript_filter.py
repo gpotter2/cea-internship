@@ -32,7 +32,7 @@ KX, KY, KZ = build_grid_params(
     whole_extent[3] - whole_extent[2], spacing[1],
     whole_extent[5] - whole_extent[4], spacing[2],
 )
-W = np.sqrt(KX**2 + KY**2 + KZ**2)
-L = np.max(W)
-self.propag_high = (W < L//2).ravel()
-self.propag_low = (W > L//4).ravel()
+K = np.sqrt(KX**2 + KY**2 + KZ**2)
+K0 = 1 / 0.8e-6  # shouldn't it be * 2pi ?
+self.propag_high = (K < K0).ravel()
+self.propag_low = (K > K0).ravel()

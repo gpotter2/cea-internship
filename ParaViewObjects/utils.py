@@ -54,7 +54,7 @@ def showField(source,
 
     scalarBar = GetScalarBar(byLUT, view)
     scalarBar.Title = field
-    scalarBar.ComponentTitle = field
+    scalarBar.ComponentTitle = ''
     scalarBar.Visibility = 1
     displayProperties.SetScalarBarVisibility(view, True)
 
@@ -82,7 +82,8 @@ def setupView(animated=False):
 
     # Configure view
     view.ViewSize = [945, 880]
-    view.AxesGrid = 'GridAxes3DActor'
+    axesGrid = view.AxesGrid
+    axesGrid.Visibility = 1
 
     # Configure camera
     view.CenterOfRotation = GetActiveCamera().GetFocalPoint()

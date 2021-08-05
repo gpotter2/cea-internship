@@ -69,7 +69,7 @@ laser1.wavelength = 0.8e-6               # The wavelength of the laser (in m)
 
 # Diagnostics
 diagnostics.diags_names = diag
-diag.intervals = 10
+diag.intervals = 5
 diag.diag_type = Full
 diag.fields_to_plot = Ex Ey Ez Bx By Bz jx jy jz rho
 
