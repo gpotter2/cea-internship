@@ -7,17 +7,16 @@ Entry point for Ascent Insitu when using the ParaView plugin
 ########################
 
 # __file__ does not currently work with ascent so add it manually
-__file__ = "/home/gpotter/pv_work/sources/ascent_source/ascent-paraview-insitu.py"
+__file__ = "/home/gpotter/pv_work/InSitu/ascent-paraview-insitu.py"
 # The path to the paraview python module. This must have been compiled with the SAME python version
 # as everything else ! watch out
 PARAVIEW_SITE_PACKAGES = "/home/gpotter/spack/opt/spack/linux-rhel7-skylake_avx512/gcc-9.4.0/paraview-5.9.1-gmpub3sql6hkvibxxtxexixkuv3agmao/lib64/python3.8/site-packages"
 
 import sys, os
-__DIR__ = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "paraview_source"))
-PLUGIN_PATH = os.path.join(__DIR__, "internal", "paraview_ascent_source.py")
+__DIR__ = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "ParaViewObjects"))
+PLUGIN_PATH = os.path.join(__DIR__, "paraview_ascent_source.py")
 
 sys.path.append(__DIR__)
-sys.path.append(os.path.join(__DIR__, "internal"))
 sys.path.append(PARAVIEW_SITE_PACKAGES)
 
 # See https://ascent.readthedocs.io/en/latest/Actions/ParaViewVisualization.html
@@ -45,7 +44,8 @@ if count2 == 0:
     CreateRenderView()
 
     # Configure View
-    from utils import showField, showPoints, setupView, getFFTFilter
+    from utils import showField, showPoints, setupView
+    from FFTFilter import getFFTFilter
     setupView()
 
     cam = GetActiveCamera()
