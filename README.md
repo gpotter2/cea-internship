@@ -23,6 +23,33 @@
 
 ## How to use (IN SITU)
 
+### Install
+
+- Create conda env:
+
+```console
+module load python/3.7.0-anaconda3-5.3.0
+conda create -n warpx --clone base
+source activate warpx
+```
+
+- Install the deps:
+
+```
+conda install cython
+pip install cupy
+```
+
+### Use
+
+Run before starting WarpX:
+
+```
+module load python/3.7.0-anaconda3-5.3.0
+source activate warpx
+export CUPY_CACHE_DIR=$MEMBERWORK/<project_id>/.cupy/kernel_cache
+```
+
 1. Copy `InSitu/ascent_actions/ascent_actions_paraview.yaml` to your `ascent_actions.yaml`
 2. Setup all the paths properly inside the files
 3. Run WarpX
