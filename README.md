@@ -17,7 +17,7 @@
 
 ## How to use (NOT IN SITU)
 
-1. Build the numpy files using the convert hdf5 tools
+1. Build the numpy files using the convert hdf5 tools
 2. Process the data by calling `LocalPropagation/process_data/process.py`
 3. In paraview, run the `LocalPropagation/main.py` script to import the ProgrammableSources.
 
