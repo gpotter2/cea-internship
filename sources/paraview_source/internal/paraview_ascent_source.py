@@ -336,7 +336,9 @@ class AscentSource(VTKPythonAlgorithmBase):
         # WARNING: this does not work inside the plugin
         #          unless you have the same import in paraview-vis.py
         from mpi4py import MPI
-        self._node = ascent_extract.ascent_data().child(0)
+        self._nodes = ascent_extract.ascent_data()
+        print(repr(self._nodes))
+        self._node = self._nodes.child(0)
         self._timeStep = -1
         self._cycle = self._node["state/cycle"]
         self._time = self._node["state/time"]

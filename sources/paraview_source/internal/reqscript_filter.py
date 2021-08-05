@@ -28,9 +28,9 @@ whole_extent = outInfo.Get(executive.WHOLE_EXTENT())
 spacing = outInfo.Get(vtk.vtkDataObject.SPACING())
 
 KX, KY, KZ = build_grid_params(
-    whole_extent[1] - whole_extent[0] + 1, spacing[0],
-    whole_extent[3] - whole_extent[2] + 1, spacing[1],
-    whole_extent[5] - whole_extent[4] + 1, spacing[2],
+    whole_extent[1] - whole_extent[0], spacing[0],
+    whole_extent[3] - whole_extent[2], spacing[1],
+    whole_extent[5] - whole_extent[4], spacing[2],
 )
 W = np.sqrt(KX**2 + KY**2 + KZ**2)
 L = np.max(W)

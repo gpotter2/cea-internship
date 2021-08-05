@@ -9,6 +9,7 @@ try:
     import cupyx as cpx
 except ImportError:
     raise ImportError("Please install ``cupy`` !")
+import numpy as np
 
 input0 = inputs[0]
 
@@ -41,5 +42,5 @@ byfft_low = cp.real(cpx.scipy.fft.ifftn(byfft_low,
 apply_log_scale(byfft_high, 1)
 apply_log_scale(byfft_low, 1)
 
-output.PointData.append(byfft_high, self.outFieldHigh)
-output.PointData.append(byfft_low, self.outFieldLow)
+output.CellData.append(byfft_high, self.outFieldHigh)
+output.CellData.append(byfft_low, self.outFieldLow)

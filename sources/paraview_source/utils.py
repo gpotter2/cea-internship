@@ -194,9 +194,9 @@ def getFFTFilter(Input, inField):
     source = ProgrammableFilter(Input=Input, registrationName='AnimatedLaserBeam')
     source.OutputDataSetType = 'Same as Input'
     HEADER = """
-self.inField = %s
-self.outFieldHigh = %s
-self.outFieldLow = %s
+self.inField = "%s"
+self.outFieldHigh = "%s"
+self.outFieldLow = "%s"
     """.strip() % (
         inField,
         inField + "_h",
@@ -205,7 +205,7 @@ self.outFieldLow = %s
     with open(os.path.join(__DIR__, 'internal', 'script_filter.py')) as fd:
         source.Script = "\n".join([HEADER, fd.read()])
     with open(os.path.join(__DIR__, 'internal', 'reqscript_filter.py')) as fd:
-        source.ScriptRequestInformation = fd.read()
+        source.RequestInformationScript = fd.read()
 
     # Trigger RequestInformation
     source.UpdatePipelineInformation()
