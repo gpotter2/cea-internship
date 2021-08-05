@@ -1,7 +1,0 @@
--
-  action: "add_extracts"
-  extracts:
-    e1:
-      type: "python"
-      params:
-        file: "/home/gpotter/pv_work/sources/ascent_source/ascent-paraview-insitu.py"

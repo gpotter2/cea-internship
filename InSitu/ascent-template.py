@@ -1,3 +1,7 @@
+"""
+A template of an Ascent python script
+"""
+
 import conduit
 import ascent.mpi
 
@@ -25,7 +29,6 @@ actions = conduit.Node()
 pipelines = conduit.Node()
 
 # Would be cool if the log filter supported positive-negative log.
-# It doesn't so we build it ourselves above
 
 # pipelines['pl1/f1/type'] = 'log'
 # pipelines['pl1/f1/params/field'] = 'By_h'

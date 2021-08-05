@@ -4,8 +4,8 @@ Script to generate a 3D gaussian beam
 
 # Import other files
 import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "process_data")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "LocalPropagation")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "LocalPropagation", "process_data")))
 from config import *
 from common import build_grid, get_path
 

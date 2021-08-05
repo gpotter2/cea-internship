@@ -1,12 +1,12 @@
 """
-Entry point for Ascent Insitu
+Entry point for Ascent Insitu when using the ParaView plugin
 """
 
 ########################
 # CONFIG ! IMPORTANT ! #
 ########################
 
-# __file__ does not work with ascent so add it manually
+# __file__ does not currently work with ascent so add it manually
 __file__ = "/home/gpotter/pv_work/sources/ascent_source/ascent-paraview-insitu.py"
 # The path to the paraview python module. This must have been compiled with the SAME python version
 # as everything else ! watch out
