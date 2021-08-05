@@ -49,7 +49,7 @@ if count2 == 0:
     setupView()
 
     cam = GetActiveCamera()
-    cam.Azimuth(-100)
+    cam.Azimuth(-40)
 
     Filtered = getFFTFilter(OutputPort(ascentSource, 0), "By")
 
