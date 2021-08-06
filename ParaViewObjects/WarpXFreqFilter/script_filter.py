@@ -4,6 +4,8 @@ The 'Script' parameter of a ProgrammableFilter
 
 # https://docs.paraview.org/en/latest/ReferenceManual/pythonProgrammableFilter.html#programmable-filter
 
+import numpy as np
+
 input0 = inputs[0]
 
 def apply_log_scale(data, threshold):

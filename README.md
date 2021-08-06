@@ -7,8 +7,9 @@
   - `debug.py`: contains a paraview ProgrammableSource to be used in Debug mode (set `DEBUG_GAUSSIAN_BEAM`)
     in the config. This displays a gaussian beam (also read from files).
 - `InSitu/`: Ascent & Paraview tools or scripts
-  - `ascent-paraview-insitu.py`: a python script called by the previous fft-filter script when used in paraview mode
-    that displays the data into paraview.
+  - `ascent-paraview-insitu.py`: called by ascent, this uses WarpX's LowFreq filter (Neil's debug branch), and displays
+    the data.
+  - `ascent-paraview-fft-insitu.py`: called by ascent, this performs FFTs manually and displays the data.
   - `ascent_actions/`: various `ascent_actions.yaml` examples
 - `ParaViewObjects/`
   - `utils.py`: some functions used by the scripts to display fields or points
