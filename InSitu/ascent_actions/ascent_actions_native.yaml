@@ -1,4 +1,10 @@
-# Would be cool if the log filter supported positive-negative log.
+-
+  action: 'add_queries'
+  queries:
+    q1:
+      params:
+        expression: "field('By') - field('By_lowfreq')"
+        name: 'By_highfreq'
 -
   action: 'add_pipelines'
   pipelines:
@@ -6,13 +12,13 @@
       f2:
         type: 'contour'
         params:
-          field: 'By'
-          iso_values: 0.25
+          field: 'By_lowfreq'
+          iso_values: 0.15
     pl2:
       f2:
         type: 'contour'
         params:
-          field: 'By'
+          field: 'By_highfreq'
           iso_values: 0.3
 -
   action: 'add_scenes'
@@ -22,13 +28,13 @@
         p1:
           type: 'pseudocolor'
           pipeline: 'pl1'
-          field: 'By'
+          field: 'By_highfreq'
           min_value: -10
           max_value: 10
         p2:
           type: 'pseudocolor'
           pipeline: 'pl2'
-          field: 'By'
+          field: 'By_lowfreq'
           color_table:
             name: "Blue to Orange"
           min_value: -10

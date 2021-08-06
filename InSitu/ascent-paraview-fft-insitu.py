@@ -7,7 +7,7 @@ Entry point for Ascent Insitu when using the ParaView plugin
 ########################
 
 # __file__ does not currently work with ascent so add it manually
-__file__ = "/home/gpotter/pv_work/InSitu/ascent-paraview-insitu.py"
+__file__ = "/home/gpotter/pv_work/InSitu/ascent-paraview-fft-insitu.py"
 # The path to the paraview python module. This must have been compiled with the SAME python version
 # as everything else ! watch out
 PARAVIEW_SITE_PACKAGES = "/home/gpotter/spack/opt/spack/linux-rhel7-skylake_avx512/gcc-9.4.0/paraview-5.9.1-gmpub3sql6hkvibxxtxexixkuv3agmao/lib64/python3.8/site-packages"
@@ -45,18 +45,13 @@ if count2 == 0:
 
     # Configure View
     from utils import showField, showPoints, setupView
-    from WarpXFreqFilter import getFormatFilter
+    from FFTFilter import getFFTFilter
     setupView()
 
     cam = GetActiveCamera()
     cam.Azimuth(-70)
 
-    Filtered = getFormatFilter(
-        OutputPort(ascentSource, 0),
-        "By",
-        "By_lowfreq",
-        "By_highfreq",
-    )
+    Filtered = getFFTFilter(OutputPort(ascentSource, 0), "By")
 
     # If nothing appears, it could be that the opacity is glitched.
     # Try setting it to 1.0. If that's the issue, check your paraview
@@ -65,17 +60,17 @@ if count2 == 0:
     showField(Filtered,
               THRESHOLD=0.2,
               CLIM=2,
-              field="By_highfreq",
+              field="By_h",
               OPACITY=1.0
               )
     # See https://discourse.paraview.org/t/view-multiple-data-arrays-at-once-from-a-single-file/2770 on why we need PassArrays
     # to shallow copy the data.
     passArray = PassArrays(Input=Filtered)
-    passArray.CellDataArrays = ['By_lowfreq']
+    passArray.CellDataArrays = ['By_l']
     showField(passArray,
               THRESHOLD=0.1,
               CLIM=2,
-              field="By_lowfreq",
+              field="By_l",
               OPACITY=1.0,
               COLOR="GYPi")
     showPoints(OutputPort(ascentSource, 1),
