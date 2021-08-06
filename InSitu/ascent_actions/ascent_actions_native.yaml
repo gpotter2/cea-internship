@@ -1,0 +1,48 @@
+# Would be cool if the log filter supported positive-negative log.
+-
+  action: 'add_pipelines'
+  pipelines:
+    pl1:
+      f2:
+        type: 'contour'
+        params:
+          field: 'By'
+          iso_values: 0.25
+    pl2:
+      f2:
+        type: 'contour'
+        params:
+          field: 'By'
+          iso_values: 0.3
+-
+  action: 'add_scenes'
+  scenes:
+    s1:
+      plots:
+        p1:
+          type: 'pseudocolor'
+          pipeline: 'pl1'
+          field: 'By'
+          min_value: -10
+          max_value: 10
+        p2:
+          type: 'pseudocolor'
+          pipeline: 'pl2'
+          field: 'By'
+          color_table:
+            name: "Blue to Orange"
+          min_value: -10
+          max_value: 10
+        p3:
+          type: 'pseudocolor'
+          field: 'particle_electrons_w'
+          points:
+            radius: 0.0000005
+      renders:
+        r1:
+          image_width: 1024
+          image_height: 1024
+          image_prefix: 'outimg_%05d'
+          camera:
+            azimuth: 100
+            elevation: 10
